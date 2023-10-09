@@ -1,0 +1,7 @@
+Modelo
+- En clase contenido falta definir funciones 
+    - contenido 
+    - cambiarRutaImagenPersonalAGlobal
+- clase abstractCreator
+- clase Actividad
+-revisar las funciones de las clases de modelo 
