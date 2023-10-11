@@ -64,7 +64,7 @@ router.post('/crearCategorias', async (req,res) =>{
     }
 });
 
-router.post('/crearSubCategorias', async (req,res) =>{
+router.post('/addSubCategoria', async (req,res) =>{
     try{
         const {categoria,nombre} = req.body;
         const cat = await Categoria.find({nombre:categoria})
