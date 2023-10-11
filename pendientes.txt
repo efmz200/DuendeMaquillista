@@ -5,3 +5,5 @@ Modelo
 - clase abstractCreator
 - clase Actividad
 -revisar las funciones de las clases de modelo 
+-funcion de  DTOalgo() -> que sifnifica? 
+

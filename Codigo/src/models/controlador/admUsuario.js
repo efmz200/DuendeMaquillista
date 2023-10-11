@@ -1,7 +1,9 @@
 
 export class admUsuario {
 
-    iniciarSesion(correo, contrasenia) {}
+    iniciarSesion(correo, contrasenia) {
+
+    }
     cerrarSesion() {}
     registrarUsuario(DTOUsuario) {}
     validarUsuario(correo, contrasenia) {}

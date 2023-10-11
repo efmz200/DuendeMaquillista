@@ -17,6 +17,7 @@ app.use(express.json());
 
 //rutas
 app.use('/api/tasks',require('./routes/task.routes'));
+app.use('/api/usuario',require('./routes/admUsuario.routes'));
 //app.use('/api/usuarios',require('./routes/Usuario.rutas'));
 //app.use('/api',fileRoutes.routes);
 
