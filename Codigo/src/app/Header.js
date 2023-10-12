@@ -3,7 +3,7 @@ import React from 'react';
 
 function Header() {
   return (
-    <header className="header">
+    <header className="header" style={{ backgroundColor: "#000000", color: "#FFFFFF"}}>
       <h1>DUENDE MAQUILLISTA</h1>
     </header>
   );

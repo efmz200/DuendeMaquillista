@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import { render } from "react-dom";
 import Header from './Header'; // Importa el componente de encabezado
 import Login from "./Login";
-
+import Registrarte from "./Registrarte";
 
 class App extends Component {
     constructor(){
@@ -14,9 +14,10 @@ class App extends Component {
     render(){
         return (
             
-            <div>
+            <div style={{ backgroundColor: "#033734" }}>
                 <Header />    
-                <Login/>        
+                <Login/>     
+                <Registrarte/>   
             </div>       
         )
     }

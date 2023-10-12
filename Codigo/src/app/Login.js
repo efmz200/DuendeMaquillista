@@ -17,13 +17,18 @@ function Login() {
     <div>
         <div className="row">
             <div className="col s12" style={{ display: "flex", justifyContent: "center" }}>
-            <div className="card">
+            <div className="card" style={{ backgroundColor: "#033734"}}>
                 <div className="card-content">
-                <form onSubmit={cancelareventos}>
+                <form onSubmit={cancelareventos} >
+                    <div class="row" style={{ color: "#FFFFFF",display: "flex", justifyContent: "center" }}>
+                        <h4>
+                            Login
+                        </h4>
+                    </div>
                     <div class="row" >
                         <div class="input-field col s12">
                             <div style={{ display: "flex", justifyContent: "center" }}>
-                                <div>
+                                <div style={{ backgroundColor: "#FFFFFF"}}>
                                     <i class="material-icons prefix">account_circle</i>
                                     <input name="Usuario" onChange={handleChange} type="text" placeholder="Usuario" />
                                 </div>
@@ -34,7 +39,7 @@ function Login() {
                     <div class="row" >
                         <div class="input-field col s12">
                             <div style={{ display: "flex", justifyContent: "center" }}>
-                                <div>
+                                <div  style={{ backgroundColor: "#FFFFFF"}}>
                                     <i class="material-icons prefix">phone</i>
                                     <input name="Contrasena" onChange={handleChange} type="text" placeholder="Contraseña" />
                                 </div>
@@ -50,13 +55,13 @@ function Login() {
                     
                     <div className="row">
                         <div style={{ display: "flex", justifyContent: "center" }}>
-                            <button type="submit" className="btn light-blue darken-4 centered" >
+                            <button type="submit" className="btn "style={{ backgroundColor: "#000000", color: "#FFFFFF"}} >
                             Login
                             </button>
                         </div>
                         <br />
                         <div style={{ display: "flex", justifyContent: "center" }}>
-                            <button type="submit" className="btn light-blue darken-4">
+                            <button type="submit" className="btn "style={{ backgroundColor: "#000000", color: "#FFFFFF"}}>
                             Registrarse
                             </button>
                         </div>
