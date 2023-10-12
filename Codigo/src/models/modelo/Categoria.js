@@ -5,7 +5,10 @@ const SubCategoriaSchema = require('./SubCategoria.js');
 
 const CategoriaSchema = new Schema({
     nombre: {type: String, required: true, unique: true},
-    subcategorias: [SubCategoriaSchema]
+    subcategorias: {
+        type: [SubCategoriaSchema],
+        default: undefined
+      }
 });
 
-module.exports = mongose.model('Categoria',CategoriaSchema)
+//module.exports = mongose.model('Categoria',CategoriaSchema)
