@@ -97,6 +97,7 @@ router.post('/addSubCategoria', async (req,res) =>{
         const subcategoria = new SubCategoria({
             nombre
         })
+        
         cat = await Categoria.findOne({nombre:categoria})
         console.log(cat.subcategorias,categoria)
         if (cat.subcategorias.length !=0){
@@ -152,7 +153,7 @@ router.post('/registarContenido', async (req,res) =>{
             palabrasClave,
             tags
         })
-        
+
         await contenido.save();
         console.log(contenido)
         res.json({
@@ -195,6 +196,31 @@ router.post('/actualizarContenido', async (req,res) =>{
         })
     }
 });
+
+//eliminar contenido
+router.post('/eliminarContenido', async (req,res) =>{
+    try{
+        const {id} = req.body;
+        const contenido = await Contenido.findOne({id:id})
+        if (contenido == null){
+            res.json({
+                status:'Contenido no existe'
+            })
+            return;
+        }
+        await Contenido.findByIdAndDelete(contenido._id)
+        console.log(contenido)
+        res.json({
+            status:'Contenido eliminado'
+        })
+    }catch(err){
+        console.log(err)
+        res.json({
+            status:'Hubo un error en la operación'
+        })
+    }
+});
+
 //agregar palabra clave a un contenido
 router.post('/addPalabrasClave', async (req,res) =>{
     try{
