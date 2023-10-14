@@ -100,7 +100,8 @@ router.post('/addSubCategoria', async (req,res) =>{
         })
         
         cat = await CategoriaSchema.findOne({nombre:categoria})
-        console.log(cat.subcategorias,categoria)
+        console.log(categoria,cat,"\n\n")
+        
         if (cat.subcategorias.length !=0){
             for (var i = 0; i < cat.subcategorias.length; i++) {
                 if (cat.subcategorias[i].nombre == nombre){
@@ -112,8 +113,9 @@ router.post('/addSubCategoria', async (req,res) =>{
             }
         }
         cat.subcategorias.push(subcategoria);
+        console.log(categoria,cat,"\n\n")
         await CategoriaSchema.findByIdAndUpdate(cat._id,cat)
-        console.log(cat)
+        
         res.json({
             status:'SubCategoriaSchema guardada'
         });
@@ -182,23 +184,6 @@ router.post('/registarContenido', async (req,res) =>{
         })
     }
 });
-
-router.get('/prueba',async (req,res) => {
-    console.log(SubCategoriaSchema == CategoriaSchema == ContenidoSchema)
-    console.log(typeof(ContenidoSchema))
-    
-    const contenido = new ContenidoSchema({
-        identificacion:1,
-        imagen:"imagen",
-        descripcion:"descripcion",
-        categoria:[],
-        subcategoria:[],
-        palabrasClave:[],
-        tags:[]    
-    })
-    await contenido.save();
-    res.json(contenido)
-})
 
 //actualizar contenido
 router.post('/actualizarContenido', async (req,res) =>{
