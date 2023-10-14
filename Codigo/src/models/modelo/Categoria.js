@@ -1,14 +1,13 @@
-const mongose = require('mongoose');
-const {Schema} = mongose;
+const mongoose = require('mongoose');
+const {Schema} = mongoose;
 const SubCategoriaSchema = require('./SubCategoria.js');
-
 
 const CategoriaSchema = new Schema({
     nombre: {type: String, required: true, unique: true},
     subcategorias: {
-        type: [SubCategoriaSchema],
-        default: undefined
+        type: [Object],
+        default: []
       }
 });
 
-//module.exports = mongose.model('Categoria',CategoriaSchema)
+module.exports = mongoose.model("Categoria",CategoriaSchema);

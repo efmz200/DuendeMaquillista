@@ -1,24 +1,25 @@
 const express = require('express');
 const router =express.Router();
 const { mongoose } = require('./../database');
-const Contenido = require('../models/modelo/Contenido');
-const Categoria = require('../models/modelo/Contenido');
-const SubCategoria = require('../models/modelo/Contenido');
+const ContenidoSchema = require('../models/modelo/Contenido');
+const CategoriaSchema = require('../models/modelo/Categoria');
+const SubCategoriaSchema = require('../models/modelo/SubCategoria');
+//const { SubCategoriaSchema, CategoriaSchema, ContenidoSchema }  = require('../models/modelo/Contenido');
 
 router.get('/',async (req,res) => {
-    const contenido =await Contenido.find({})
+    const contenido =await ContenidoSchema.find({})
     console.log(contenido)
     res.json(contenido)
 })
 
 router.get('/Categorias',async (req,res) => {
-    const categoria = await Categoria.find({})
+    const categoria = await CategoriaSchema.find({})
     console.log(categoria)
     res.json(categoria)
 });
 
 router.get('/SubCategorias',async (req,res) => {
-    const subcategoria =await SubCategoria.find({})
+    const subcategoria =await SubCategoriaSchema.find({})
     console.log(subcategoria)
     res.json(subcategoria)
 });
@@ -27,7 +28,7 @@ router.get('/SubCategorias',async (req,res) => {
 router.post('/SubCategorias', async (req,res) =>{
     try{
         const {categoria,nombre} = req.body;
-        const cat = await Categoria.find({nombre:categoria})
+        const cat = await CategoriaSchema.find({nombre:categoria})
         var subCats = [];
         if (cat.length == 0){
             res.json({
@@ -58,28 +59,28 @@ router.post('/addCategorias', async (req,res) =>{
     try{
         const {nombre} = req.body;
         console.log(nombre)
-        const categoria = new Categoria({
+        const categoria = new CategoriaSchema({
             nombre,
             subcategorias:[]
         });
-        const cat = await Categoria.findOne({nombre:nombre})
+        const cat = await CategoriaSchema.findOne({nombre:nombre})
         if (cat != null){
             res.json({
-                status:'Categoria ya existe'
+                status:'CategoriaSchema ya existe'
             });
             return;
         }
         await categoria.save();
         console.log(categoria)
         res.json({
-            status:'Categoria guardada'
+            status:'CategoriaSchema guardada'
         });
         
     }catch(err){        
         console.log(err)
         if (err.code == 11000){
             res.json({
-                status:'Categoria ya existe'
+                status:'CategoriaSchema ya existe'
             });
         }else{
             res.json({
@@ -94,27 +95,27 @@ router.post('/addCategorias', async (req,res) =>{
 router.post('/addSubCategoria', async (req,res) =>{
     try{
         const {categoria,nombre} = req.body;        
-        const subcategoria = new SubCategoria({
+        const subcategoria = new SubCategoriaSchema({
             nombre
         })
         
-        cat = await Categoria.findOne({nombre:categoria})
+        cat = await CategoriaSchema.findOne({nombre:categoria})
         console.log(cat.subcategorias,categoria)
         if (cat.subcategorias.length !=0){
             for (var i = 0; i < cat.subcategorias.length; i++) {
                 if (cat.subcategorias[i].nombre == nombre){
                     res.json({
-                        status:'SubCategoria ya existe'
+                        status:'SubCategoriaSchema ya existe'
                     });
                     return;
                 }
             }
         }
         cat.subcategorias.push(subcategoria);
-        await Categoria.findByIdAndUpdate(cat._id,cat)
+        await CategoriaSchema.findByIdAndUpdate(cat._id,cat)
         console.log(cat)
         res.json({
-            status:'SubCategoria guardada'
+            status:'SubCategoriaSchema guardada'
         });
         
     }catch(err){        
@@ -129,35 +130,50 @@ router.post('/addSubCategoria', async (req,res) =>{
 
 //agregar contenido
 router.post('/registarContenido', async (req,res) =>{
-    try{
-        const {id,imagen,descripcion,categoria,subcategoria,palabrasClave,tags} = req.body;
+    var {id,imagen,descripcion,categoria,subcategoria,palabrasClave,tags} = req.body;
+    try{        
         if (categoria == null){
             categoria = [];
+        }else{
+            cat = await CategoriaSchema.findOne({nombre:categoria})
+            if (cat == null){
+                const newCat = new CategoriaSchema({
+                    nombre:categoria,
+                }); 
+                await newCat.save();
+                categoria = newCat;
+            }else{
+                categoria = cat;
+            }
         }
         if (subcategoria == null){
             subcategoria = [];
+        }else{
+            subcategoria = [subcategoria];
         }
         if (palabrasClave == null){
             palabrasClave = [];
+        }else{
+            palabrasClave = [palabrasClave];
         }
         if (tags == null){
             tags = [];
+        }else{
+            tags = [tags];
         }
-        
-        const contenido = new Contenido({
+        const contenido = new ContenidoSchema({
             id,
-            imagen,
-            descripcion,
-            categoria,
-            subcategoria,
-            palabrasClave,
-            tags
+            imagen:imagen,
+            descripcion:descripcion,
+            categoria:categoria,
+            subcategoria:subcategoria,
+            palabrasClave:palabrasClave,
+            tags:tags
         })
-
         await contenido.save();
         console.log(contenido)
         res.json({
-            status:'Contenido guardado'
+            status:'ContenidoSchema guardado'
         })
     }catch(err){
         console.log(err)
@@ -167,14 +183,31 @@ router.post('/registarContenido', async (req,res) =>{
     }
 });
 
+router.get('/prueba',async (req,res) => {
+    console.log(SubCategoriaSchema == CategoriaSchema == ContenidoSchema)
+    console.log(typeof(ContenidoSchema))
+    
+    const contenido = new ContenidoSchema({
+        identificacion:1,
+        imagen:"imagen",
+        descripcion:"descripcion",
+        categoria:[],
+        subcategoria:[],
+        palabrasClave:[],
+        tags:[]    
+    })
+    await contenido.save();
+    res.json(contenido)
+})
+
 //actualizar contenido
 router.post('/actualizarContenido', async (req,res) =>{
     try{
         const {id,imagen,descripcion,categoria,subcategoria,palabrasClave,tags} = req.body;
-        const contenido = await Contenido.findOne({id:id})
+        const contenido = await ContenidoSchema.findOne({id:id})
         if (contenido == null){
             res.json({
-                status:'Contenido no existe'
+                status:'ContenidoSchema no existe'
             })
             return;
         }
@@ -184,10 +217,10 @@ router.post('/actualizarContenido', async (req,res) =>{
         contenido.subcategoria = subcategoria;
         contenido.palabrasClave = palabrasClave;
         contenido.tags = tags;
-        await Contenido.findByIdAndUpdate(contenido._id,contenido)
+        await ContenidoSchema.findByIdAndUpdate(contenido._id,contenido)
         console.log(contenido)
         res.json({
-            status:'Contenido actualizado'
+            status:'ContenidoSchema actualizado'
         })
     }catch(err){
         console.log(err)
@@ -201,17 +234,17 @@ router.post('/actualizarContenido', async (req,res) =>{
 router.post('/eliminarContenido', async (req,res) =>{
     try{
         const {id} = req.body;
-        const contenido = await Contenido.findOne({id:id})
+        const contenido = await ContenidoSchema.findOne({id:id})
         if (contenido == null){
             res.json({
-                status:'Contenido no existe'
+                status:'ContenidoSchema no existe'
             })
             return;
         }
-        await Contenido.findByIdAndDelete(contenido._id)
+        await ContenidoSchema.findByIdAndDelete(contenido._id)
         console.log(contenido)
         res.json({
-            status:'Contenido eliminado'
+            status:'ContenidoSchema eliminado'
         })
     }catch(err){
         console.log(err)
@@ -225,15 +258,15 @@ router.post('/eliminarContenido', async (req,res) =>{
 router.post('/addPalabrasClave', async (req,res) =>{
     try{
         const {id,palabraClave} = req.body;
-        const contenido = await Contenido.findOne({id:id})
+        const contenido = await ContenidoSchema.findOne({id:id})
         if (contenido == null){
             res.json({
-                status:'Contenido no existe'
+                status:'ContenidoSchema no existe'
             })
             return;
         }
         contenido.palabrasClave.push(palabraClave);
-        await Contenido.findByIdAndUpdate(contenido._id,contenido)
+        await ContenidoSchema.findByIdAndUpdate(contenido._id,contenido)
         console.log(contenido)
         res.json({
             status:'Palabras Clave guardadas'
@@ -250,15 +283,15 @@ router.post('/addPalabrasClave', async (req,res) =>{
 router.post('/addTag', async (req,res) =>{
     try{
         const {id,tag} = req.body;
-        const contenido = await Contenido.findOne({id:id})
+        const contenido = await ContenidoSchema.findOne({id:id})
         if (contenido == null){
             res.json({
-                status:'Contenido no existe'
+                status:'ContenidoSchema no existe'
             })
             return;
         }
         contenido.tags.push(tag);
-        await Contenido.findByIdAndUpdate(contenido._id,contenido)
+        await ContenidoSchema.findByIdAndUpdate(contenido._id,contenido)
         console.log(contenido)
         res.json({
             status:'Tag guardado'
@@ -275,10 +308,10 @@ router.post('/addTag', async (req,res) =>{
 router.post('/deleteTag', async (req,res) =>{
     try{
         const {id,tag} = req.body;
-        const contenido = await Contenido.findOne({id:id})
+        const contenido = await ContenidoSchema.findOne({id:id})
         if (contenido == null){
             res.json({
-                status:'Contenido no existe'
+                status:'ContenidoSchema no existe'
             })
             return;
         }
@@ -287,7 +320,7 @@ router.post('/deleteTag', async (req,res) =>{
                 contenido.tags.pop(contenido.tags[i]);
             }
         }
-        await Contenido.findByIdAndUpdate(contenido._id,contenido)
+        await ContenidoSchema.findByIdAndUpdate(contenido._id,contenido)
         console.log(contenido)
         res.json({
             status:'Tag eliminado'
@@ -304,25 +337,25 @@ router.post('/deleteTag', async (req,res) =>{
 router.post('/addContenidoCategoria', async (req,res) =>{
     try{
         const {id,categoria} = req.body;
-        const contenido = await Contenido.findOne({id:id})
-        const cat = await Categoria.findOne({nombre:categoria})
+        const contenido = await ContenidoSchema.findOne({id:id})
+        const cat = await CategoriaSchema.findOne({nombre:categoria})
         if (contenido == null){
             res.json({
-                status:'Contenido no existe'
+                status:'ContenidoSchema no existe'
             })
             return;
         }
         if (cat == null){
             res.json({
-                status:'Categoria no existe'
+                status:'CategoriaSchema no existe'
             })
             return;
         }
         contenido.categoria.push(cat);
-        await Contenido.findByIdAndUpdate(contenido._id,contenido)
+        await ContenidoSchema.findByIdAndUpdate(contenido._id,contenido)
         console.log(contenido)
         res.json({
-            status:'Categoria guardada'
+            status:'CategoriaSchema guardada'
         })
     }catch(err){
         console.log(err)
@@ -336,15 +369,15 @@ router.post('/addContenidoCategoria', async (req,res) =>{
 router.post('/addDescripcion', async (req,res) =>{
     try{
         const {id,descripcion} = req.body;
-        const contenido = await Contenido.findOne({id:id})
+        const contenido = await ContenidoSchema.findOne({id:id})
         if (contenido == null){
             res.json({
-                status:'Contenido no existe'
+                status:'ContenidoSchema no existe'
             })
             return;
         }
         contenido.descripcion = descripcion;
-        await Contenido.findByIdAndUpdate(contenido._id,contenido)
+        await ContenidoSchema.findByIdAndUpdate(contenido._id,contenido)
         console.log(contenido)
         res.json({
             status:'Descripcion guardada'
@@ -361,10 +394,10 @@ router.post('/addDescripcion', async (req,res) =>{
 router.post('/deletePalabraClave', async (req,res) =>{
     try{
         const {id,palabraClave} = req.body;
-        const contenido = await Contenido.findOne({id:id})
+        const contenido = await ContenidoSchema.findOne({id:id})
         if (contenido == null){
             res.json({
-                status:'Contenido no existe'
+                status:'ContenidoSchema no existe'
             })
             return;
         }
@@ -373,7 +406,7 @@ router.post('/deletePalabraClave', async (req,res) =>{
                 contenido.palabrasClave.pop(contenido.palabrasClave[i]);
             }
         }
-        await Contenido.findByIdAndUpdate(contenido._id,contenido)
+        await ContenidoSchema.findByIdAndUpdate(contenido._id,contenido)
         console.log(contenido)
         res.json({
             status:'Palabra Clave eliminada'
@@ -390,15 +423,15 @@ router.post('/deletePalabraClave', async (req,res) =>{
 router.post('/addImagen', async (req,res) =>{
     try{
         const {id,imagen} = req.body;
-        const contenido = await Contenido.findOne({id:id})
+        const contenido = await ContenidoSchema.findOne({id:id})
         if (contenido == null){
             res.json({
-                status:'Contenido no existe'
+                status:'ContenidoSchema no existe'
             })
             return;
         }
         contenido.imagen = imagen;
-        await Contenido.findByIdAndUpdate(contenido._id,contenido)
+        await ContenidoSchema.findByIdAndUpdate(contenido._id,contenido)
         console.log(contenido)
         res.json({
             status:'Imagen guardada'
