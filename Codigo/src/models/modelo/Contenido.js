@@ -21,8 +21,8 @@ const ContenidoSchema = new Schema({
     descripcion: {type: String, required: true},
     categoria: {type:[CategoriaSchema],default: []},    
     subcategoria:{type:[SubCategoriaSchema],default: []},
-    palabrasClave: {type: [String], required: true},
-    tags: {type: [String], required: true}
+    palabrasClave: {type: [String]},
+    tags: {type: [String]}
 });
 
 module.exports = mongoose.model('Contenido',ContenidoSchema)
