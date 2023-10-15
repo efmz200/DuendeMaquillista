@@ -1,6 +1,5 @@
 const express = require('express');
 const router =express.Router();
-const { mongoose } = require('./../database');
 const ContenidoSchema = require('../models/modelo/Contenido');
 const CategoriaSchema = require('../models/modelo/Categoria');
 const SubCategoriaSchema = require('../models/modelo/SubCategoria');
