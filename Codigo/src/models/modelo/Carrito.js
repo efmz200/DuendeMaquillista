@@ -1,21 +1,12 @@
-import Producto from "./Producto.js";
 
-export class Carrito{
-    #listaProductos = [];
+const mongoose = require('mongoose');
+const {Schema} = mongoose;
 
-    addProducto(producto){
-        if (producto.cantidad >= 0){
-            this.#listaProductos.push(producto);
-            producto.cantidad--;
-        }
-    }
+const CarritoSchema = new Schema({
+    listaProductos : [{
+        cantidad: {type:Number,default:0},
+        producto: {type:Object,default:null}
+    }]
+});
 
-    borrarProducto(producto) {
-        this.#listaProductos = this.#listaProductos.filter(p => p !== producto);
-        for (let i = 0; i < this.#listaProductos.length; i++) {
-            if (this.#listaProductos[i].id == producto.id){
-                this.#listaProductos.pop(this.#listaProductos[i]);
-            }
-        }
-    }
-}
+module.exports = mongoose.model("Carrito",CarritoSchema);

@@ -21,7 +21,7 @@ router.get('/SubCategorias',async (req,res) => {
     const subcategoria =await SubCategoriaSchema.find({})
     console.log(subcategoria)
     res.json(subcategoria)
-});
+}); 
 
 //listar SubCategorias de una categoria
 router.post('/SubCategorias', async (req,res) =>{
