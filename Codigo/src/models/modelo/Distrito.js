@@ -1,15 +1,8 @@
+const mongoose = require('mongoose');
+const {Schema} = mongoose;
 
-export class Distrito{
-    #nombre;
+const DistritoSchema = new Schema({
+    nombre: {type: String, default: ''}
+});
 
-    constructor(nombre) {
-        this.#nombre = nombre;
-    }
-
-    get nombre() {
-        return this.#nombre;
-    }
-    set nombre(nombre) {
-        this.#nombre = nombre;
-    }
-}
+const Distrito = mongoose.model("Distrito",DistritoSchema);

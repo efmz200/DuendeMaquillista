@@ -104,6 +104,13 @@ router.post('/eliminarProductoCarrito',async(req,res)=>{
     res.json({status: 'El producto no estaba en el carrito'});
 })
 
-//se obtiene 
+//se obtienen los productos del carrito
+router.post('/getCarrito',async(req,res)=>{
+    const {id_carrito} = req.body;
+    var carrito = await Carrito.findOne({_id:id_carrito});
+    res.json({status: 'Productos obtenidos',productos:carrito.listaProductos});
+})
+
+//se realiza la compra de los productos del carrito
 
 module.exports = router;
