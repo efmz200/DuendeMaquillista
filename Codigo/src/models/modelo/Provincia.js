@@ -1,32 +1,10 @@
 
+const mongoose = require('mongoose');
+const {Schema} = mongoose;
 
-export class Provincia{
-    #nombre;
-    #listaCantones = [];
+const ProvinciaSchema = new Schema({
+    nombre: {type: String, default: ''},
+    listaCantones: {type: [Object], default: []}
+});
 
-    constructor(nombre) {
-        this.#nombre = nombre;
-    }
-
-    get nombre() {
-        return this.#nombre;
-    }
-    set nombre(nombre) {
-        this.#nombre = nombre;
-    }
-
-    get listaCantones() {
-        return this.#listaCantones;
-    }
-    addCanton(Canton) {
-        this.#listaCantones.push(Canton);
-    }
-    borrarCanton(Canton) {
-        for (let i = 0; i < this.#listaCantones.length; i++) {
-            if (this.#listaCantones[i].nombre === Canton.nombre) {
-                this.#listaCantones.pop(this.#listaCantones[i]);
-            }
-        }        
-    }
-
-}
+module.exports = mongoose.model("Provincia",ProvinciaSchema);
