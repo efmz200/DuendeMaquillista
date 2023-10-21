@@ -1,23 +1,9 @@
-export class Curso{
-    #nombre;
-    #notas;
+const mongoose = require('mongoose');
+const {Schema} = mongoose;
 
-    constructor(nombre, notas){
-        this.#nombre = nombre;
-        this.#notas = notas;
-    }
-    
-    get nombre(){
-        return this.#nombre;
-    }
-    set nombre(nombre){
-        this.#nombre = nombre;
-    }
+const CursoSchema = new Schema({
+    nombre: {type: String, default: ''},
+    notas: {type: String, default: ''}
+});
 
-    get notas(){
-        return this.#notas;
-    }
-    set notas(notas){
-        this.#notas = notas;
-    }
-}
+module.exports = mongoose.model("Curso",CursoSchema);

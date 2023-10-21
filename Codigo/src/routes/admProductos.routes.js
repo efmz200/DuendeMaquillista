@@ -1,8 +1,8 @@
-const express = require('express');
-const router =express.Router();
-const Producto = require('../models/modelo/Producto');
+const express           = require('express');
+const router            = express.Router();
+const Producto          = require('../models/modelo/Producto');
 const CategoriaProducto = require('../models/modelo/CategoriaProducto');
-const Carrito = require('../models/modelo/Carrito');
+const Carrito           = require('../models/modelo/Carrito');
 
 router.post('/agregarProducto',async(req,res)=>{
     const {codigo,nombre,precio,disponibilidad,descripcion,imagen} = req.body;

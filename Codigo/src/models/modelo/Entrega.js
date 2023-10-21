@@ -1,25 +1,9 @@
+const mongoose = require('mongoose');
+const {Schema} = mongoose;
 
-export class Entrega{
-    #numero;
-    #estado;
+const EntregaSchema = new Schema({
+    numeroFactura : {type: Number, default: 0},
+    estado : {type: String, default: ''}
+});
 
-    constructor(numero, estado){
-        this.#numero = numero;
-        this.#estado = estado;
-    }
-
-    get numero(){
-        return this.#numero;
-    }
-    set numero(numero){
-        this.#numero = numero;
-    }
-
-    get estado(){
-        return this.#estado;
-    }
-    set estado(estado){
-        this.#estado = estado;
-    }
-    
-}
+module.exports = mongoose.model("Entrega",EntregaSchema);
