@@ -5,20 +5,20 @@ const Producto = require('../models/modelo/Factura');
 
 
 //pendiente
-router.prototype('/enviarInteresContenido',async(req,res)=>{
+router.post('/enviarInteresContenido',async(req,res)=>{
     const {pMensajeInteresContenido,pIDContenido} = req.body;
     
     res.json({status: 'Interes guardado'});
 });
 
 //pendiente
-router.prototype('/enviarFactura',async(req,res)=>{
+router.post('/enviarFactura',async(req,res)=>{
     const {pNumeroPedido,pIDContenido} = req.body;
     
     res.json({status: 'Interes guardado'});
 });
 
-router.prototype('/getFactura',async(req,res)=>{
+router.post('/getFactura',async(req,res)=>{
     const {pNumeroFactura} = req.body;
     var Factura = await Factura.findOne({numeroFactura:pNumeroFactura});
     if (Factura == null){
