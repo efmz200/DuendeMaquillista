@@ -1,9 +1,9 @@
 const express   = require('express');
 const router    = express.Router();
-const Actividad = require('../models/modelo/Actividad');
-const Curso     = require('../models/modelo/Curso');
-const Servicio  = require('../models/modelo/Servicio');
-const Entrega   = require('../models/modelo/Entrega');
+const Actividad = require('./Actividad');
+const Curso     = require('./Curso');
+const Servicio  = require('./Servicio');
+const Entrega   = require('./Entrega');
 
 function Factory(type, data) {   
 

@@ -19,7 +19,12 @@ app.use(express.json());
 app.use('/api/tasks',require('./routes/task.routes'));
 app.use('/api/usuario',require('./routes/admUsuario.routes'));
 app.use('/api/contenido',require('./routes/admGestionContenido.routes'));
+app.use('/api/Agenda',require('./routes/admAgenda.routes'));
 app.use('/api/productos',require('./routes/admProductos.routes'));
+app.use('/api/Notificaciones',require('./routes/admCentroNotificaciones.routes'));
+
+
+
 //app.use('/api/usuarios',require('./routes/Usuario.rutas'));
 //app.use('/api',fileRoutes.routes);
 

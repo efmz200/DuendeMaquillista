@@ -1,10 +1,7 @@
 const express   = require('express');
 const router    = express.Router();
 const Actividad = require('../models/modelo/Actividad');
-const Curso     = require('../models/modelo/Curso');
-const Servicio  = require('../models/modelo/Servicio');
-const Entrega   = require('../models/modelo/Entrega');
-import { Factory } from '../models/modelo/AbstractCreator';
+const Factory   = require('../models/modelo/AbstractCreator');
 
 
 //agendar curso
@@ -17,7 +14,7 @@ router.post('/agendarCurso',async(req,res)=>{
             nombre: pNombre,
             notas: pNotas
         }
-        var actividad = Factory("Curso",data);
+        var actividad = Factory.Factory("Curso",data);
         await actividad.save();
         res.json({status: 'Curso guardado'});
     }catch(err){
@@ -38,7 +35,7 @@ router.post('/agendarEntregas',async(req,res)=>{
             numeroFactura: pNumeroFactura,
             estado: "Pendiente"
         }
-        var actividad = Factory("Entrega",data);
+        var actividad = Factory.Factory("Entrega",data);
         await actividad.save();
         res.json({status: 'Entrega guardada'});
     }catch(err){
@@ -62,7 +59,7 @@ router.post('/agendarServicio',async(req,res)=>{
             notas: pNotas,
             imagen: pImagen
         }
-        var actividad = Factory("Servicio",data);
+        var actividad = Factory.Factory("Servicio",data);
         await actividad.save();
         res.json({status: 'Servicio guardado'});
     }catch(err){
@@ -107,12 +104,5 @@ router.get('/getAgenda',async(req,res)=>{
         })        
     }    
 })
-
-
-
-
-
-
-
 
 module.exports = router;
