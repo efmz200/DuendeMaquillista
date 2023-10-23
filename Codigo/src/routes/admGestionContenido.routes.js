@@ -3,28 +3,63 @@ const router =express.Router();
 const ContenidoSchema = require('../models/modelo/Contenido');
 const CategoriaSchema = require('../models/modelo/Categoria');
 const SubCategoriaSchema = require('../models/modelo/SubCategoria');
-//const { SubCategoriaSchema, CategoriaSchema, ContenidoSchema }  = require('../models/modelo/Contenido');
 
-router.get('/',async (req,res) => {
+//filtrar contenido
+router.post('filtrarContenido',async (req,res) => {
+    try{
+        const {pPalabraClave,pCategoria,pSubCategoria} = req.body;
+        var contenido = await ContenidoSchema.find({})
+        var contenidoFiltrado = [];
+        for (var i = 0; i < contenido.length; i++) {
+            agregar = false;
+            cont = contenido[i];
+            for (var j = 0; j < contenido[i].palabrasClave.length; j++) {
+                if (cont.palabrasClave[j] == pPalabraClave){
+                    agregar = true;
+                }
+            }
+            for (var j = 0; j < contenido[i].categoria.length; j++) {
+                if (cont.categoria[j] == pCategoria){
+                    agregar = true;
+                }
+            }
+            for (var j = 0; j < contenido[i].subcategoria.length; j++) {
+                if (cont.subcategoria[j] == pSubCategoria){
+                    agregar = true;
+                }
+            }
+            if (agregar){
+                contenidoFiltrado.push(cont);
+            }
+        }
+        return res.json(contenidoFiltrado)
+
+    }catch(err){
+        console.log(err)
+        res.json({
+            status:false,
+            descripcion:'Hubo un error en la operación'
+        })
+    }
+
+})
+
+//listar contenido
+router.get('/getContenidos',async (req,res) => {
     const contenido =await ContenidoSchema.find({})
     console.log(contenido)
     res.json(contenido)
 })
 
-router.get('/Categorias',async (req,res) => {
+//listar categorias
+router.get('/getCategorias',async (req,res) => {
     const categoria = await CategoriaSchema.find({})
     console.log(categoria)
     res.json(categoria)
 });
 
-router.get('/SubCategorias',async (req,res) => {
-    const subcategoria =await SubCategoriaSchema.find({})
-    console.log(subcategoria)
-    res.json(subcategoria)
-}); 
-
 //listar SubCategorias de una categoria
-router.post('/SubCategorias', async (req,res) =>{
+router.post('/getSubcategoria', async (req,res) =>{
     try{
         const {categoria,nombre} = req.body;
         const cat = await CategoriaSchema.find({nombre:categoria})
@@ -54,17 +89,17 @@ router.post('/SubCategorias', async (req,res) =>{
 });
 
 //crear categorias
-router.post('/addCategorias', async (req,res) =>{
+router.post('/agregarCategorias', async (req,res) =>{
     try{
-        const {nombre} = req.body;
-        console.log(nombre)
+        const {pNombreCategoria} = req.body;
         const categoria = new CategoriaSchema({
-            nombre,
+            nombre:pNombreCategoria,
             subcategorias:[]
         });
-        const cat = await CategoriaSchema.findOne({nombre:nombre})
+        const cat = await CategoriaSchema.findOne({nombre:pNombreCategoria})
         if (cat != null){
             res.json({
+                success: false,
                 status:'CategoriaSchema ya existe'
             });
             return;
@@ -72,26 +107,22 @@ router.post('/addCategorias', async (req,res) =>{
         await categoria.save();
         console.log(categoria)
         res.json({
+            success: true,
             status:'CategoriaSchema guardada'
         });
         
     }catch(err){        
         console.log(err)
-        if (err.code == 11000){
-            res.json({
-                status:'CategoriaSchema ya existe'
-            });
-        }else{
-            res.json({
-                status:'Hubo un error en la operación'
-            })
-        }      
+        res.json({
+            success: false,
+            status:'Hubo un error en la operación'
+        })    
     }
 });
 
 
 //agregar subcategorias a una categoria
-router.post('/addSubCategoria', async (req,res) =>{
+router.post('/agregarSubcategoria', async (req,res) =>{
     try{
         const {categoria,nombre} = req.body;        
         const subcategoria = new SubCategoriaSchema({
@@ -99,12 +130,12 @@ router.post('/addSubCategoria', async (req,res) =>{
         })
         
         cat = await CategoriaSchema.findOne({nombre:categoria})
-        console.log(categoria,cat,"\n\n")
         
         if (cat.subcategorias.length !=0){
             for (var i = 0; i < cat.subcategorias.length; i++) {
                 if (cat.subcategorias[i].nombre == nombre){
                     res.json({
+                        success: false,
                         status:'SubCategoriaSchema ya existe'
                     });
                     return;
@@ -116,17 +147,356 @@ router.post('/addSubCategoria', async (req,res) =>{
         await CategoriaSchema.findByIdAndUpdate(cat._id,cat)
         
         res.json({
+            success: true,
             status:'SubCategoriaSchema guardada'
         });
         
     }catch(err){        
         console.log(err)
         res.json({
+            success: false,
             status:'Hubo un error en la operación'
         })        
     }
 });
 
+
+//agregar palabra clave a un contenido
+router.post('/addPalabrasClave', async (req,res) =>{
+    try{
+        const {id,palabraClave} = req.body;
+        const contenido = await ContenidoSchema.findOne({id:id})
+        if (contenido == null){
+            res.json({
+                status:'ContenidoSchema no existe'
+            })
+            return;
+        }
+        contenido.palabrasClave.push(palabraClave);
+        await ContenidoSchema.findByIdAndUpdate(contenido._id,contenido)
+        console.log(contenido)
+        res.json({
+            success: true,
+            status:'Palabras Clave guardadas'
+        })
+    }catch(err){
+        console.log(err)
+        res.json({
+            success: false,
+            status:'Hubo un error en la operación'
+        })
+    }
+});
+
+//agregar tags a un contenido
+router.post('/agregarTag', async (req,res) =>{
+    try{
+        const {idContenido,tag} = req.body;
+        const contenido = await ContenidoSchema.findOne({id:idContenido})
+        if (contenido == null){
+            res.json({
+                success: false,
+                status:'ContenidoSchema no existe'
+            })
+            return;
+        }
+        contenido.tags.push(tag);
+        await ContenidoSchema.findByIdAndUpdate(contenido._id,contenido)
+        console.log(contenido)
+        res.json({
+            success: true,
+            status:'Tag guardado'
+        })
+    }catch(err){
+        console.log(err)
+        res.json({
+            success: false,
+            status:'Hubo un error en la operación'
+        })
+    }
+});
+
+
+//editar descripcion
+router.post('/editarDescripcion', async (req,res) =>{
+    try{
+        const {idContenido,descripcion} = req.body;
+        const contenido = await ContenidoSchema.findOneAndUpdate({id:idContenido},{descripcion:descripcion})
+        if (contenido == null){
+            res.json({
+                success: false,
+                status:'ContenidoSchema no existe'
+            })
+            return;
+        }
+        console.log(contenido)
+        res.json({
+            success: true,
+            status:'Descripcion guardada'
+        })
+    }catch(err){
+        console.log(err)
+        res.json({
+            success: false,
+            status:'Hubo un error en la operación'
+        })
+    }
+
+})
+
+//eliminar palabra clave
+router.post('/eliminarPalabraClave', async (req,res) =>{
+    try{
+        const {idContenido,palabraClave} = req.body;
+        const contenido = await ContenidoSchema.findOne({id:idContenido})
+        if (contenido == null){
+            res.json({
+                success: false,
+                status:'ContenidoSchema no existe'
+            })
+            return;
+        }
+        for (var i = 0; i < contenido.palabrasClave.length; i++) {
+            if (contenido.palabrasClave[i] == palabraClave){
+                contenido.palabrasClave.pop(contenido.palabrasClave[i]);
+                await ContenidoSchema.findByIdAndUpdate(contenido._id,contenido)
+                return res.json({
+                    success: true,
+                    status:'Palabra Clave eliminada'
+                })
+            }
+        }
+        res.json({
+            success: false,
+            status:'Palabra Clave no existe'
+        })
+    }catch(err){
+        console.log(err)
+        res.json({
+            success: false,
+            status:'Hubo un error en la operación'
+        })
+    }
+
+})
+
+
+//eliminar palabra clave de un contenido
+router.post('/deletePalabraClave', async (req,res) =>{
+    try{
+        const {id,palabraClave} = req.body;
+        const contenido = await ContenidoSchema.findOne({id:id})
+        if (contenido == null){
+            res.json({
+                success: false,
+                status:'ContenidoSchema no existe'
+            })
+            return;
+        }
+        for (var i = 0; i < contenido.palabrasClave.length; i++) {
+            if (contenido.palabrasClave[i] == palabraClave){
+                contenido.palabrasClave.pop(contenido.palabrasClave[i]);
+            }
+        }
+        await ContenidoSchema.findByIdAndUpdate(contenido._id,contenido)
+        console.log(contenido)
+        res.json({
+            success: true,
+            status:'Palabra Clave eliminada'
+        })
+    }catch(err){
+        console.log(err)
+        res.json({
+            success: false,
+            status:'Hubo un error en la operación'
+        })
+    }
+});
+
+//eliminar tag de un contenido
+router.post('/eliminarTag', async (req,res) =>{
+    try{
+        const {idContenido,tag} = req.body;
+        const contenido = await ContenidoSchema.findOne({id:idContenido})
+        if (contenido == null){
+            res.json({
+                success: false,
+                status:'ContenidoSchema no existe'
+            })
+            return;
+        }
+        for (var i = 0; i < contenido.tags.length; i++) {
+            if (contenido.tags[i] == tag){
+                contenido.tags.pop(contenido.tags[i]);
+            }
+        }
+        await ContenidoSchema.findByIdAndUpdate(contenido._id,contenido)
+        console.log(contenido)
+        res.json({
+            success: true,
+            status:'Tag eliminado'
+        })
+    }catch(err){
+        console.log(err)
+        res.json({
+            success: false,
+            status:'Hubo un error en la operación'
+        })
+    }
+});
+
+//agregar imagen a un contenido
+router.post('/agregarImagen', async (req,res) =>{
+    try{
+        const {idContenido,imagen} = req.body;
+        const contenido = await ContenidoSchema.findOne({id:idContenido})
+        if (contenido == null){
+            res.json({
+                success: false,
+                status:'ContenidoSchema no existe'
+            })
+            return;
+        }
+        contenido.imagen = imagen;
+        await ContenidoSchema.findByIdAndUpdate(contenido._id,contenido)
+        console.log(contenido)
+        res.json({
+            success: true,
+            status:'Imagen guardada'
+        })
+    }catch(err){
+        console.log(err)
+        res.json({
+            success: false,
+            status:'Hubo un error en la operación'
+        })
+    }
+});
+
+//actualizar imagen a un contenido
+router.post('/actualizarImagen', async (req,res) =>{
+    try{
+        const {idContenido,imagen} = req.body;
+        const contenido = await ContenidoSchema.findOne({id:idContenido})
+        if (contenido == null){
+            res.json({
+                success: false,
+                status:'ContenidoSchema no existe'
+            })
+            return;
+        }
+        contenido.imagen = imagen;
+        await ContenidoSchema.findByIdAndUpdate(contenido._id,contenido)
+        console.log(contenido)
+        res.json({
+            success: true,
+            status:'Imagen guardada'
+        })
+    }catch(err){
+        console.log(err)
+        res.json({
+            success: false,
+            status:'Hubo un error en la operación'
+        })
+    }
+});
+
+//agregar categoria a un contenido
+router.post('/addContenidoCategoria', async (req,res) =>{
+    try{
+        const {id,categoria} = req.body;
+        const contenido = await ContenidoSchema.findOne({id:id})
+        const cat = await CategoriaSchema.findOne({nombre:categoria})
+        if (contenido == null){
+            res.json({
+                success: false,
+                status:'ContenidoSchema no existe'
+            })
+            return;
+        }
+        if (cat == null){
+            res.json({
+                success: false,
+                status:'CategoriaSchema no existe'
+            })
+            return;
+        }
+        contenido.categoria.push(cat);
+        await ContenidoSchema.findByIdAndUpdate(contenido._id,contenido)
+        console.log(contenido)
+        res.json({
+            success: true,
+            status:'CategoriaSchema guardada'
+        })
+    }catch(err){
+        console.log(err)
+        res.json({
+            success: false,
+            status:'Hubo un error en la operación'
+        })
+    }
+});
+
+
+//eliminar contenido
+router.post('/eliminarContenido', async (req,res) =>{
+    try{
+        const {idContenido} = req.body;
+        const contenido = await ContenidoSchema.findOne({id:idContenido})
+        if (contenido == null){
+            res.json({
+                success: false,
+                status:'ContenidoSchema no existe'
+            })
+            return;
+        }
+        await ContenidoSchema.findByIdAndDelete(contenido._id)
+        console.log(contenido)
+        res.json({
+            success: true,
+            status:'ContenidoSchema eliminado'
+        })
+    }catch(err){
+        console.log(err)
+        res.json({
+            success: false,
+            status:'Hubo un error en la operación'
+        })
+    }
+});
+
+//actualizar contenido
+router.post('/actualizarContenido', async (req,res) =>{
+    try{
+        const {idContenido,imagen,descripcion,categoria,subcategoria,palabrasClave,tags} = req.body;
+        const contenido = await ContenidoSchema.findOne({id:idContenido})
+        if (contenido == null){
+            res.json({
+                success: false,
+                status:'ContenidoSchema no existe'
+            })
+            return;
+        }
+        contenido.imagen = imagen;
+        contenido.descripcion = descripcion;
+        contenido.categoria = categoria;
+        contenido.subcategoria = subcategoria;
+        contenido.palabrasClave = palabrasClave;
+        contenido.tags = tags;
+        await ContenidoSchema.findByIdAndUpdate(contenido._id,contenido)
+        console.log(contenido)
+        res.json({
+            success: true,
+            status:'ContenidoSchema actualizado'
+        })
+    }catch(err){
+        console.log(err)
+        res.json({
+            success: false,
+            status:'Hubo un error en la operación'
+        })
+    }
+});
 
 
 //agregar contenido
@@ -174,260 +544,40 @@ router.post('/registarContenido', async (req,res) =>{
         await contenido.save();
         console.log(contenido)
         res.json({
+            success: true,
             status:'ContenidoSchema guardado'
         })
     }catch(err){
         console.log(err)
         res.json({
+            success: false,
             status:'Hubo un error en la operación'
         })
     }
 });
 
-//actualizar contenido
-router.post('/actualizarContenido', async (req,res) =>{
+//obtener publucación por id
+router.post('/getPublicacion', async (req,res) =>{
     try{
-        const {id,imagen,descripcion,categoria,subcategoria,palabrasClave,tags} = req.body;
-        const contenido = await ContenidoSchema.findOne({id:id})
+        const {idContenido} = req.body;
+        const contenido = await ContenidoSchema.findOne({id:idContenido})
         if (contenido == null){
             res.json({
+                success: false,
                 status:'ContenidoSchema no existe'
             })
             return;
         }
-        contenido.imagen = imagen;
-        contenido.descripcion = descripcion;
-        contenido.categoria = categoria;
-        contenido.subcategoria = subcategoria;
-        contenido.palabrasClave = palabrasClave;
-        contenido.tags = tags;
-        await ContenidoSchema.findByIdAndUpdate(contenido._id,contenido)
         console.log(contenido)
-        res.json({
-            status:'ContenidoSchema actualizado'
-        })
+        res.json({contenido:contenido,success:true})
     }catch(err){
         console.log(err)
         res.json({
+            success: false,
             status:'Hubo un error en la operación'
         })
     }
 });
-
-//eliminar contenido
-router.post('/eliminarContenido', async (req,res) =>{
-    try{
-        const {id} = req.body;
-        const contenido = await ContenidoSchema.findOne({id:id})
-        if (contenido == null){
-            res.json({
-                status:'ContenidoSchema no existe'
-            })
-            return;
-        }
-        await ContenidoSchema.findByIdAndDelete(contenido._id)
-        console.log(contenido)
-        res.json({
-            status:'ContenidoSchema eliminado'
-        })
-    }catch(err){
-        console.log(err)
-        res.json({
-            status:'Hubo un error en la operación'
-        })
-    }
-});
-
-//agregar palabra clave a un contenido
-router.post('/addPalabrasClave', async (req,res) =>{
-    try{
-        const {id,palabraClave} = req.body;
-        const contenido = await ContenidoSchema.findOne({id:id})
-        if (contenido == null){
-            res.json({
-                status:'ContenidoSchema no existe'
-            })
-            return;
-        }
-        contenido.palabrasClave.push(palabraClave);
-        await ContenidoSchema.findByIdAndUpdate(contenido._id,contenido)
-        console.log(contenido)
-        res.json({
-            status:'Palabras Clave guardadas'
-        })
-    }catch(err){
-        console.log(err)
-        res.json({
-            status:'Hubo un error en la operación'
-        })
-    }
-});
-
-//agregar tags a un contenido
-router.post('/addTag', async (req,res) =>{
-    try{
-        const {id,tag} = req.body;
-        const contenido = await ContenidoSchema.findOne({id:id})
-        if (contenido == null){
-            res.json({
-                status:'ContenidoSchema no existe'
-            })
-            return;
-        }
-        contenido.tags.push(tag);
-        await ContenidoSchema.findByIdAndUpdate(contenido._id,contenido)
-        console.log(contenido)
-        res.json({
-            status:'Tag guardado'
-        })
-    }catch(err){
-        console.log(err)
-        res.json({
-            status:'Hubo un error en la operación'
-        })
-    }
-});
-
-//eliminar tag de un contenido
-router.post('/deleteTag', async (req,res) =>{
-    try{
-        const {id,tag} = req.body;
-        const contenido = await ContenidoSchema.findOne({id:id})
-        if (contenido == null){
-            res.json({
-                status:'ContenidoSchema no existe'
-            })
-            return;
-        }
-        for (var i = 0; i < contenido.tags.length; i++) {
-            if (contenido.tags[i] == tag){
-                contenido.tags.pop(contenido.tags[i]);
-            }
-        }
-        await ContenidoSchema.findByIdAndUpdate(contenido._id,contenido)
-        console.log(contenido)
-        res.json({
-            status:'Tag eliminado'
-        })
-    }catch(err){
-        console.log(err)
-        res.json({
-            status:'Hubo un error en la operación'
-        })
-    }
-});
-
-//agregar categoria a un contenido
-router.post('/addContenidoCategoria', async (req,res) =>{
-    try{
-        const {id,categoria} = req.body;
-        const contenido = await ContenidoSchema.findOne({id:id})
-        const cat = await CategoriaSchema.findOne({nombre:categoria})
-        if (contenido == null){
-            res.json({
-                status:'ContenidoSchema no existe'
-            })
-            return;
-        }
-        if (cat == null){
-            res.json({
-                status:'CategoriaSchema no existe'
-            })
-            return;
-        }
-        contenido.categoria.push(cat);
-        await ContenidoSchema.findByIdAndUpdate(contenido._id,contenido)
-        console.log(contenido)
-        res.json({
-            status:'CategoriaSchema guardada'
-        })
-    }catch(err){
-        console.log(err)
-        res.json({
-            status:'Hubo un error en la operación'
-        })
-    }
-});
-
-//agregar descripcion a un contenido
-router.post('/addDescripcion', async (req,res) =>{
-    try{
-        const {id,descripcion} = req.body;
-        const contenido = await ContenidoSchema.findOne({id:id})
-        if (contenido == null){
-            res.json({
-                status:'ContenidoSchema no existe'
-            })
-            return;
-        }
-        contenido.descripcion = descripcion;
-        await ContenidoSchema.findByIdAndUpdate(contenido._id,contenido)
-        console.log(contenido)
-        res.json({
-            status:'Descripcion guardada'
-        })
-    }catch(err){
-        console.log(err)
-        res.json({
-            status:'Hubo un error en la operación'
-        })
-    }
-});
-
-//eliminar palabra clave de un contenido
-router.post('/deletePalabraClave', async (req,res) =>{
-    try{
-        const {id,palabraClave} = req.body;
-        const contenido = await ContenidoSchema.findOne({id:id})
-        if (contenido == null){
-            res.json({
-                status:'ContenidoSchema no existe'
-            })
-            return;
-        }
-        for (var i = 0; i < contenido.palabrasClave.length; i++) {
-            if (contenido.palabrasClave[i] == palabraClave){
-                contenido.palabrasClave.pop(contenido.palabrasClave[i]);
-            }
-        }
-        await ContenidoSchema.findByIdAndUpdate(contenido._id,contenido)
-        console.log(contenido)
-        res.json({
-            status:'Palabra Clave eliminada'
-        })
-    }catch(err){
-        console.log(err)
-        res.json({
-            status:'Hubo un error en la operación'
-        })
-    }
-});
-
-//agregar imagen a un contenido
-router.post('/addImagen', async (req,res) =>{
-    try{
-        const {id,imagen} = req.body;
-        const contenido = await ContenidoSchema.findOne({id:id})
-        if (contenido == null){
-            res.json({
-                status:'ContenidoSchema no existe'
-            })
-            return;
-        }
-        contenido.imagen = imagen;
-        await ContenidoSchema.findByIdAndUpdate(contenido._id,contenido)
-        console.log(contenido)
-        res.json({
-            status:'Imagen guardada'
-        })
-    }catch(err){
-        console.log(err)
-        res.json({
-            status:'Hubo un error en la operación'
-        })
-    }
-});
-
 
 
 module.exports = router;

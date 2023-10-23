@@ -12,19 +12,19 @@ router.get('/',async (req,res) => {
 
 //iniciarSesion
 router.post('/iniciarSesion',async (req,res) => {
-    try{
-        success = false;
+    try{        
         const {correo,contrasena} = req.body;
         const usuario =await Usuario.findOne({correo,contrasena})
         if (usuario != null){
-            success = true;            
+            res.json({ success: true, estatus: "Sesion iniciada" });
+             return;           
         } 
-
-        res.json({ success: success });
+        res.json({ success: false, estatus: "Correo o contrseña invalidos" });       
 
     }catch(err){
         console.log(err)
         res.json({
+            success: false,
             status:'Hubo un error en el inicio de sesión'
         })
     }
@@ -47,12 +47,14 @@ router.post('/registrarUsuario', async (req,res) =>{
         await usuario.save();
         console.log(usuario)
         res.json({
-            status:'Usuario guardado'
+            status:'Usuario guardado',
+            success: true
         });
         
     }catch(err){        
         console.log(err)
         res.json({
+            success: false,
             status:'Hubo un error en la operación'
         })        
     }
@@ -74,18 +76,22 @@ router.post('/actualizarUsuario', async (req,res) =>{
         }, {new: true});
         console.log(usuario)
         res.json({
+            success: true,
             status:'Usuario actualizado'
         });        
     }catch(err){        
         console.log(err)
         res.json({
+            success: false,
             status:'Hubo un error en la operación'
         })        
     }
 })
 
+//reestablece la contraseña de un usuario si concuerda el correo
 router.post('/olvideContrasena', async (req,res) =>{
     try{
+        //prepara el correo 
         const {correo} = req.body;
         console.log(process.env.GMAIL_MAIL)
         let transporter = nodemailer.createTransport({
@@ -100,6 +106,7 @@ router.post('/olvideContrasena', async (req,res) =>{
             }
           });
 
+        //genera una contraseña aleatoria
         const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+';
         let contrasena = '';
         for (let i = 0; i < 12; i++) {
@@ -107,6 +114,7 @@ router.post('/olvideContrasena', async (req,res) =>{
             contrasena += caracteres[indice];
         }
         
+        //envio del correo
         const mensaje = `Su nueva contraseña es: ${contrasena}. \nSi usted no solicitó el cambio de contraseña, cámbiela inmediatamente.`;
   
         const mailOptions = {
@@ -115,7 +123,8 @@ router.post('/olvideContrasena', async (req,res) =>{
             subject: 'Cambio de contrasenia',
             text: mensaje
         };
-          
+        
+        //actualiza la contraseña en la base de datos
         const usuario = await Usuario.findOneAndUpdate({correo},{contrasena}, {new: true});
         if (usuario != null){          
         
@@ -132,12 +141,14 @@ router.post('/olvideContrasena', async (req,res) =>{
         }
         
         return res.json({
+            success: true,
             status:'Si su correo es correcto, se le enviará un correo con su nueva contraseña'
         });
         
     }catch(err){        
         console.log(err)
         res.json({
+            success: false,
             status:'Hubo un error en la operación'
         })        
     }
@@ -162,6 +173,7 @@ router.post('/eliminarUsuario', async (req,res) =>{
     }
 })
 
+//validar usuario == iniciar sesion? 
 
 
 
