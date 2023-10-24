@@ -9,3 +9,5 @@ const ProductoSchema = new Schema({
     descripcion: {type: String, default: ''},
     imagen: {type: String, default: ''},
 });
+
+module.exports = mongoose.model('Producto',ProductoSchema);

@@ -61,8 +61,9 @@ router.get('/getCategorias',async (req,res) => {
 //listar SubCategorias de una categoria
 router.post('/getSubcategoria', async (req,res) =>{
     try{
-        const {categoria,nombre} = req.body;
+        const {categoria} = req.body;
         const cat = await CategoriaSchema.find({nombre:categoria})
+        console.log(cat)
         var subCats = [];
         if (cat.length == 0){
             res.json({
@@ -71,8 +72,10 @@ router.post('/getSubcategoria', async (req,res) =>{
             })
             return;
         }
-        for (var i = 0; i < cat.subcategorias.length; i++) {
-            subCats.push(cat.subcategorias[i]);
+        for (var i = 0; i < cat.length; i++) {
+            for (var j = 0; j < cat[i].subcategorias.length; j++) {
+                subCats.push(cat[i].subcategorias[j]);
+            }
         }
         res.json({
             status: true,
@@ -162,10 +165,10 @@ router.post('/agregarSubcategoria', async (req,res) =>{
 
 
 //agregar palabra clave a un contenido
-router.post('/addPalabrasClave', async (req,res) =>{
+router.post('/agregarPalabraClave', async (req,res) =>{
     try{
-        const {id,palabraClave} = req.body;
-        const contenido = await ContenidoSchema.findOne({id:id})
+        const {idContenido,palabraClave} = req.body;
+        const contenido = await ContenidoSchema.findOne({id:idContenido})
         if (contenido == null){
             res.json({
                 status:'ContenidoSchema no existe'
@@ -201,7 +204,7 @@ router.post('/agregarTag', async (req,res) =>{
             return;
         }
         contenido.tags.push(tag);
-        await ContenidoSchema.findByIdAndUpdate(contenido._id,contenido)
+        await ContenidoSchema.findByIdAndUpdate(contenido._id,contenido,{new:true})
         console.log(contenido)
         res.json({
             success: true,
@@ -258,8 +261,9 @@ router.post('/eliminarPalabraClave', async (req,res) =>{
         }
         for (var i = 0; i < contenido.palabrasClave.length; i++) {
             if (contenido.palabrasClave[i] == palabraClave){
-                contenido.palabrasClave.pop(contenido.palabrasClave[i]);
-                await ContenidoSchema.findByIdAndUpdate(contenido._id,contenido)
+                contenido.palabrasClave.splice(i,1);
+                var cont = await ContenidoSchema.findByIdAndUpdate(contenido._id,contenido,{new:true})
+                console.log(cont)
                 return res.json({
                     success: true,
                     status:'Palabra Clave eliminada'
@@ -281,7 +285,7 @@ router.post('/eliminarPalabraClave', async (req,res) =>{
 })
 
 
-//eliminar palabra clave de un contenido
+//eliminar palabra clave de un contenido --esta no es necesaria :p 
 router.post('/deletePalabraClave', async (req,res) =>{
     try{
         const {id,palabraClave} = req.body;
@@ -295,7 +299,7 @@ router.post('/deletePalabraClave', async (req,res) =>{
         }
         for (var i = 0; i < contenido.palabrasClave.length; i++) {
             if (contenido.palabrasClave[i] == palabraClave){
-                contenido.palabrasClave.pop(contenido.palabrasClave[i]);
+                contenido.palabrasClave.splice(i,1);
             }
         }
         await ContenidoSchema.findByIdAndUpdate(contenido._id,contenido)
@@ -327,15 +331,20 @@ router.post('/eliminarTag', async (req,res) =>{
         }
         for (var i = 0; i < contenido.tags.length; i++) {
             if (contenido.tags[i] == tag){
-                contenido.tags.pop(contenido.tags[i]);
+                contenido.tags.splice(i,1);
+                await ContenidoSchema.findByIdAndUpdate(contenido._id,contenido)
+                console.log(contenido)
+                res.json({
+                    success: true,
+                    status:'Tag eliminado'
+                })
             }
         }
-        await ContenidoSchema.findByIdAndUpdate(contenido._id,contenido)
-        console.log(contenido)
         res.json({
-            success: true,
-            status:'Tag eliminado'
+            success: false,
+            status:'Tag no existe'
         })
+        
     }catch(err){
         console.log(err)
         res.json({
@@ -381,7 +390,7 @@ router.post('/actualizarImagen', async (req,res) =>{
         if (contenido == null){
             res.json({
                 success: false,
-                status:'ContenidoSchema no existe'
+                status:'Contenido no existe'
             })
             return;
         }
@@ -390,7 +399,7 @@ router.post('/actualizarImagen', async (req,res) =>{
         console.log(contenido)
         res.json({
             success: true,
-            status:'Imagen guardada'
+            status:'Imagen actualizada'
         })
     }catch(err){
         console.log(err)
@@ -402,10 +411,10 @@ router.post('/actualizarImagen', async (req,res) =>{
 });
 
 //agregar categoria a un contenido
-router.post('/addContenidoCategoria', async (req,res) =>{
+router.post('/agregarContenidoCategoria', async (req,res) =>{
     try{
-        const {id,categoria} = req.body;
-        const contenido = await ContenidoSchema.findOne({id:id})
+        const {idContenido,categoria} = req.body;
+        const contenido = await ContenidoSchema.findOne({id:idContenido})
         const cat = await CategoriaSchema.findOne({nombre:categoria})
         if (contenido == null){
             res.json({
@@ -477,13 +486,25 @@ router.post('/actualizarContenido', async (req,res) =>{
             })
             return;
         }
-        contenido.imagen = imagen;
-        contenido.descripcion = descripcion;
-        contenido.categoria = categoria;
-        contenido.subcategoria = subcategoria;
-        contenido.palabrasClave = palabrasClave;
-        contenido.tags = tags;
-        await ContenidoSchema.findByIdAndUpdate(contenido._id,contenido)
+        if (imagen != null){
+            contenido.imagen = imagen;
+        }
+        if (descripcion != null){
+            contenido.descripcion = descripcion;
+        6}
+        if (categoria != null){
+            contenido.categoria = categoria;
+        }
+        if (subcategoria != null){
+            contenido.subcategoria = subcategoria;
+        }
+        if (palabrasClave != null){
+            contenido.palabrasClave = palabrasClave;
+        }
+        if (tags != null){
+            contenido.tags = tags;
+        }
+        await ContenidoSchema.findByIdAndUpdate(contenido._id,contenido,{new:true})
         console.log(contenido)
         res.json({
             success: true,
@@ -501,7 +522,8 @@ router.post('/actualizarContenido', async (req,res) =>{
 
 //agregar contenido
 router.post('/registarContenido', async (req,res) =>{
-    var {id,imagen,descripcion,categoria,subcategoria,palabrasClave,tags} = req.body;
+    var {idContenido,imagen,descripcion,categoria,subcategoria,palabrasClave,tags} = req.body;
+    const id = idContenido;
     try{        
         if (categoria == null){
             categoria = [];
@@ -525,12 +547,12 @@ router.post('/registarContenido', async (req,res) =>{
         if (palabrasClave == null){
             palabrasClave = [];
         }else{
-            palabrasClave = [palabrasClave];
+            palabrasClave = palabrasClave;
         }
         if (tags == null){
             tags = [];
         }else{
-            tags = [tags];
+            tags = tags;
         }
         const contenido = new ContenidoSchema({
             id,

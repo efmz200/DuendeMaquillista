@@ -3,7 +3,7 @@ const router    = express.Router();
 const Actividad = require('../models/modelo/Actividad');
 const Factory   = require('../models/modelo/AbstractCreator');
 
-
+//fechas formato AAAA-MM-DD
 //agendar curso
 router.post('/agendarCurso',async(req,res)=>{
     try{
@@ -14,7 +14,7 @@ router.post('/agendarCurso',async(req,res)=>{
             nombre: pNombre,
             notas: pNotas
         }
-        var actividad = Factory.Factory("Curso",data);
+        var actividad = Factory("Curso",data);
         await actividad.save();
         res.json({status: 'Curso guardado'});
     }catch(err){
@@ -26,7 +26,7 @@ router.post('/agendarCurso',async(req,res)=>{
 });
 
 //agendar Entrega
-router.post('/agendarEntregas',async(req,res)=>{
+router.post('/agendarEntrega',async(req,res)=>{
     try{
         const {pFecha,pDescripcion,pNumeroFactura} = req.body;
         data = {
@@ -35,7 +35,7 @@ router.post('/agendarEntregas',async(req,res)=>{
             numeroFactura: pNumeroFactura,
             estado: "Pendiente"
         }
-        var actividad = Factory.Factory("Entrega",data);
+        var actividad = Factory("Entrega",data);
         await actividad.save();
         res.json({status: 'Entrega guardada'});
     }catch(err){
@@ -59,7 +59,7 @@ router.post('/agendarServicio',async(req,res)=>{
             notas: pNotas,
             imagen: pImagen
         }
-        var actividad = Factory.Factory("Servicio",data);
+        var actividad = Factory("Servicio",data);
         await actividad.save();
         res.json({status: 'Servicio guardado'});
     }catch(err){
@@ -78,7 +78,9 @@ router.post('/cambiarEstado',async(req,res)=>{
         for (let i = 0; i < actividades.length; i++) {
             if(actividades[i].actividadConcreta.numeroFactura == pNumeroFactura){
                 actividades[i].actividadConcreta.estado = pEstado;
-                await actividades[i].save();
+                idActividad = actividades[i]._id;
+                const actividad = await Actividad.findOneAndUpdate({_id: idActividad},actividades[i], {new: true})
+                console.log(actividad)
                 res.json({status: 'Estado actualizado'});
                 return
             }

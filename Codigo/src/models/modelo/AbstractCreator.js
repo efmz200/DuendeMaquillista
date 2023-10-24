@@ -35,4 +35,4 @@ function Factory(type, data) {
     
 }
 
-module.export = {Factory};
+module.exports = Factory;
