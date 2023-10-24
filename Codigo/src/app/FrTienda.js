@@ -222,11 +222,53 @@ export default class FrTienda {
         fetch('/api/contenido/getCategorias')
             .then(res => res.json())
             .then(data =>{ 
-                //categorias = ({categoria:data});
-                console.log('categorias');
+                console.log(data);
+                categorias.push( data);
+
+        
+        console.log(categorias);
 
                 
+        //console.log(categorias[0].length);
+
+        const numColumnas = 4; 
+        console.log(numColumnas);
+
             
+        
+        const columnas2 = [];
+            
+        for (let i = 0; i < numColumnas; i++) {
+                columnas2.push(
+                    <div className="col s4" >
+                                <div className="card" style={{ backgroundColor: "#033734" }}>
+                                    <div className="card-content">
+                                        <div style={{ display: "flex", justifyContent: "center" }}>
+                                            <div style={{ backgroundColor: "white", width: "200px", height: "150px", display: "flex", justifyContent: "center", alignItems: "center" }}>
+                                                <h1>img</h1>
+                                            </div>
+                                            
+                                            
+                                        </div>
+                                        <div style={{ display: "flex", justifyContent: "center" }}>
+                                            
+                                            <div style={{ marginTop: "10px" }}> 
+                                                <button type="submit" className="btn" style={{ backgroundColor: "#FFFFFF", color: "#000000" }}>
+                                                    Nombre producto
+                                                </button>
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                );
+        }
+        return (
+        <div className="row">
+                    
+            {columnas2}
+        </div>)
             });
         
         }
