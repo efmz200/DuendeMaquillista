@@ -1,13 +1,13 @@
-import React from 'react';
+import React, {useEffect,useState }  from 'react';
 
-export default class FrTienda {
+/**export default class FrTienda {
     constructor() {
-    }
-     cancelareventos(e){
+    }*/
+function     cancelareventos(e){
         e.preventDefault();
     }
     
-     handleChange(e){
+function    handleChange(e){
         const {name,value }= e.target;
         this.setState({
             [name]: value
@@ -15,7 +15,7 @@ export default class FrTienda {
     
     }
     
-    visualizarCarrito(){
+function    visualizarCarrito(){
         const numColumnas = 4; // Cantidad de columnas que deseas
 
         // Un array de elementos JSX para representar las columnas
@@ -39,7 +39,8 @@ export default class FrTienda {
                                             <span> precio</span>
                                         </div>
                                         <div className='col s3'>
-                                            <span>spinbox</span>
+                                            
+                                            <input type="number" name="cantidad" maxLength="16" style={{ backgroundColor: "#FFFFFF" }}/>
                                         </div>
                                         <div className='col s3'>
                                             <button type="submit" className="btn" style={{ backgroundColor: "#033734",color: "#FFFFFF" }}>
@@ -92,7 +93,7 @@ export default class FrTienda {
         
     }
 
-    visualizarPublicacion(){
+function   visualizarPublicacion(){
 
         const cuadro =  []
         
@@ -116,12 +117,12 @@ export default class FrTienda {
                                     <div style={{ display: "flex", justifyContent: "center" }}>
                                         
                                         <div style={{ marginTop: "10px" }}> {/* Agregar margen superior de 10px */}
-                                            <form onSubmit={this.cancelareventos} style={{ backgroundColor: "#FFFFFF", color: "#000000" }}>
+                                            <form onSubmit={cancelareventos} style={{ backgroundColor: "#FFFFFF", color: "#000000" }}>
                                                 <span>Si te interesa contratar el servicio de este makeup no dudes en escribirme</span>
                                                 <br/>
                                                 <div className="row">
                                                     <div className="col s8">
-                                                        <input name="Mensaje" onChange={this.handleChange} type="text" defaultValue="Me interesa, que precio tiene?" style={{border: "1px solid #000000" }}/>
+                                                        <input name="Mensaje" onChange={handleChange} type="text" defaultValue="Me interesa, que precio tiene?" style={{border: "1px solid #000000" }}/>
                                                     </div>
                                                     <div className="col s4">
                                                         <button type="submit" className="btn" style={{ backgroundColor: "#FFFFFF", color: "#000000", border: "1px solid #000000" }}>
@@ -213,67 +214,64 @@ export default class FrTienda {
             
         )
     }
-    visualizarCategoriaProductos(){
-        
-        const categorias = [];
+function    visualizarCategoriaProductos(){
+    const [categorias, setCategorias] = useState([]);
+    const [numColumnas, setNumColumnas] = useState(0);
 
-        
-        
+    useEffect(() => {
         fetch('/api/contenido/getCategorias')
             .then(res => res.json())
-            .then(data =>{ 
+            .then(data => {
                 console.log(data);
-                categorias.push( data);
-
-        
-        console.log(categorias);
-
+                setCategorias(data);
+                setNumColumnas(categorias.length); // Establece el número de columnas
                 
-        //console.log(categorias[0].length);
+            });
+    }, []);
+    
+    //console.log(numColumnas)
+    console.log(categorias)
+    
 
-        const numColumnas = 4; 
-        console.log(numColumnas);
+    const columnas2 = [];
 
-            
-        
-        const columnas2 = [];
-            
-        for (let i = 0; i < numColumnas; i++) {
-                columnas2.push(
-                    <div className="col s4" >
-                                <div className="card" style={{ backgroundColor: "#033734" }}>
-                                    <div className="card-content">
-                                        <div style={{ display: "flex", justifyContent: "center" }}>
-                                            <div style={{ backgroundColor: "white", width: "200px", height: "150px", display: "flex", justifyContent: "center", alignItems: "center" }}>
-                                                <h1>img</h1>
-                                            </div>
+    for (let i = 0; i < categorias.length; i++) {
+        columnas2.push(
+            <div className="col s4">
+                <div className="card" style={{ backgroundColor: "#033734" }}>
+                    <div className="card-content">
+                                <div style={{ display: "flex", justifyContent: "center" }}>
+                                    <div style={{ backgroundColor: "white", width: "200px", height: "150px", display: "flex", justifyContent: "center", alignItems: "center" }}>
+                                        <h1>img</h1>
+                                    </div>
+                                    
+                                    
+                                </div>
+                                <div style={{ display: "flex", justifyContent: "center" }}>
+                                    
+                                    <div style={{ marginTop: "10px" }}> {/* Agregar margen superior de 10px */}
+                                        <button type="submit" className="btn" style={{ backgroundColor: "#FFFFFF", color: "#000000" }}>
                                             
-                                            
-                                        </div>
-                                        <div style={{ display: "flex", justifyContent: "center" }}>
-                                            
-                                            <div style={{ marginTop: "10px" }}> 
-                                                <button type="submit" className="btn" style={{ backgroundColor: "#FFFFFF", color: "#000000" }}>
-                                                    Nombre producto
-                                                </button>
-                                            </div>
-                                        </div>
-                                        
+                                            {categorias[i].nombre}
+                                        </button>
                                     </div>
                                 </div>
-                            </div>
-                );
-        }
-        return (
+                                
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    return (
         <div className="row">
-                    
             {columnas2}
-        </div>)
-            });
-        
-        }
-    visualizarProductos(categoria){
+        </div>
+    );
+}
+function    visualizarProductos(categoria){
         const numColumnas = 4; // Cantidad de columnas que deseas
+
 
         // Un array de elementos JSX para representar las columnas
         const columnas = [];
@@ -296,7 +294,7 @@ export default class FrTienda {
                                             <span> precio</span>
                                         </div>
                                         <div className='col s4'>
-                                            <span>spinbox</span>
+                                            <input type="number" name="cantidad" maxLength="16" style={{ backgroundColor: "#FFFFFF" }}/>
                                         </div>
                                         <div className='col s4'>
                                             <button type="submit" className="btn" style={{ backgroundColor: "#033734",color: "#FFFFFF" }}>
@@ -336,20 +334,22 @@ export default class FrTienda {
 
     }
 
-    visualizarTienda() {
+function    FrTienda() {
         return (
             <div>
                 <div style={{ color: "#FFFFFF" }}>
                     <h1>La Tienda del Duende</h1>
                     
-                    {this.visualizarCategoriaProductos()}
-                    {this.visualizarProductos('categoria2')}
-                    {this.visualizarPublicacion()}
-                    {this.visualizarCarrito()}
+                    
+                    {visualizarProductos('categoria2')}
+                    {visualizarCategoriaProductos()}
+                    {visualizarPublicacion()}
+                    {visualizarCarrito()}
                     
                 </div>
             </div>
         );
     }
     
-}
+//}
+export default FrTienda;

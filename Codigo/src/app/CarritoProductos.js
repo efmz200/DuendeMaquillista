@@ -33,7 +33,8 @@ function CarritoProductos() {
                                             <span> precio</span>
                                         </div>
                                         <div className='col s3'>
-                                            <span>spinbox</span>
+                                            <span>spinbox3f3</span>
+                                            <input type="text" pattern="[0-9]*" />
                                         </div>
                                         <div className='col s3'>
                                             <button type="submit" className="btn" style={{ backgroundColor: "#033734",color: "#FFFFFF" }}>

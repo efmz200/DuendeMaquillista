@@ -29,12 +29,12 @@ class App extends Component {
     }
 
     render() {
-        const tienda = new FrTienda(); // Instancia la clase FrTienda
+        //const tienda = new FrTienda(); // Instancia la clase FrTienda
 
         return (
             <div style={{ backgroundColor: "#033734" }}>
                 <Header />
-                {tienda.visualizarTienda()} {/* Llama al método para renderizar */}
+                <FrTienda/>
             </div>
         )
     }
