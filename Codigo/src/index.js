@@ -23,6 +23,8 @@ app.use('/api/agenda',require('./routes/admAgenda.routes'));
 app.use('/api/productos',require('./routes/admProductos.routes'));
 app.use('/api/notificaciones',require('./routes/admCentroNotificaciones.routes'));
 
+//app.use('/front/FrLogin',require('./app/RfrLogin.routes'));
+
 
 
 //app.use('/api/usuarios',require('./routes/Usuario.rutas'));
@@ -31,6 +33,11 @@ app.use('/api/notificaciones',require('./routes/admCentroNotificaciones.routes')
 //archivos estaticos
 app.use(express.static(path.join(__dirname,'public')))
 //app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+app.get('/*', function (req, res) {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
 
 
 
