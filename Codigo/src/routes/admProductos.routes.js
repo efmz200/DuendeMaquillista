@@ -100,7 +100,8 @@ router.get('/getCategoriaProductos',async(req,res)=>{
         res.json({
             succes: true,
             status: 'Categoria encontrada',
-            categorias
+            categorias,
+            cats
         });
     }catch(err){
         console.log(err)

@@ -217,30 +217,30 @@ export function   VisualizarPublicacion(){
         )
     }
 export function    VisualizarCategoriaProductos(){
-    const [categorias, setCategorias] = useState([]);
+    const [categorias2, setCategorias] = useState([]);
     const [numColumnas, setNumColumnas] = useState(0);
 
     useEffect(() => {
-        fetch('/api/contenido/getCategorias')
+        fetch('/api/productos/getCategoriaProductos')
             .then(res => res.json())
             .then(data => {
                 console.log(data);
-                setCategorias(data);
-                setNumColumnas(categorias.length); // Establece el número de columnas
+                setCategorias(data.cats);
+                setNumColumnas(categorias2.length); // Establece el número de columnas
                 
             });
     }, []);
     
     //console.log(numColumnas)
-    console.log(categorias)
+    console.log(categorias2)
     
 
     const columnas2 = [];
 
-    for (let i = 0; i < categorias.length; i++) {
+    for (let i = 0; i < categorias2.length; i++) {
         const data = { id: i, name: 'Ejemplo' };
         columnas2.push(
-            <div className="col s4" id= {categorias[i].id}>
+            <div className="col s4" id= {categorias2[i].id}>
                 <div className="card" style={{ backgroundColor: "#033734" }}>
                     <div className="card-content">
                                 <div style={{ display: "flex", justifyContent: "center" }}>
@@ -256,7 +256,7 @@ export function    VisualizarCategoriaProductos(){
                                         <button type="submit" className="btn" style={{ backgroundColor: "#FFFFFF", color: "#000000" }}>
                                             
                                         
-                                            <Link to="/categoriaproductos" state={{ name: categorias[i].nombre }} style={{ backgroundColor: "#FFFFFF", color: "#000000"}}>{ categorias[i].nombre }</Link>
+                                            <Link to="/categoriaproductos" state={{ name: categorias2[i].nombre, products:categorias2[i].Productos }} style={{ backgroundColor: "#FFFFFF", color: "#000000"}}>{ categorias2[i].nombre }</Link>
                                             
                                         </button>
                                     </div>
@@ -280,12 +280,12 @@ export function    VisualizarCategoriaProductos(){
     );
 }
 export function    VisualizarProductos(){
-        const numColumnas = 4; // Cantidad de columnas que deseas
+        
         const location = useLocation();
         console.log('hola');
         console.log(location.state);//"any type"
         //<p>Contenido de la página 2. Datos recibidos: {data.name}</p>
-
+        const numColumnas = location.state.products.length; // Cantidad de columnas que deseas
         // Un array de elementos JSX para representar las columnas
         const columnas = [];
     
@@ -305,7 +305,7 @@ export function    VisualizarProductos(){
                                 <div style={{ display: "flex", justifyContent: "center" }}>
                                     <div className='row' style={{  width: "200px", display: "flex", justifyContent: "center", alignItems: "center", marginTop: "10px" , color: "#FFFFFF  " }}>
                                         <div className='col s4'>
-                                            <span> precio</span>
+                                            <span> {location.state.products[i].precio}</span>
                                         </div>
                                         <div className='col s4'>
                                             <input type="number" name="cantidad" maxLength="16" style={{ backgroundColor: "#FFFFFF" }}/>
@@ -333,7 +333,7 @@ export function    VisualizarProductos(){
                                 </div>
                                 <div style={{ display: "flex", justifyContent: "center", color: "#FFFFFF  " }}>
                                     
-                                    <span>stock</span>
+                                    <span>{location.state.products[i].disponibilidad} en stock</span>
                                 </div>
                                 
                             </div>
