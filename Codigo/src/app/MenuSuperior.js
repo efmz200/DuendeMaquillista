@@ -1,6 +1,6 @@
 import React from 'react';
 //const imagen = require('./pruebaImagenes/img1.jpg');
-
+import { Link } from 'react-router-dom';
 function cancelareventos(e){
     e.preventDefault();
 }
@@ -20,9 +20,11 @@ function MenuSuperior() {
     <nav>
       <div className="nav-wrapper" style={{ backgroundColor: "#06495E" }}>
         <ul id="nav-mobile" className="left">
-          <li><a href="/">Inicio</a></li>
-          <li><a href="/productos">Productos</a></li>
-          <li><a href="/contacto">Contacto</a></li>
+          
+          <li><Link to="/categorias" >Categorias</Link>
+                                    </li>
+          <li><Link to="/carrito" >Carrito</Link>
+                                    </li>
         </ul>
       </div>
     </nav>

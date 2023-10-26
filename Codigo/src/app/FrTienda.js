@@ -1,5 +1,6 @@
 import React, {useEffect,useState }  from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 /**export default class FrTienda {
     constructor() {
@@ -7,7 +8,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 function     cancelareventos(e){
         e.preventDefault();
     }
-    
+   
 function    handleChange(e){
         const {name,value }= e.target;
         this.setState({
@@ -16,7 +17,7 @@ function    handleChange(e){
     
     }
     
-function    visualizarCarrito(){
+export function    VisualizarCarrito(){
         const numColumnas = 4; // Cantidad de columnas que deseas
 
         // Un array de elementos JSX para representar las columnas
@@ -94,7 +95,7 @@ function    visualizarCarrito(){
         
     }
 
-function   visualizarPublicacion(){
+export function   VisualizarPublicacion(){
 
         const cuadro =  []
         
@@ -215,7 +216,7 @@ function   visualizarPublicacion(){
             
         )
     }
-function    visualizarCategoriaProductos(){
+export function    VisualizarCategoriaProductos(){
     const [categorias, setCategorias] = useState([]);
     const [numColumnas, setNumColumnas] = useState(0);
 
@@ -237,8 +238,9 @@ function    visualizarCategoriaProductos(){
     const columnas2 = [];
 
     for (let i = 0; i < categorias.length; i++) {
+        const data = { id: i, name: 'Ejemplo' };
         columnas2.push(
-            <div className="col s4">
+            <div className="col s4" id= {categorias[i].id}>
                 <div className="card" style={{ backgroundColor: "#033734" }}>
                     <div className="card-content">
                                 <div style={{ display: "flex", justifyContent: "center" }}>
@@ -253,7 +255,9 @@ function    visualizarCategoriaProductos(){
                                     <div style={{ marginTop: "10px" }}> {/* Agregar margen superior de 10px */}
                                         <button type="submit" className="btn" style={{ backgroundColor: "#FFFFFF", color: "#000000" }}>
                                             
-                                            {categorias[i].nombre}
+                                        
+                                            <Link to="/categoriaproductos" state={{ name: categorias[i].nombre }} style={{ backgroundColor: "#FFFFFF", color: "#000000"}}>{ categorias[i].nombre }</Link>
+                                            
                                         </button>
                                     </div>
                                 </div>
@@ -265,14 +269,22 @@ function    visualizarCategoriaProductos(){
     }
 
     return (
-        <div className="row">
-            {columnas2}
+        <div>
+            <div style={{ color: "#FFFFFF" }}>
+                <h1>La Tienda del Duende</h1>
+                <div className="row">
+                    {columnas2}
+                </div>
+            </div>
         </div>
     );
 }
-function    visualizarProductos(categoria){
+export function    VisualizarProductos(){
         const numColumnas = 4; // Cantidad de columnas que deseas
-
+        const location = useLocation();
+        console.log('hola');
+        console.log(location.state);//"any type"
+        //<p>Contenido de la página 2. Datos recibidos: {data.name}</p>
 
         // Un array de elementos JSX para representar las columnas
         const columnas = [];
@@ -282,6 +294,7 @@ function    visualizarProductos(categoria){
             <div className="col s4" >
                         <div className="card" style={{ backgroundColor: "#033734" }}>
                             <div className="card-content">
+                            
                                 <div style={{ display: "flex", justifyContent: "center" }}>
                                     <div style={{ backgroundColor: "white", width: "200px", height: "150px", display: "flex", justifyContent: "center", alignItems: "center" }}>
                                         <h1>img</h1>
@@ -315,6 +328,7 @@ function    visualizarProductos(categoria){
                                         <button type="submit" className="btn" style={{ backgroundColor: "#000000", color: "#FFFFFF " }}>
                                             Agregar al carrito
                                         </button>
+                                            
                                     </div>
                                 </div>
                                 <div style={{ display: "flex", justifyContent: "center", color: "#FFFFFF  " }}>
@@ -329,23 +343,23 @@ function    visualizarProductos(categoria){
         }
         return (
             <div className="row">
-            
+                <h1>{location.state.name}</h1>
                 {columnas}
             </div>)
 
     }
 
-function    FrTienda() {
+export function    FrTienda() {
         return (
             <div>
                 <div style={{ color: "#FFFFFF" }}>
                     <h1>La Tienda del Duende</h1>
                     
                     
-                    {visualizarProductos('categoria2')}
-                    {visualizarCategoriaProductos()}
-                    {visualizarPublicacion()}
-                    {visualizarCarrito()}
+                    {VisualizarProductos('categoria2')}
+                    {VisualizarCategoriaProductos()}
+                    {VisualizarPublicacion()}
+                    {VisualizarCarrito()}
                     
                 </div>
             </div>
@@ -353,4 +367,4 @@ function    FrTienda() {
     }
     
 //}
-export default FrTienda;
+//export default FrTienda;

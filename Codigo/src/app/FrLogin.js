@@ -235,7 +235,7 @@ export function IniciarSesion(){
                             <div className="row">
                                 <div style={{ display: "flex", justifyContent: "center" }}>
                                     <button type="submit" className="btn "style={{ backgroundColor: "#000000", color: "#FFFFFF"}} >
-                                    Login
+                                        <Link to="/categorias" style={{ backgroundColor: "#000000", color: "#FFFFFF"}}>Login</Link>
                                     </button>
                                 </div>
                                 <br />
