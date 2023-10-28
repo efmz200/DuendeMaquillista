@@ -25,6 +25,10 @@ function MenuSuperior() {
                                     </li>
           <li><Link to="/carrito" >Carrito</Link>
                                     </li>
+          <li><Link to="/contenido" >Contenido</Link>
+                                    </li>
+          <li><Link to="/login" >Login</Link>
+                                    </li>
         </ul>
       </div>
     </nav>

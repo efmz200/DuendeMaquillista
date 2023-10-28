@@ -96,6 +96,32 @@ export function    VisualizarCarrito(){
     }
 
 export function   VisualizarPublicacion(){
+        const location = useLocation();
+        console.log('hola');
+        console.log(location.state);//"any type"
+        const objeto = location.state.name
+        console.log(objeto);
+        var strCategoria = ""
+        var strsubategoria = ""
+        var strpalabrasClave = ""
+        var strtags= ""
+        for (let m = 0; m < objeto.categoria.length; m++) {
+            strCategoria += objeto.categoria[m].nombre
+            strCategoria += ","
+        }
+        for (let m = 0; m < objeto.subcategoria.length; m++) {
+            strsubategoria += objeto.subcategoria[m].nombre
+            strsubategoria += ","
+        }
+        for (let m = 0; m < objeto.palabrasClave.length; m++) {
+            strpalabrasClave += objeto.palabrasClave[m]
+            strpalabrasClave += ","
+        }
+        for (let m = 0; m < objeto.tags.length; m++) {
+            strtags += objeto.tags[m]
+            strtags += ","
+        }
+
 
         const cuadro =  []
         
@@ -111,7 +137,7 @@ export function   VisualizarPublicacion(){
                                 <div className="col s6">
                                     <div style={{ display: "flex", justifyContent: "center" }}>
                                         <div style={{ backgroundColor: "white", width: "500px", height: "500px", display: "flex", justifyContent: "center", alignItems: "center" }}>
-                                            <h1>img</h1>
+                                            <img src={objeto.imagen} alt="Descripción de la imagen" style={{  width: "500px", height: "500px" }}/>
                                         </div>
                                         
                                         
@@ -148,7 +174,7 @@ export function   VisualizarPublicacion(){
                                         
                                         <br/>
                                         <div className="col s10"  style={{border: "1px solid #000000" }}>
-                                            <span >Descripcion de productos </span>
+                                            <span >{objeto.descripcion} </span>
                                             
                                         </div>
         
@@ -160,7 +186,7 @@ export function   VisualizarPublicacion(){
                                         
                                         <br/>
                                         <div className="col s10"  style={{border: "1px solid #000000" }}>
-                                            <span >categoria de productos </span>
+                                            <span >{strCategoria}</span>
                                             
                                         </div>
                                         <br/>
@@ -171,7 +197,7 @@ export function   VisualizarPublicacion(){
                                         
                                         <br/>
                                         <div className="col s10"  style={{border: "1px solid #000000" }}>
-                                            <span >subcategoria de productos </span>
+                                            <span >{strsubategoria}</span>
                                             
                                         </div>
                                         <br/>
@@ -182,7 +208,7 @@ export function   VisualizarPublicacion(){
                                         
                                         <br/>
                                         <div className="col s10"  style={{border: "1px solid #000000" }}>
-                                            <span >Palabras clave de productos </span>
+                                            <span >{strpalabrasClave}</span>
                                             
                                         </div>
                                         <br/>
@@ -193,7 +219,7 @@ export function   VisualizarPublicacion(){
                                         
                                         <br/>
                                         <div className="col s10"  style={{border: "1px solid #000000" }}>
-                                            <span >tags de productos </span>
+                                            <span >{strtags} </span>
                                             
                                         </div>
                                         <br/>
@@ -365,6 +391,65 @@ export function    FrTienda() {
             </div>
         );
     }
+
     
+export function    VisualizarTienda(){
+        
+        const [contenidos, setCategorias] = useState([]);
+        const [numColumnas, setNumColumnas] = useState(0);
+    
+        useEffect(() => {
+            fetch('/api/contenido/getContenidos')
+                .then(res => res.json())
+                .then(data => {
+                    console.log(data);
+                    setCategorias(data);
+                    setNumColumnas(contenidos.length); // Establece el número de columnas
+                    
+                });
+        }, []);
+        
+        //console.log(numColumnas)
+        console.log(contenidos)
+        
+    
+        const columnas2 = [];
+    
+        for (let i = 0; i < contenidos.length; i++) {
+            const data = { id: i, name: 'Ejemplo' };
+            columnas2.push(
+                <div className="col s4" id= {contenidos[i].id}>
+                    <div className="card" style={{ backgroundColor: "#033734" }}>
+                        <div className="card-content">
+                                    <div style={{ display: "flex", justifyContent: "center" }}>
+                                        <div style={{ backgroundColor: "white", width: "200px", height: "150px", display: "flex", justifyContent: "center", alignItems: "center" }}>
+                                            
+                                            
+                                            <Link to="/publicacion" state={{ name: contenidos[i] }} style={{ backgroundColor: "#FFFFFF", color: "#000000"}}>
+                                                <img src={contenidos[i].imagen} alt="Descripción de la imagen" style={{  width: "200px", height: "150px" }}/>
+                                            </Link>
+                                                
+                                        </div>
+                                        
+                                        
+                                    </div>
+                                    
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+    
+        return (
+            <div>
+                <div style={{ color: "#FFFFFF" }}>
+                    <h1>La Tienda del Duende</h1>
+                    <div className="row">
+                        {columnas2}
+                    </div>
+                </div>
+            </div>
+        );
+    }
 //}
 //export default FrTienda;

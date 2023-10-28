@@ -1,5 +1,6 @@
 import React, {useEffect,useState }  from 'react';
-import { Link } from 'react-router-dom';
+import { Link  } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom'; 
 
 
     
@@ -173,7 +174,15 @@ export function RegistrarUsuario(){
         );
     }
 
-export function IniciarSesion(){
+export function IniciarSesion(props){
+    const { myConstant, updateConstantValue } = props;
+    const navigate = useNavigate();
+
+    // Access and display the constant value
+    console.log(myConstant);
+
+    // Function to update the constant value
+    
     function cancelareventos(e){
         e.preventDefault();
     }
@@ -182,6 +191,13 @@ export function IniciarSesion(){
         contrasena: "",
         
     });
+
+    const updateConstant = () => {
+        const newValue = formData.nombre;
+        updateConstantValue(newValue);
+        navigate(`/contenido`);
+        
+    }
 
     function handleChange(e) {
         const { name, value } = e.target;
@@ -235,7 +251,7 @@ export function IniciarSesion(){
                             <div className="row">
                                 <div style={{ display: "flex", justifyContent: "center" }}>
                                     <button type="submit" className="btn "style={{ backgroundColor: "#000000", color: "#FFFFFF"}} >
-                                        <Link to="/categorias" style={{ backgroundColor: "#000000", color: "#FFFFFF"}}>Login</Link>
+                                        <Link to="/contenido" state={{ user: formData }} style={{ backgroundColor: "#000000", color: "#FFFFFF"}}>Login</Link>
                                     </button>
                                 </div>
                                 <br />
@@ -244,6 +260,7 @@ export function IniciarSesion(){
                                     
                                     <Link to="/Registrar" style={{ backgroundColor: "#000000", color: "#FFFFFF"}}>Registrarse</Link>
                                     </button>
+                                    <button onClick={updateConstant}>Update Constant</button>
                                     
                                 </div>
                                 
