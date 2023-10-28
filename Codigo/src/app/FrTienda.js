@@ -42,7 +42,7 @@ export function    VisualizarCarrito(){
                                         </div>
                                         <div className='col s3'>
                                             
-                                            <input type="number" name="cantidad" maxLength="16" style={{ backgroundColor: "#FFFFFF" }}/>
+                                            <input type="number" name="cantidad" maxLength="16" style={{  width: "50px", height: "30px",backgroundColor: "#FFFFFF" }}/>
                                         </div>
                                         <div className='col s3'>
                                             <button type="submit" className="btn" style={{ backgroundColor: "#033734",color: "#FFFFFF" }}>
@@ -144,21 +144,28 @@ export function   VisualizarPublicacion(){
                                     </div>
                                     <div style={{ display: "flex", justifyContent: "center" }}>
                                         
-                                        <div style={{ marginTop: "10px" }}> {/* Agregar margen superior de 10px */}
-                                            <form onSubmit={cancelareventos} style={{ backgroundColor: "#FFFFFF", color: "#000000" }}>
-                                                <span>Si te interesa contratar el servicio de este makeup no dudes en escribirme</span>
-                                                <br/>
-                                                <div className="row">
-                                                    <div className="col s8">
-                                                        <input name="Mensaje" onChange={handleChange} type="text" defaultValue="Me interesa, que precio tiene?" style={{border: "1px solid #000000" }}/>
-                                                    </div>
-                                                    <div className="col s4">
-                                                        <button type="submit" className="btn" style={{ backgroundColor: "#FFFFFF", color: "#000000", border: "1px solid #000000" }}>
-                                                            Enviar
-                                                        </button>
+                                        <div className="row" > {/* Agregar margen superior de 10px */}
+                                            <form onSubmit={cancelareventos} style={{marginTop: "10px" ,borderRadius: '10px',backgroundColor: "#FFFFFF", color: "#000000" }}>
+                                                <div  style={{margin: '20px'}}>
+                                                    <div >
+                                                        <span >Si te interesa contratar el servicio de este makeup no dudes en escribirme</span>
                                                     </div>
                                                     
+                                                    <br/>
+                                                    <div className="row">
+                                                        <div className="col s8">
+                                                            <input name="Mensaje" onChange={handleChange} type="text" defaultValue="Me interesa, que precio tiene?" style={{borderRadius: '10px',border: "1px solid #000000" }}/>
+                                                        </div>
+                                                        <div className="col s4">
+                                                            <button type="submit" className="btn" style={{ borderRadius: '10px',backgroundColor: "#FFFFFF", color: "#000000", border: "1px solid #000000" }}>
+                                                                Enviar
+                                                            </button>
+                                                        </div>
+                                                        
+                                                    </div>
+
                                                 </div>
+                                                
                                                 
                                             </form>
                                             
@@ -166,63 +173,65 @@ export function   VisualizarPublicacion(){
                                     </div>
                                 </div>
                                 <div className="col s6" >
-                                    <div  className="col s8"  style={{ backgroundColor: "#FFFFFF", color: "#000000" , fontSize: "26px" }}>
+                                    <div  className="col s8"  style={{ margin: '20px',borderRadius: '10px',backgroundColor: "#FFFFFF", color: "#000000" , fontSize: "26px" }}>
                                         <br/>
-                                        <div className="col s10">
+                                        <div className="col s12">
                                             <span>Descripcion</span>
                                         </div>
                                         
                                         <br/>
-                                        <div className="col s10"  style={{border: "1px solid #000000" }}>
+                                        <div className="col s12"  style={{border: "1px solid #000000"}} >
                                             <span >{objeto.descripcion} </span>
                                             
                                         </div>
         
                                         <br/>
                                         <br/>
-                                        <div className="col s10">
+                                        <div className="col s12">
                                             <span>Categoria</span>
                                         </div>
                                         
                                         <br/>
-                                        <div className="col s10"  style={{border: "1px solid #000000" }}>
+                                        <div className="col s12"  style={{border: "1px solid #000000" }}>
+                                            
                                             <span >{strCategoria}</span>
                                             
                                         </div>
                                         <br/>
                                         <br/>
-                                        <div className="col s10">
+                                        <div className="col s12">
                                             <span>Subcategoria</span>
                                         </div>
                                         
                                         <br/>
-                                        <div className="col s10"  style={{border: "1px solid #000000" }}>
+                                        <div className="col s12"  style={{border: "1px solid #000000" }}>
                                             <span >{strsubategoria}</span>
                                             
                                         </div>
                                         <br/>
                                         <br/>
-                                        <div className="col s10">
+                                        <div className="col s12">
                                             <span>Palabras clave</span>
                                         </div>
                                         
                                         <br/>
-                                        <div className="col s10"  style={{border: "1px solid #000000" }}>
+                                        <div className="col s12"  style={{border: "1px solid #000000" }}>
                                             <span >{strpalabrasClave}</span>
                                             
                                         </div>
                                         <br/>
                                         <br/>
-                                        <div className="col s10">
+                                        <div className="col s12">
                                             <span>#tags</span>
                                         </div>
                                         
                                         <br/>
-                                        <div className="col s10"  style={{border: "1px solid #000000" }}>
+                                        <div className="col s12"  style={{border: "1px solid #000000" }}>
                                             <span >{strtags} </span>
                                             
                                         </div>
                                         <br/>
+                                        <h1></h1>
                                     </div>
                                    
                                     
@@ -267,10 +276,9 @@ export function    VisualizarCategoriaProductos(){
         const data = { id: i, name: 'Ejemplo' };
         columnas2.push(
             <div className="col s4" id= {categorias2[i].id}>
-                <div className="card" style={{ backgroundColor: "#033734" }}>
-                    <div className="card-content">
+                
                                 <div style={{ display: "flex", justifyContent: "center" }}>
-                                    <div style={{ backgroundColor: "white", width: "200px", height: "150px", display: "flex", justifyContent: "center", alignItems: "center" }}>
+                                    <div style={{ backgroundColor: "white", width: "250px", height: "250px", display: "flex", justifyContent: "center", alignItems: "center" }}>
                                         <h1>img</h1>
                                     </div>
                                     
@@ -289,8 +297,7 @@ export function    VisualizarCategoriaProductos(){
                                 </div>
                                 
                     </div>
-                </div>
-            </div>
+                
         );
     }
 
@@ -318,8 +325,7 @@ export function    VisualizarProductos(){
         for (let i = 0; i < numColumnas; i++) {
         columnas.push(
             <div className="col s4" >
-                        <div className="card" style={{ backgroundColor: "#033734" }}>
-                            <div className="card-content">
+                        
                             
                                 <div style={{ display: "flex", justifyContent: "center" }}>
                                     <div style={{ backgroundColor: "white", width: "200px", height: "150px", display: "flex", justifyContent: "center", alignItems: "center" }}>
@@ -334,10 +340,10 @@ export function    VisualizarProductos(){
                                             <span> {location.state.products[i].precio}</span>
                                         </div>
                                         <div className='col s4'>
-                                            <input type="number" name="cantidad" maxLength="16" style={{ backgroundColor: "#FFFFFF" }}/>
+                                            <input type="number" name="cantidad" maxLength="16" style={{ width: "50px", height: "30px",backgroundColor: "#FFFFFF" }}/>
                                         </div>
                                         <div className='col s4'>
-                                            <button type="submit" className="btn" style={{ backgroundColor: "#033734",color: "#FFFFFF" }}>
+                                            <button type="submit" class="btn" style={{  width: "30px", height: "30px",backgroundColor: "#033734",color: "#FFFFFF" }}>
                                                 
                                                 <span class="material-icons">
                                                     favorite
@@ -351,7 +357,7 @@ export function    VisualizarProductos(){
                                 <div style={{ display: "flex", justifyContent: "center" }}>
                                     
                                     <div style={{ marginTop: "10px" }}> {/* Agregar margen superior de 10px */}
-                                        <button type="submit" className="btn" style={{ backgroundColor: "#000000", color: "#FFFFFF " }}>
+                                        <button type="submit" className="btn" style={{ borderRadius: '10px',backgroundColor: "#000000", color: "#FFFFFF " }}>
                                             Agregar al carrito
                                         </button>
                                             
@@ -362,8 +368,7 @@ export function    VisualizarProductos(){
                                     <span>{location.state.products[i].disponibilidad} en stock</span>
                                 </div>
                                 
-                            </div>
-                        </div>
+                            
                     </div>
         );
         }
