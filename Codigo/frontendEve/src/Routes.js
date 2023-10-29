@@ -1,4 +1,4 @@
-import LoginPage from "../src/pages/Login.jsx";
+import LoginPage from "./pages/Login.jsx";
 import SignUpPage from "./pages/SignUpPage.jsx";
 import MenuAdmin from "./pages/MenuAdmin.jsx";
 import GaleriaDuende from "./pages/GaleriaDuende.jsx";
