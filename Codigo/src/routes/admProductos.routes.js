@@ -198,6 +198,7 @@ router.post('/agregarProductoCarrito',async(req,res)=>{
                 console.log(carrito);
                 res.json({
                     succes:false,
+                    idCarrito,
                     status: 'El producto ya estaba agregado al carrito se aumento la cantidad'
                 });
                 return;
@@ -209,6 +210,7 @@ router.post('/agregarProductoCarrito',async(req,res)=>{
         console.log(carr);
         res.json({
             succes:true,
+            idCarrito,
             status: 'Producto agregado al carrito'
         });    
     }catch(err){    
@@ -233,6 +235,7 @@ router.post('/eliminarProductoCarrito',async(req,res)=>{
                 console.log(carr);
                 res.json({
                     succes: true,
+                    idCarrito,
                     status: 'Producto eliminado del carrito'});
                 return;
             }
@@ -251,7 +254,7 @@ router.post('/eliminarProductoCarrito',async(req,res)=>{
 router.post('/getCarrito',async(req,res)=>{
     const {idCarrito} = req.body;
     var carrito = await Carrito.findOne({_id:idCarrito});
-    res.json({status: 'Productos obtenidos',productos:carrito.listaProductos});
+    res.json({status: 'Productos obtenidos',idCarrito,productos:carrito.listaProductos});
 })
 
 //se realiza la compra de los productos del carrito
