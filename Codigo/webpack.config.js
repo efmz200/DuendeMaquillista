@@ -9,12 +9,16 @@ module.exports = {
     rules:[
         {
             use: 'babel-loader',
-            test: /\.js$/,
+            test: /\.js|\.jsx$/,
             exclude:/node_modules/
         },
         {
-          test: /\.(sass|less|css)$/,
-          use: ["style-loader", "css-loader", 'sass-loader'],
+          test: /\.css$/,
+          use: [
+            "style-loader",
+            { loader: "css-loader", options: { importLoaders: 1 } },
+            "postcss-loader",
+          ],
         }
     ]
 }
