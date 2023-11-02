@@ -8,6 +8,120 @@ import Modal from "../components/Modal/Modal.js";
 /**export default class FrTienda {
     constructor() {
     }*/
+
+
+function MenuSuperior2() {
+        const navigate = useNavigate();
+      
+        const handleGaleria = () => {
+            navigate('/contenido', {});
+        }
+    
+        /*const handleAgenda = () => {
+            navigate('/menuAgenda', {});
+        }*/
+    
+        const handleTienda = () => {
+            navigate('/categorias', {});
+        }
+        const handleCarrito = () => {
+            navigate('/carrito', {});
+        }
+    
+        /*const handleMensajes = () => {
+            navigate('/mensajesAdmin', {});
+        }
+    
+        const handleMenuAdmin = () => {
+            navigate('/menuAdmin', {});
+        }*/
+      
+        return (
+            <div>
+            <div className="sm:mx-auto sm:w-full sm:max-w-md">
+              <h2 className="text-center text-3xl font-regular text-white">
+                DUENDE MAQUILLISTA
+              </h2>
+              <br />
+            </div>
+    
+    
+            <div className="bg-medGreen flex flex-col justify-center py-4 sm:px-6 lg:px-8">
+              <div class="inline-flex rounded-md shadow-sm" role="group">
+                <button
+                  onClick={handleGaleria}
+                  type="button"
+                  class="inline-flex items-center px-4 py-2 text-sm font-medium text-green bg-transparent border border-green rounded-l-lg hover:bg-green hover:text-white focus:z-10 focus:ring-2 focus:ring-green focus:bg-green focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-green dark:focus:bg-green"
+                >
+                  La Galería del Duende
+                </button>
+                {/**<button
+                  onClick={handleAgenda}
+                  type="button"
+                  class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-transparent border-t border-b border-gray-900 hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-green dark:focus:bg-green"
+                >
+                  La Agenda del Duende
+        </button>*/}
+                <button
+                  onClick={handleTienda}
+                  type="button"
+                  class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-transparent border border-gray-900 rounded-r-md hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-green dark:focus:bg-green"
+                >
+                  La Tienda del Duende
+                </button>
+    
+                <div className="ml-auto flex space-x-2">
+                  {" "}
+                  {/* Utilizamos ml-auto para mover estos botones al lado derecho*/ }
+                  <button
+                    onClick={handleCarrito}
+                    type="button"
+                    class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-medGreen rounded-lg hover:bg-medGreen focus:ring-4 focus:outline-none focus:ring-green dark:bg-medGreen dark:hover:bg-green dark:focus:ring-green"
+                  >
+                    C
+                    
+                  </button>
+                  {/*<button
+                    onClick={handleMensajes}
+                    type="button"
+                    class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-medGreen rounded-lg hover:bg-medGreen focus:ring-4 focus:outline-none focus:ring-green dark:bg-medGreen dark:hover:bg-green dark:focus:ring-green"
+                  >
+                    Mensajes
+                    <span class="inline-flex items-center justify-center w-4 h-4 ml-2 text-xs font-semibold text-white bg-green rounded-full">
+                      2
+                    </span>
+                  </button>
+                  <button
+                    onClick={handleMenuAdmin}
+                    type="button"
+                    class="text-white focus:ring-4 focus:ring-green font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-medgreen dark:hover:bg-green dark:focus:ring-green"
+                  >
+                    Menú Principal
+                    <svg
+                      class="w-3.5 h-3.5 ml-2"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 14 10"
+                    >
+                      <path
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M1 5h12m0 0L9 1m4 4L9 9"
+                      />
+                    </svg>
+    </button>*/}
+                </div>
+    
+              </div>
+            </div>
+    
+            </div>
+            
+        );
+      }
 function     cancelareventos(e){
         e.preventDefault();
     }
@@ -20,30 +134,12 @@ function    handleChange(e){
     
     }
     
-export function    VisualizarCarrito(){//casilita
-    let navigate = useNavigate();
+export function    VisualizarCarrito(){//casilita *****
+    
 
 
 
-    const handleGaleria = () => {
-        navigate('/galeriaDuende', {});
-    }
-
-    const handleAgenda = () => {
-        navigate('/menuAgenda', {});
-    }
-
-    const handleTienda = () => {
-        navigate('/tiendaDuende', {});
-    }
-
-    const handleMensajes = () => {
-        navigate('/mensajesAdmin', {});
-    }
-
-    const handleMenuAdmin = () => {
-        navigate('/menuAdmin', {});
-    }
+    
         
         const [listaProductos, setlistaProductos] = useState([]);
         
@@ -129,77 +225,9 @@ export function    VisualizarCarrito(){//casilita
     return (
         <Fragment>
       <div className="main-h-screen bg-black flex flex-col justify-center py-4">
-        <div className="sm:mx-auto sm:w-full sm:max-w-md">
-          <h2 className="text-center text-3xl font-regular text-white">
-            DUENDE MAQUILLISTA
-          </h2>
-          <br />
-        </div>
-
-
-        <div className="bg-medGreen flex flex-col justify-center py-4 sm:px-6 lg:px-8">
-          <div class="inline-flex rounded-md shadow-sm" role="group">
-            <button
-              onClick={handleGaleria}
-              type="button"
-              class="inline-flex items-center px-4 py-2 text-sm font-medium text-green bg-transparent border border-green rounded-l-lg hover:bg-green hover:text-white focus:z-10 focus:ring-2 focus:ring-green focus:bg-green focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-green dark:focus:bg-green"
-            >
-              La Galería del Duende
-            </button>
-            <button
-              onClick={handleAgenda}
-              type="button"
-              class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-transparent border-t border-b border-gray-900 hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-green dark:focus:bg-green"
-            >
-              La Agenda del Duende
-            </button>
-            <button
-              onClick={handleTienda}
-              type="button"
-              class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-transparent border border-gray-900 rounded-r-md hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-green dark:focus:bg-green"
-            >
-              La Tienda del Duende
-            </button>
-
-            <div className="ml-auto flex space-x-2">
-              {" "}
-              {/* Utilizamos ml-auto para mover estos botones al lado derecho */}
-              <button
-                onClick={handleMensajes}
-                type="button"
-                class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-medGreen rounded-lg hover:bg-medGreen focus:ring-4 focus:outline-none focus:ring-green dark:bg-medGreen dark:hover:bg-green dark:focus:ring-green"
-              >
-                Mensajes
-                <span class="inline-flex items-center justify-center w-4 h-4 ml-2 text-xs font-semibold text-white bg-green rounded-full">
-                  2
-                </span>
-              </button>
-              <button
-                onClick={handleMenuAdmin}
-                type="button"
-                class="text-white focus:ring-4 focus:ring-green font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-medgreen dark:hover:bg-green dark:focus:ring-green"
-              >
-                Menú Principal
-                <svg
-                  class="w-3.5 h-3.5 ml-2"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 14 10"
-                >
-                  <path
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M1 5h12m0 0L9 1m4 4L9 9"
-                  />
-                </svg>
-              </button>
-            </div>
-
-          </div>
-        </div>
+        
+        <MenuSuperior2 />
+        
 
 
         <div class="bg-darkGreen flex flex-col justify-center py-4 px-10 sm:px-24lg:px-8">
@@ -239,30 +267,8 @@ export function    VisualizarCarrito(){//casilita
         
     }
 
-export function   VisualizarPublicacion(){//casi no lista
-    let navigate = useNavigate();
+export function   VisualizarPublicacion(){//casi no lista *****
 
-
-
-    const handleGaleria = () => {
-        navigate('/galeriaDuende', {});
-    }
-
-    const handleAgenda = () => {
-        navigate('/menuAgenda', {});
-    }
-
-    const handleTienda = () => {
-        navigate('/tiendaDuende', {});
-    }
-
-    const handleMensajes = () => {
-        navigate('/mensajesAdmin', {});
-    }
-
-    const handleMenuAdmin = () => {
-        navigate('/menuAdmin', {});
-    }
         const location = useLocation();
         console.log('hola');
         console.log(location.state);//"any type"
@@ -414,77 +420,7 @@ export function   VisualizarPublicacion(){//casi no lista
         return (
             <Fragment>
       <div className="main-h-screen bg-black flex flex-col justify-center py-4">
-        <div className="sm:mx-auto sm:w-full sm:max-w-md">
-          <h2 className="text-center text-3xl font-regular text-white">
-            DUENDE MAQUILLISTA
-          </h2>
-          <br />
-        </div>
-
-
-        <div className="bg-medGreen flex flex-col justify-center py-4 sm:px-6 lg:px-8">
-          <div class="inline-flex rounded-md shadow-sm" role="group">
-            <button
-              onClick={handleGaleria}
-              type="button"
-              class="inline-flex items-center px-4 py-2 text-sm font-medium text-green bg-transparent border border-green rounded-l-lg hover:bg-green hover:text-white focus:z-10 focus:ring-2 focus:ring-green focus:bg-green focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-green dark:focus:bg-green"
-            >
-              La Galería del Duende
-            </button>
-            <button
-              onClick={handleAgenda}
-              type="button"
-              class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-transparent border-t border-b border-gray-900 hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-green dark:focus:bg-green"
-            >
-              La Agenda del Duende
-            </button>
-            <button
-              onClick={handleTienda}
-              type="button"
-              class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-transparent border border-gray-900 rounded-r-md hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-green dark:focus:bg-green"
-            >
-              La Tienda del Duende
-            </button>
-
-            <div className="ml-auto flex space-x-2">
-              {" "}
-              {/* Utilizamos ml-auto para mover estos botones al lado derecho */}
-              <button
-                onClick={handleMensajes}
-                type="button"
-                class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-medGreen rounded-lg hover:bg-medGreen focus:ring-4 focus:outline-none focus:ring-green dark:bg-medGreen dark:hover:bg-green dark:focus:ring-green"
-              >
-                Mensajes
-                <span class="inline-flex items-center justify-center w-4 h-4 ml-2 text-xs font-semibold text-white bg-green rounded-full">
-                  2
-                </span>
-              </button>
-              <button
-                onClick={handleMenuAdmin}
-                type="button"
-                class="text-white focus:ring-4 focus:ring-green font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-medgreen dark:hover:bg-green dark:focus:ring-green"
-              >
-                Menú Principal
-                <svg
-                  class="w-3.5 h-3.5 ml-2"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 14 10"
-                >
-                  <path
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M1 5h12m0 0L9 1m4 4L9 9"
-                  />
-                </svg>
-              </button>
-            </div>
-
-          </div>
-        </div>
+        <MenuSuperior2 />
 
 
         <div class="bg-darkGreen flex flex-col justify-center py-4 px-10 sm:px-24lg:px-8">
@@ -510,30 +446,8 @@ export function   VisualizarPublicacion(){//casi no lista
 
     </Fragment>)
     }
-export function    VisualizarCategoriaProductos(){//lista
-    let navigate = useNavigate();
-
-
-
-    const handleGaleria = () => {
-        navigate('/galeriaDuende', {});
-    }
-
-    const handleAgenda = () => {
-        navigate('/menuAgenda', {});
-    }
-
-    const handleTienda = () => {
-        navigate('/tiendaDuende', {});
-    }
-
-    const handleMensajes = () => {
-        navigate('/mensajesAdmin', {});
-    }
-
-    const handleMenuAdmin = () => {
-        navigate('/menuAdmin', {});
-    }
+export function    VisualizarCategoriaProductos(){//lista ****
+    
     
     const [categorias2, setCategorias] = useState([]);
 
@@ -599,77 +513,7 @@ export function    VisualizarCategoriaProductos(){//lista
     return (
         <Fragment>
       <div className="main-h-screen bg-black flex flex-col justify-center py-4">
-        <div className="sm:mx-auto sm:w-full sm:max-w-md">
-          <h2 className="text-center text-3xl font-regular text-white">
-            DUENDE MAQUILLISTA
-          </h2>
-          <br />
-        </div>
-
-
-        <div className="bg-medGreen flex flex-col justify-center py-4 sm:px-6 lg:px-8">
-          <div class="inline-flex rounded-md shadow-sm" role="group">
-            <button
-              onClick={handleGaleria}
-              type="button"
-              class="inline-flex items-center px-4 py-2 text-sm font-medium text-green bg-transparent border border-green rounded-l-lg hover:bg-green hover:text-white focus:z-10 focus:ring-2 focus:ring-green focus:bg-green focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-green dark:focus:bg-green"
-            >
-              La Galería del Duende
-            </button>
-            <button
-              onClick={handleAgenda}
-              type="button"
-              class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-transparent border-t border-b border-gray-900 hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-green dark:focus:bg-green"
-            >
-              La Agenda del Duende
-            </button>
-            <button
-              onClick={handleTienda}
-              type="button"
-              class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-transparent border border-gray-900 rounded-r-md hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-green dark:focus:bg-green"
-            >
-              La Tienda del Duende
-            </button>
-
-            <div className="ml-auto flex space-x-2">
-              {" "}
-              {/* Utilizamos ml-auto para mover estos botones al lado derecho */}
-              <button
-                onClick={handleMensajes}
-                type="button"
-                class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-medGreen rounded-lg hover:bg-medGreen focus:ring-4 focus:outline-none focus:ring-green dark:bg-medGreen dark:hover:bg-green dark:focus:ring-green"
-              >
-                Mensajes
-                <span class="inline-flex items-center justify-center w-4 h-4 ml-2 text-xs font-semibold text-white bg-green rounded-full">
-                  2
-                </span>
-              </button>
-              <button
-                onClick={handleMenuAdmin}
-                type="button"
-                class="text-white focus:ring-4 focus:ring-green font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-medgreen dark:hover:bg-green dark:focus:ring-green"
-              >
-                Menú Principal
-                <svg
-                  class="w-3.5 h-3.5 ml-2"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 14 10"
-                >
-                  <path
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M1 5h12m0 0L9 1m4 4L9 9"
-                  />
-                </svg>
-              </button>
-            </div>
-
-          </div>
-        </div>
+        <MenuSuperior2 />
 
 
         <div class="bg-darkGreen flex flex-col justify-center py-4 px-10 sm:px-24lg:px-8">
@@ -700,31 +544,40 @@ export function    VisualizarCategoriaProductos(){//lista
     </Fragment>
     );
 }
-export function    VisualizarProductos(){//casi lista
-    let navigate = useNavigate();
-
-
-
-    const handleGaleria = () => {
-        navigate('/galeriaDuende', {});
-    }
-
-    const handleAgenda = () => {
-        navigate('/menuAgenda', {});
-    }
-
-    const handleTienda = () => {
-        navigate('/tiendaDuende', {});
-    }
-
-    const handleMensajes = () => {
-        navigate('/mensajesAdmin', {});
-    }
-
-    const handleMenuAdmin = () => {
-        navigate('/menuAdmin', {});
-    }
+export function    VisualizarProductos(){//casi lista *****
+        const [datosEnvio, setDatosEnvio] = useState({
+            idCarrito: '6537366bd6e4e15f3beb9b0f', // Asigna los valores adecuados
+            codigoProducto: 'valor',
+            cantidad: 'valor'
+        });
+        const clickAgregarProducto = (codigo,cantidad) => {
+            setDatosEnvio({
+                
+                codigoProducto: codigo,
+                cantidad: cantidad
+              });
+            agregarProductoCarrito();
+        }
+    
+        const agregarProductoCarrito = async () => {
+            try {
+            const response = await fetch('http://localhost:3000/api/productos/agregarProductoCarrito', {
+                method: 'POST',
+                headers: {
+                'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(datosEnvio)
+            });
         
+            const data = await response.json();
+            console.log(data); // Maneja la respuesta como necesites en tu aplicación React
+        
+            // Actualiza la interfaz o el estado según sea necesario
+            } catch (error) {
+            console.error('Error al agregar producto al carrito:', error);
+            // Maneja los errores
+            }
+        };
         const location = useLocation();
         console.log('hola');
         console.log(location.state);//"any type"
@@ -741,7 +594,7 @@ export function    VisualizarProductos(){//casi lista
                             
                                 <div style={{ display: "flex", justifyContent: "center" }}>
                                     <div style={{ backgroundColor: "white", width: "200px", height: "150px", display: "flex", justifyContent: "center", alignItems: "center" }}>
-                                        <h1>img</h1>
+                                    <img src={location.state.products[i].imagen} alt="Descripción de la imagen" style={{  width: "200px", height: "150px" }}/>
                                     </div>
                                     
                                     
@@ -769,7 +622,7 @@ export function    VisualizarProductos(){//casi lista
                                 <div style={{ display: "flex", justifyContent: "center" }}>
                                     
                                     <div style={{ marginTop: "10px" }}> {/* Agregar margen superior de 10px */}
-                                        <button type="submit" className="btn" style={{ borderRadius: '10px',backgroundColor: "#000000", color: "#FFFFFF " }}>
+                                        <button type="submit" onClick={() => clickAgregarProducto(location.state.products[i].codigo, 2)} className="btn" style={{ borderRadius: '10px',backgroundColor: "#000000", color: "#FFFFFF " }}>
                                             Agregar al carrito
                                         </button>
                                             
@@ -787,77 +640,7 @@ export function    VisualizarProductos(){//casi lista
         return (
             <Fragment>
       <div className="main-h-screen bg-black flex flex-col justify-center py-4">
-        <div className="sm:mx-auto sm:w-full sm:max-w-md">
-          <h2 className="text-center text-3xl font-regular text-white">
-            DUENDE MAQUILLISTA
-          </h2>
-          <br />
-        </div>
-
-
-        <div className="bg-medGreen flex flex-col justify-center py-4 sm:px-6 lg:px-8">
-          <div class="inline-flex rounded-md shadow-sm" role="group">
-            <button
-              onClick={handleGaleria}
-              type="button"
-              class="inline-flex items-center px-4 py-2 text-sm font-medium text-green bg-transparent border border-green rounded-l-lg hover:bg-green hover:text-white focus:z-10 focus:ring-2 focus:ring-green focus:bg-green focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-green dark:focus:bg-green"
-            >
-              La Galería del Duende
-            </button>
-            <button
-              onClick={handleAgenda}
-              type="button"
-              class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-transparent border-t border-b border-gray-900 hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-green dark:focus:bg-green"
-            >
-              La Agenda del Duende
-            </button>
-            <button
-              onClick={handleTienda}
-              type="button"
-              class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-transparent border border-gray-900 rounded-r-md hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-green dark:focus:bg-green"
-            >
-              La Tienda del Duende
-            </button>
-
-            <div className="ml-auto flex space-x-2">
-              {" "}
-              {/* Utilizamos ml-auto para mover estos botones al lado derecho */}
-              <button
-                onClick={handleMensajes}
-                type="button"
-                class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-medGreen rounded-lg hover:bg-medGreen focus:ring-4 focus:outline-none focus:ring-green dark:bg-medGreen dark:hover:bg-green dark:focus:ring-green"
-              >
-                Mensajes
-                <span class="inline-flex items-center justify-center w-4 h-4 ml-2 text-xs font-semibold text-white bg-green rounded-full">
-                  2
-                </span>
-              </button>
-              <button
-                onClick={handleMenuAdmin}
-                type="button"
-                class="text-white focus:ring-4 focus:ring-green font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-medgreen dark:hover:bg-green dark:focus:ring-green"
-              >
-                Menú Principal
-                <svg
-                  class="w-3.5 h-3.5 ml-2"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 14 10"
-                >
-                  <path
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M1 5h12m0 0L9 1m4 4L9 9"
-                  />
-                </svg>
-              </button>
-            </div>
-
-          </div>
-        </div>
+      <MenuSuperior2 />
 
 
         <div class="bg-darkGreen flex flex-col justify-center py-4 px-10 sm:px-24lg:px-8">
@@ -907,30 +690,8 @@ export function    FrTienda() {
     }
 
     
-export function    VisualizarTienda(){//casi lista
-    let navigate = useNavigate();
-
-
-
-    const handleGaleria = () => {
-        navigate('/galeriaDuende', {});
-    }
-
-    const handleAgenda = () => {
-        navigate('/menuAgenda', {});
-    }
-
-    const handleTienda = () => {
-        navigate('/tiendaDuende', {});
-    }
-
-    const handleMensajes = () => {
-        navigate('/mensajesAdmin', {});
-    }
-
-    const handleMenuAdmin = () => {
-        navigate('/menuAdmin', {});
-    }
+export function    VisualizarTienda(){//casi lista ****
+    
         
         const [contenidos, setCategorias] = useState([]);
         const [numColumnas, setNumColumnas] = useState(0);
@@ -980,77 +741,7 @@ export function    VisualizarTienda(){//casi lista
         return (
             <Fragment>
       <div className="main-h-screen bg-black flex flex-col justify-center py-4">
-        <div className="sm:mx-auto sm:w-full sm:max-w-md">
-          <h2 className="text-center text-3xl font-regular text-white">
-            DUENDE MAQUILLISTA
-          </h2>
-          <br />
-        </div>
-
-
-        <div className="bg-medGreen flex flex-col justify-center py-4 sm:px-6 lg:px-8">
-          <div class="inline-flex rounded-md shadow-sm" role="group">
-            <button
-              onClick={handleGaleria}
-              type="button"
-              class="inline-flex items-center px-4 py-2 text-sm font-medium text-green bg-transparent border border-green rounded-l-lg hover:bg-green hover:text-white focus:z-10 focus:ring-2 focus:ring-green focus:bg-green focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-green dark:focus:bg-green"
-            >
-              La Galería del Duende
-            </button>
-            <button
-              onClick={handleAgenda}
-              type="button"
-              class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-transparent border-t border-b border-gray-900 hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-green dark:focus:bg-green"
-            >
-              La Agenda del Duende
-            </button>
-            <button
-              onClick={handleTienda}
-              type="button"
-              class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-transparent border border-gray-900 rounded-r-md hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-green dark:focus:bg-green"
-            >
-              La Tienda del Duende
-            </button>
-
-            <div className="ml-auto flex space-x-2">
-              {" "}
-              {/* Utilizamos ml-auto para mover estos botones al lado derecho */}
-              <button
-                onClick={handleMensajes}
-                type="button"
-                class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-medGreen rounded-lg hover:bg-medGreen focus:ring-4 focus:outline-none focus:ring-green dark:bg-medGreen dark:hover:bg-green dark:focus:ring-green"
-              >
-                Mensajes
-                <span class="inline-flex items-center justify-center w-4 h-4 ml-2 text-xs font-semibold text-white bg-green rounded-full">
-                  2
-                </span>
-              </button>
-              <button
-                onClick={handleMenuAdmin}
-                type="button"
-                class="text-white focus:ring-4 focus:ring-green font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-medgreen dark:hover:bg-green dark:focus:ring-green"
-              >
-                Menú Principal
-                <svg
-                  class="w-3.5 h-3.5 ml-2"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 14 10"
-                >
-                  <path
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M1 5h12m0 0L9 1m4 4L9 9"
-                  />
-                </svg>
-              </button>
-            </div>
-
-          </div>
-        </div>
+      <MenuSuperior2 />
 
 
         <div class="bg-darkGreen flex flex-col justify-center py-4 px-10 sm:px-24lg:px-8">
@@ -1082,29 +773,7 @@ export function    VisualizarTienda(){//casi lista
     }
 
 export function    VisualizarFactura(){
-    let navigate = useNavigate();
-
-
-
-    const handleGaleria = () => {
-        navigate('/galeriaDuende', {});
-    }
-
-    const handleAgenda = () => {
-        navigate('/menuAgenda', {});
-    }
-
-    const handleTienda = () => {
-        navigate('/tiendaDuende', {});
-    }
-
-    const handleMensajes = () => {
-        navigate('/mensajesAdmin', {});
-    }
-
-    const handleMenuAdmin = () => {
-        navigate('/menuAdmin', {});
-    }
+    
     
     const location = useLocation();
     console.log('hola');
@@ -1201,14 +870,32 @@ export function    VisualizarFactura(){
                                     </div>
                                 </div>
                                 <div className="row">
-                                    <div class="input-field col s12">
+                                    <div class="input-field col s4">
                                         <select>
-                                        <option value="" disabled selected>Choose your option</option>
-                                        <option value="1">Option 1</option>
-                                        <option value="2">Option 2</option>
-                                        <option value="3">Option 3</option>
+                                        <option value="" disabled selected>Provincia</option>
+                                        <option value="Cartago">Cartago</option>
+                                        <option value="San Jose">San Jose</option>
+                                        
                                         </select>
-                                        <label>Materialize Select</label>
+                                        
+                                    </div>
+                                    <div class="input-field col s4">
+                                        <select>
+                                        <option value="" disabled selected>Canton</option>
+                                        <option value="Turrialba">Turrialba</option>
+                                        <option value="Montes de Oca">Montes de Oca</option>
+                                        
+                                        </select>
+                                        
+                                    </div>
+                                    <div class="input-field col s4">
+                                        <select>
+                                        <option value="" disabled selected>Distrito</option>
+                                        <option value="Santa Teresita">Santa Teresita</option>
+                                        <option value="Sabanilla">Sabanilla</option>
+                                        
+                                        </select>
+                                        
                                     </div>
                                 </div>
                                 
@@ -1252,77 +939,7 @@ export function    VisualizarFactura(){
     return (
         <Fragment>
       <div className="main-h-screen bg-black flex flex-col justify-center py-4">
-        <div className="sm:mx-auto sm:w-full sm:max-w-md">
-          <h2 className="text-center text-3xl font-regular text-white">
-            DUENDE MAQUILLISTA
-          </h2>
-          <br />
-        </div>
-
-
-        <div className="bg-medGreen flex flex-col justify-center py-4 sm:px-6 lg:px-8">
-          <div class="inline-flex rounded-md shadow-sm" role="group">
-            <button
-              onClick={handleGaleria}
-              type="button"
-              class="inline-flex items-center px-4 py-2 text-sm font-medium text-green bg-transparent border border-green rounded-l-lg hover:bg-green hover:text-white focus:z-10 focus:ring-2 focus:ring-green focus:bg-green focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-green dark:focus:bg-green"
-            >
-              La Galería del Duende
-            </button>
-            <button
-              onClick={handleAgenda}
-              type="button"
-              class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-transparent border-t border-b border-gray-900 hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-green dark:focus:bg-green"
-            >
-              La Agenda del Duende
-            </button>
-            <button
-              onClick={handleTienda}
-              type="button"
-              class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-transparent border border-gray-900 rounded-r-md hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-green dark:focus:bg-green"
-            >
-              La Tienda del Duende
-            </button>
-
-            <div className="ml-auto flex space-x-2">
-              {" "}
-              {/* Utilizamos ml-auto para mover estos botones al lado derecho */}
-              <button
-                onClick={handleMensajes}
-                type="button"
-                class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-medGreen rounded-lg hover:bg-medGreen focus:ring-4 focus:outline-none focus:ring-green dark:bg-medGreen dark:hover:bg-green dark:focus:ring-green"
-              >
-                Mensajes
-                <span class="inline-flex items-center justify-center w-4 h-4 ml-2 text-xs font-semibold text-white bg-green rounded-full">
-                  2
-                </span>
-              </button>
-              <button
-                onClick={handleMenuAdmin}
-                type="button"
-                class="text-white focus:ring-4 focus:ring-green font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-medgreen dark:hover:bg-green dark:focus:ring-green"
-              >
-                Menú Principal
-                <svg
-                  class="w-3.5 h-3.5 ml-2"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 14 10"
-                >
-                  <path
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M1 5h12m0 0L9 1m4 4L9 9"
-                  />
-                </svg>
-              </button>
-            </div>
-
-          </div>
-        </div>
+      <MenuSuperior2 />
 
 
         <div class="bg-darkGreen flex flex-col justify-center py-4 px-10 sm:px-24lg:px-8">

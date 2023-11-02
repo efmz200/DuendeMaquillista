@@ -26,10 +26,10 @@ const App = () => {
         
         <Route path="/categorias" element={<VisualizarCategoriaProductos />} />
         <Route path="/categoriaproductos" element={<VisualizarProductos />} />
-                        <Route path="/carrito" element={<VisualizarCarrito />} />
-                        <Route path="/factura" element={<VisualizarFactura />} />
-                        <Route path="/contenido" element={<VisualizarTienda />} />
-                        <Route path="/publicacion" element={<VisualizarPublicacion />} />
+        <Route path="/carrito" element={<VisualizarCarrito />} />
+        <Route path="/factura" element={<VisualizarFactura />} />
+        <Route path="/contenido" element={<VisualizarTienda />} />
+        <Route path="/publicacion" element={<VisualizarPublicacion />} />
       </Routes>
     </BrowserRouter>
   )
