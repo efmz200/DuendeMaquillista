@@ -5,6 +5,9 @@ import {IniciarSesion,RegistrarUsuario} from './FrLogin';
 import {VisualizarCategoriaProductos,VisualizarProductos,FrTienda,VisualizarCarrito,VisualizarPublicacion,VisualizarTienda,VisualizarFactura} from './FrTienda';
 import MenuSuperior from './MenuSuperior';
 
+import './App.css';
+
+
 class App extends Component {
     
     constructor() {
