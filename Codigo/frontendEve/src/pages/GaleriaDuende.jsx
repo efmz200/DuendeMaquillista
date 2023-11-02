@@ -21,7 +21,8 @@ function GaleriaDuende() {
 
   const [categoria, setCategoria] = useState("");
   const [nuevaCategoria, setNuevaCategoria] = useState("");
-  const [subCategoria, setSubCategoria] = useState("");
+  
+  const [nuevaSubCategoria, setNuevaSubCategoria] = useState("");
 
 
   const handleGaleria = () => {
@@ -280,12 +281,7 @@ function GaleriaDuende() {
               <h3 className='text-center text-2xl font-semibold text-white'>Actualizar Imagen</h3>
             </div>
             <label htmlFor='text' className='text-gray-100'>Nueva imagen</label>
-            <input
-              name='imagen'
-              type='text'
-              required value={imagen}
-              onChange={(e) => setImagen(e.target.value)}
-              className='appearance-none block w-full px-3 py-2 border border-gray-200 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green focus:border-green sm:text-sm' placeholder="Url Imagen" />
+            <input class="block w-full text-m py-2 px-2 text-white border border-green rounded-lg cursor-pointer bg-medGreen dark:text-white focus:outline-none dark:bg-darkGreen dark:border-green dark:placeholder-gray-400" id="file_input" type="file"/>
             <div class="p-4 text-center">
               <button data-modal-hide="popup-modal" type="button" class="text-white bg-white hover:bg-green focus:ring-4 focus:outline-none rounded-lg border-darkGreen text-sm font-medium px-5 py-2.5 hover:text-white focus:z-10 dark:bg-darkGreen dark:text-white dark:hover:text-white dark:focus:ring-green mr-2">
                 Actualizar Imagen
@@ -362,16 +358,11 @@ function GaleriaDuende() {
             <input name='nombrePublicacion' type='text' required value={nombrePublicacion} onChange={(e) => setNombrePublicacion(e.target.value)}
               className='appearance-none block w-full px-3 py-2 border border-gray-200 rounded-md shadow-sm placeholder-gray-800 focus:outline-none focus:ring-green focus:border-green sm:text-sm' placeholder="Nombre Publicación" />
 
-            <input name='imagen' type='text' required value={imagen} onChange={(e) => setImagen(e.target.value)}
-              className='appearance-none block w-full px-3 py-2 border border-gray-200 rounded-md shadow-sm placeholder-gray-800 focus:outline-none focus:ring-green focus:border-green sm:text-sm' placeholder="Url Imagen" />
-
-
             <textarea name='descripcion' type='text' required value={descripcion} onChange={(e) => setDescripcion(e.target.value)}
               className='appearance-none block w-full px-3 py-2 border border-gray-200 rounded-md shadow-sm placeholder-gray-800 focus:outline-none focus:ring-green focus:border-green sm:text-sm' placeholder="Descripción" />
 
             <input name='descripcion' type='text' required value={palabraClave} onChange={(e) => setPalabraClave(e.target.value)}
               className='appearance-none block w-full px-3 py-2 border border-gray-200 rounded-md shadow-sm placeholder-gray-800 focus:outline-none focus:ring-green focus:border-green sm:text-sm' placeholder="Palabras Clave" />
-
 
             <select id="underline_select" class="block py-2.5 px-6 w-full bg-white rounded-lg border-0 border-b-2 border-medGreen text-gray-800 text-sm peer">
               <option selected>Categoría</option>
@@ -387,7 +378,8 @@ function GaleriaDuende() {
 
             <input name='descripcion' type='text' required value={tags} onChange={(e) => setTags(e.target.value)}
               className='appearance-none block w-full px-3 py-2 border border-gray-200 rounded-md shadow-sm placeholder-gray-800 focus:outline-none focus:ring-green focus:border-green sm:text-sm' placeholder="#Tags" />
-
+            
+            <input class="block w-full text-sm py-2 px-2 text-gray-800 border border-gray-300 rounded-lg cursor-pointer bg-gray-100 dark:text-gray-800 focus:outline-none dark:bg-gray-100 dark:placeholder-gray-800" id="file_input" type="file" multiple/>
 
             <div class="p-4 text-center">
               <button data-modal-hide="popup-modal" type="button" class="text-white bg-white hover:bg-green focus:ring-4 focus:outline-none rounded-lg border-darkGreen text-sm font-medium px-5 py-2.5 hover:text-white focus:z-10 dark:bg-darkGreen dark:text-white dark:hover:text-white dark:focus:ring-green mr-2">
@@ -407,22 +399,30 @@ function GaleriaDuende() {
             </div>
 
             <input name='nuevaCategoria' type='text' required value={nuevaCategoria} onChange={(e) => setNuevaCategoria(e.target.value)}
-              className='appearance-none block w-full px-3 py-2 border border-gray-200 rounded-md shadow-sm placeholder-gray-800 focus:outline-none focus:ring-green focus:border-green sm:text-sm' placeholder="Nueva categoría/subcategoría" />
+              className='appearance-none block w-full px-3 py-2 border border-gray-200 rounded-md shadow-sm placeholder-gray-800 focus:outline-none focus:ring-green focus:border-green sm:text-sm' placeholder="Nueva categoría" />
 
-            <input name='descripcion' type='text' required value={palabraClave} onChange={(e) => setPalabraClave(e.target.value)}
-              className='appearance-none block w-full px-3 py-2 border border-gray-200 rounded-md shadow-sm placeholder-gray-800 focus:outline-none focus:ring-green focus:border-green sm:text-sm' placeholder="Palabras Clave" />
-
+            <div>
+              <h3 className='text-center text-xl font-semibold py-2 text-white'>Agregar SubCategorías</h3><br />
+            </div>
 
             <select id="underline_select" class="block py-2.5 px-6 w-full bg-white rounded-lg border-0 border-b-2 border-medGreen text-gray-800 text-sm peer">
-              <option selected>Tipo</option>
-              <option value="categoria">Categoría</option>
-              <option value="subcategoria">Subcategoría</option>
+              <option selected>Categoría</option>
+              <option value="A">A</option>
+              <option value="B">B</option>
             </select>
+
+            <input name='nuevaSubCategoria' type='text' required value={nuevaSubCategoria} onChange={(e) => setNuevaSubCategoria(e.target.value)}
+              className='appearance-none block w-full px-3 py-2 border border-gray-200 rounded-md shadow-sm placeholder-gray-800 focus:outline-none focus:ring-green focus:border-green sm:text-sm' placeholder="Nueva subcategoría" />
 
             <div class="p-4 text-center">
               <button data-modal-hide="popup-modal" type="button" class="text-white bg-white hover:bg-green focus:ring-4 focus:outline-none rounded-lg border-darkGreen text-sm font-medium px-5 py-2.5 hover:text-white focus:z-10 dark:bg-darkGreen dark:text-white dark:hover:text-white dark:focus:ring-green mr-2">
-                Agregar
+                Agregar Categoría
               </button>
+
+              <button data-modal-hide="popup-modal" type="button" class="text-white bg-white hover:bg-green focus:ring-4 focus:outline-none rounded-lg border-darkGreen text-sm font-medium px-5 py-2.5 hover:text-white focus:z-10 dark:bg-darkGreen dark:text-white dark:hover:text-white dark:focus:ring-green mr-2">
+                Agregar SubCategoría
+              </button>
+
               <button onClick={() => setShowModalAddCat(false)} data-modal-hide="popup-modal" type="button" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">Cancelar</button>
             </div>
           </form>
