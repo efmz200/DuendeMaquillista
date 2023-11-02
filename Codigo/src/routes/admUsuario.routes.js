@@ -3,6 +3,7 @@ const router =express.Router();
 require('dotenv').config();
 const nodemailer = require('nodemailer');
 const Usuario = require('../models/modelo/Usuario');
+const Carrito = require('../models/modelo/Carrito');
 
 router.get('/',async (req,res) => {
     const usuario = await Usuario.find({})
@@ -12,14 +13,14 @@ router.get('/',async (req,res) => {
 
 //iniciarSesion
 router.post('/iniciarSesion',async (req,res) => {
-    try{        
-        const {correo,contrasena} = req.body;
+    try{
+                const {correo,contrasena} = req.body;
         const usuario =await Usuario.findOne({correo,contrasena})
         if (usuario != null){
             res.json({ success: true, estatus: "Sesion iniciada" });
-             return;           
+             return;            
         } 
-        res.json({ success: false, estatus: "Correo o contrseña invalidos" });       
+res.json({ success: false, estatus: "Correo o contrseña invalidos" });
 
     }catch(err){
         console.log(err)
@@ -35,6 +36,10 @@ router.post('/registrarUsuario', async (req,res) =>{
     try{
         const {nombre,apellido,correo,contrasena,nacimiento,telefono,genero} = req.body;
         console.log(nacimiento)
+        const carrito = new Carrito({
+            productos: []
+        });
+        carrito = await carrito.save();
         const usuario = new Usuario({
             nombre,
             apellido,
@@ -42,7 +47,9 @@ router.post('/registrarUsuario', async (req,res) =>{
             contrasena,
             nacimiento,
             telefono,
-            genero
+            genero,
+            carrito
+
         })
         await usuario.save();
         console.log(usuario)
@@ -91,7 +98,7 @@ router.post('/actualizarUsuario', async (req,res) =>{
 //reestablece la contraseña de un usuario si concuerda el correo
 router.post('/olvideContrasena', async (req,res) =>{
     try{
-        //prepara el correo 
+//prepara el correo 
         const {correo} = req.body;
         console.log(process.env.GMAIL_MAIL)
         let transporter = nodemailer.createTransport({
@@ -106,7 +113,7 @@ router.post('/olvideContrasena', async (req,res) =>{
             }
           });
 
-        //genera una contraseña aleatoria
+//genera una contraseña aleatoria
         const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+';
         let contrasena = '';
         for (let i = 0; i < 12; i++) {
@@ -114,7 +121,7 @@ router.post('/olvideContrasena', async (req,res) =>{
             contrasena += caracteres[indice];
         }
         
-        //envio del correo
+//envio del correo
         const mensaje = `Su nueva contraseña es: ${contrasena}. \nSi usted no solicitó el cambio de contraseña, cámbiela inmediatamente.`;
   
         const mailOptions = {
@@ -123,8 +130,8 @@ router.post('/olvideContrasena', async (req,res) =>{
             subject: 'Cambio de contrasenia',
             text: mensaje
         };
-        
-        //actualiza la contraseña en la base de datos
+          
+//actualiza la contraseña en la base de datos
         const usuario = await Usuario.findOneAndUpdate({correo},{contrasena}, {new: true});
         if (usuario != null){          
         
