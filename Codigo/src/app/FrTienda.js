@@ -2,6 +2,7 @@ import React, {useEffect,useState }  from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { Link, useLocation } from 'react-router-dom';
 
+
 /**export default class FrTienda {
     constructor() {
     }*/
@@ -18,19 +19,47 @@ function    handleChange(e){
     }
     
 export function    VisualizarCarrito(){
-        const numColumnas = 4; // Cantidad de columnas que deseas
+        const [listaProductos, setlistaProductos] = useState([]);
+        
+        const idCarrito = '6537366bd6e4e15f3beb9b0f'; // Reemplaza con el ID del carrito que estás buscando
+        const url = '/api/productos/getCarrito'; // Reemplaza con la URL de tu servidor
+        var response = '';
+        useEffect(() => {
+            response =fetch(url, {
+                method: 'POST',
+                headers:{
+                    'Accept': 'application/json',
+                    'Content-Type':'application/json'
+                },
+                body: JSON.stringify({ idCarrito }),
+            })
+                .then(res => res.json())
+                .then(data => {
+                    console.log(data)
+                    setlistaProductos(data.productos);
+                    
+                    
+                    
+    
+                })
+                .catch(err => console.err(err));
+            
+        }, []);
+        console.log('listaProductos')
+        console.log(listaProductos)
 
         // Un array de elementos JSX para representar las columnas
         const columnas = [];
     
-        for (let i = 0; i < numColumnas; i++) {
+        for (let i = 0; i < listaProductos.length; i++) {
         columnas.push(
             <div className="col s4" >
                         <div className="card" style={{ backgroundColor: "#033734" }}>
                             <div className="card-content">
                                 <div style={{ display: "flex", justifyContent: "center" }}>
                                     <div style={{ backgroundColor: "white", width: "200px", height: "150px", display: "flex", justifyContent: "center", alignItems: "center" }}>
-                                        <h1>img</h1>
+                                        
+                                        <img src={listaProductos[i].producto.imagen} alt="Descripción de la imagen" style={{  width: "200px", height: "150px" }}/>
                                     </div>
                                     
                                     
@@ -38,11 +67,11 @@ export function    VisualizarCarrito(){
                                 <div style={{ display: "flex", justifyContent: "center" }}>
                                     <div className='row' style={{  width: "200px", display: "flex", justifyContent: "center", alignItems: "center", marginTop: "10px" , color: "#FFFFFF  " }}>
                                         <div className='col s3'>
-                                            <span> precio</span>
+                                            <span> {listaProductos[i].producto.precio}</span>
                                         </div>
                                         <div className='col s3'>
                                             
-                                            <input type="number" name="cantidad" maxLength="16" style={{  width: "50px", height: "30px",backgroundColor: "#FFFFFF" }}/>
+                                            <input type="number" name="cantidad" maxLength="16" value={listaProductos[i].cantidad} style={{  width: "50px", height: "30px",backgroundColor: "#FFFFFF" }}/>
                                         </div>
                                         <div className='col s3'>
                                             <button type="submit" className="btn" style={{ backgroundColor: "#033734",color: "#FFFFFF" }}>
@@ -85,8 +114,10 @@ export function    VisualizarCarrito(){
                 </div>
                 <div style={{ display: "flex", justifyContent: "center" }}>
                 <div style={{ marginTop: "10px" }}> {/* Agregar margen superior de 10px */}
-                    <button type="submit" className="btn" style={{ backgroundColor: "#000000", color: "#FFFFFF " }}>
-                    Realizar Compra
+                    <button type="submit" className="btn" style={{ backgroundColor: "#000000", color: "# " }}>
+                    
+                        <Link to="/factura" state={{  products:listaProductos }} style={{ backgroundColor: "#000000", color: "#FFFFFF"}}>Realizar Compra</Link>
+                                            
                     </button>
                 </div>
                 </div>
@@ -321,8 +352,9 @@ export function    VisualizarProductos(){
         const numColumnas = location.state.products.length; // Cantidad de columnas que deseas
         // Un array de elementos JSX para representar las columnas
         const columnas = [];
-    
+
         for (let i = 0; i < numColumnas; i++) {
+        
         columnas.push(
             <div className="col s4" >
                         
@@ -456,5 +488,154 @@ export function    VisualizarTienda(){
             </div>
         );
     }
+
+export function    VisualizarFactura(){
+    const location = useLocation();
+    console.log('hola');
+    console.log(location.state);//"any type"
+    //<p>Contenido de la página 2. Datos recibidos: {data.name}</p>
+    const numColumnas = location.state.products.length; // Cantidad de columnas que deseas
+    console.log(numColumnas);
+    const columnas = [];
+    var suma = 0;
+    for (let i = 0; i < numColumnas; i++) {
+        suma += location.state.products[i].producto.precio*location.state.products[i].cantidad
+        columnas.push(
+            <div className="row">
+    <           div className="col s8" >
+                    <div className="col s10"  style={{border: "1px solid #000000" }}>
+                        <span >{location.state.products[i].producto.nombre}</span>
+                    </div>            
+                </div>
+                <div className="col s2" >
+                                
+                </div>
+                <div className="col s2" >
+                    <div className="col s10"  style={{border: "1px solid #000000" }}>
+                        <span >{location.state.products[i].cantidad}</span>
+                    </div>            
+                </div>
+            </div>
+           
+        );
+        }
+    return (
+        <div>
+            <div className="row" style={{ color: "#FFFFFF" }} >
+                <h1>
+                    Factura
+                </h1>
+            </div>
+                <div className="row" >
+                            
+                            <div className="col s6">
+                                <div style={{ display: "flex", justifyContent: "center" }}>
+                                    <div style={{ backgroundColor: "white", width: "500px", height: "500px", display: "flex", justifyContent: "center", alignItems: "center" }}>
+                                        <h1>img</h1>
+                                    </div>
+                                    
+                                    
+                                </div>
+                                <div >
+                                    <div className='row' style={{ display: "flex", justifyContent: "center" }}>
+                                        <div style={{ marginTop: "10px" }}> {/* Agregar margen superior de 10px */}                             
+                                                <button type="submit" className="btn" style={{ backgroundColor: "#000000", color: "#FFFFFF " }}>
+                                                    Adjuntar Comprobante
+                                                </button>                                 
+                                        </div>
+                                    </div>
+                                    
+                                    <br/>
+                                    <div className='row' style={{ display: "flex", justifyContent: "center" }}>
+                                        <div style={{ marginTop: "10px" }}> {/* Agregar margen superior de 10px */}                             
+                                                <button type="submit" className="btn" style={{ backgroundColor: "#000000", color: "#FFFFFF " }}>
+                                                    Pagar
+                                                </button>                                 
+                                        </div>
+                                    </div>
+                                   
+                                </div>
+                            </div>
+                            <div className="col s6" >
+                                <div  className="col s8"  style={{ backgroundColor: "#FFFFFF", color: "#000000" , fontSize: "26px" }}>
+                                    <br/>
+                                    <div className="row">
+                                        <div className="col s8" >
+                                            <div className="col s10"  >
+                                                <span >Detalle de compra</span>
+                                            </div>            
+                                        </div>
+                                        <div className="col s1" >
+                                                        
+                                        </div>
+                                        <div className="col s2" >
+                                            <div className="col s10"  >
+                                                <span >Cantidad</span>
+                                            </div>            
+                                        </div>
+                                    </div>
+                                    {columnas}
+                                    
+                                    
+    
+                                    
+                                    <div className="row">
+                                        <div className="col s12">
+                                            <span>Direccion de entrega</span>
+                                        </div>
+                                    </div>
+                                    <div className="row">
+                                        <div class="input-field col s12">
+                                            <select>
+                                            <option value="" disabled selected>Choose your option</option>
+                                            <option value="1">Option 1</option>
+                                            <option value="2">Option 2</option>
+                                            <option value="3">Option 3</option>
+                                            </select>
+                                            <label>Materialize Select</label>
+                                        </div>
+                                    </div>
+                                    
+                                    
+                                    <div className="row">
+                                        <div className="col s12">
+                                            <span>Detalles de direccion</span>
+                                        </div>
+                                    </div>
+                                    <div className="row">
+                                        <div className="col s12">
+                                            <textarea style={{ width: "300px", height: "200px" }} />
+                                        </div>
+                                        
+                                    </div>
+                                    <div className="row">
+                                        <div>
+                                            <div className="col s5" style={{border: "1px solid #000000", marginLeft: "50px",marginRight:"100px"}}>
+                                                <span>Total de compra</span>
+                                            </div>
+                                            
+                                            <div className="col s3" style={{border: "1px solid #000000" }}>
+                                                <span>{suma}</span>
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                    
+                                </div>
+                               
+                                
+                                
+                            
+                            </div>
+                            
+                            
+                        
+                </div>
+        </div>
+    
+                        
+    
+        );
+}
 //}
 //export default FrTienda;
