@@ -169,6 +169,7 @@ router.post('/agregarStock',async(req,res)=>{
 //se agrega un producto al carrito
 router.post('/agregarProductoCarrito',async(req,res)=>{
     try{
+        console.log(req.body)
         const {idCarrito,codigoProducto,cantidad} = req.body;
         var carrito = null;
         if (idCarrito != null){
@@ -205,7 +206,7 @@ router.post('/agregarProductoCarrito',async(req,res)=>{
             }
         }
         carrito.listaProductos.push({cantidad:cantidad,producto:producto});
-        //carrito.save();
+        carrito.save();
         carr = await Carrito.findOneAndUpdate({_id:idCarrito},carrito, {new: true})
         console.log(carr);
         res.json({

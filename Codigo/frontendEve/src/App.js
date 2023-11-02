@@ -8,11 +8,16 @@ import {VisualizarCategoriaProductos,VisualizarProductos,FrTienda,VisualizarCarr
 import './App.css';
 
 const App = () => {
+  const [user, setUser] = useState(['valor_inicial']);
+  const updateConstantValue = (newValue) => {
+    setUser(newValue);
+}
+
   return (
     
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<LoginPage />} />
+        <Route path="/" element={<LoginPage user={user} updateConstantValue={updateConstantValue}/>} />
         <Route path="/signUp" element={<SignUpPage />} />
         <Route path="/menuAdmin" element={<MenuAdmin />} />
         <Route path="/galeriaDuende" element={<GaleriaDuende />} />
@@ -24,7 +29,7 @@ const App = () => {
         <Route path="/mensajesAdmin" element={<MensajesAdmin />} />
         <Route path="/publicacion" element={<VisualizarPublicacion />} />
         
-        <Route path="/categorias" element={<VisualizarCategoriaProductos />} />
+        <Route path="/categorias" element={<VisualizarCategoriaProductos user={user}  />} />
         <Route path="/categoriaproductos" element={<VisualizarProductos />} />
         <Route path="/carrito" element={<VisualizarCarrito />} />
         <Route path="/factura" element={<VisualizarFactura />} />

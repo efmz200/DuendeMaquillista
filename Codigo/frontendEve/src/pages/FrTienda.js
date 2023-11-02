@@ -193,7 +193,7 @@ export function    VisualizarCarrito(){//casilita *****
                                         </div>
                                         <div className='col s3'>
                                             
-                                            <input type="number" name="cantidad" maxLength="16" value={listaProductos[i].cantidad} style={{  width: "50px", height: "30px",backgroundColor: "#FFFFFF" }}/>
+                                            <input type="number" name="cantidad" maxLength="16" value={listaProductos[i].cantidad} style={{  width: "50px", height: "30px",backgroundColor: "#FFFFFF" ,color:'#000000'}}/>
                                         </div>
                                         <div className='col s3'>
                                             <button type="submit" className="btn" style={{ backgroundColor: "#033734",color: "#FFFFFF" }}>
@@ -305,7 +305,7 @@ export function   VisualizarPublicacion(){//casi no lista *****
                         Publicacion
                     </h1>
                 </div>
-                    <div className="row" >
+                    <div className="row" class="grid grid-cols-1 md:grid-cols-2 gap-2">
                                 
                                 <div class="col s6">
                                     <div style={{ display: "flex", justifyContent: "center" }}>
@@ -347,63 +347,59 @@ export function   VisualizarPublicacion(){//casi no lista *****
                                 </div>
                                 <div class="col s6" style={{ backgroundColor: "#FFFFFF", color: "#000000" }}>
                                     <div  className="col s8"  style={{ margin: '20px',borderRadius: '10px',backgroundColor: "#FFFFFF", color: "#000000" , fontSize: "26px" }}>
-                                        <br/>
+                                        
                                         <div className="col s12">
                                             <span>Descripcion</span>
                                         </div>
                                         
-                                        <br/>
+                                        
                                         <div className="col s12"  style={{border: "1px solid #000000"}} >
                                             <span >{objeto.descripcion} </span>
                                             
                                         </div>
         
-                                        <br/>
-                                        <br/>
+                                        
                                         <div className="col s12">
                                             <span>Categoria</span>
                                         </div>
                                         
-                                        <br/>
+                                        
                                         <div className="col s12"  style={{border: "1px solid #000000" }}>
                                             
                                             <span >{strCategoria}</span>
                                             
                                         </div>
-                                        <br/>
-                                        <br/>
+                                        
                                         <div className="col s12">
                                             <span>Subcategoria</span>
                                         </div>
                                         
-                                        <br/>
+                                        
                                         <div className="col s12"  style={{border: "1px solid #000000" }}>
                                             <span >{strsubategoria}</span>
                                             
                                         </div>
-                                        <br/>
-                                        <br/>
+                                        
                                         <div className="col s12">
                                             <span>Palabras clave</span>
                                         </div>
                                         
-                                        <br/>
+                                        
                                         <div className="col s12"  style={{border: "1px solid #000000" }}>
                                             <span >{strpalabrasClave}</span>
                                             
                                         </div>
-                                        <br/>
-                                        <br/>
+                                        
                                         <div className="col s12">
                                             <span>#tags</span>
                                         </div>
                                         
-                                        <br/>
+                                        
                                         <div className="col s12"  style={{border: "1px solid #000000" }}>
                                             <span >{strtags} </span>
                                             
                                         </div>
-                                        <br/>
+                                        
                                         <h1></h1>
                                     </div>
                                    
@@ -432,7 +428,7 @@ export function   VisualizarPublicacion(){//casi no lista *****
 
 
 
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div >
 
               {/* Hacer un foreach para cada una de las imagenes y tarjetas del arreglo en BD */}
                 {cuadro}
@@ -446,8 +442,8 @@ export function   VisualizarPublicacion(){//casi no lista *****
 
     </Fragment>)
     }
-export function    VisualizarCategoriaProductos(){//lista ****
-    
+export function    VisualizarCategoriaProductos(props){//lista ****
+    const { user} = props;
     
     const [categorias2, setCategorias] = useState([]);
 
@@ -512,6 +508,9 @@ export function    VisualizarCategoriaProductos(){//lista ****
 
     return (
         <Fragment>
+            <h1>
+                {user}
+            </h1>
       <div className="main-h-screen bg-black flex flex-col justify-center py-4">
         <MenuSuperior2 />
 
@@ -545,28 +544,24 @@ export function    VisualizarCategoriaProductos(){//lista ****
     );
 }
 export function    VisualizarProductos(){//casi lista *****
-        const [datosEnvio, setDatosEnvio] = useState({
-            idCarrito: '6537366bd6e4e15f3beb9b0f', // Asigna los valores adecuados
-            codigoProducto: 'valor',
-            cantidad: 'valor'
-        });
+        
         const clickAgregarProducto = (codigo,cantidad) => {
-            setDatosEnvio({
-                
-                codigoProducto: codigo,
-                cantidad: cantidad
-              });
-            agregarProductoCarrito();
+            
+            agregarProductoCarrito(codigo,cantidad);
         }
     
-        const agregarProductoCarrito = async () => {
+        const agregarProductoCarrito = async (codigo,cantidad) => {
             try {
             const response = await fetch('http://localhost:3000/api/productos/agregarProductoCarrito', {
                 method: 'POST',
                 headers: {
                 'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(datosEnvio)
+                body: JSON.stringify({
+                    idCarrito: '6537366bd6e4e15f3beb9b0f', // Asigna los valores adecuados
+                    codigoProducto: codigo,
+                    cantidad: cantidad
+                })
             });
         
             const data = await response.json();
@@ -587,6 +582,8 @@ export function    VisualizarProductos(){//casi lista *****
         const columnas = [];
 
         for (let i = 0; i < numColumnas; i++) {
+        let cantidadInput = React.createRef(); // Crear una referencia para cada input
+
         
         columnas.push(
             <div className="col s4" >
@@ -605,8 +602,14 @@ export function    VisualizarProductos(){//casi lista *****
                                             <span> {location.state.products[i].precio}</span>
                                         </div>
                                         <div className='col s4'>
-                                            <input type="number" name="cantidad" maxLength="16" style={{ width: "50px", height: "30px",backgroundColor: "#FFFFFF" }}/>
-                                        </div>
+                                            
+                                        <input
+                                            type="number"
+                                            ref={cantidadInput} // Asignar la referencia al input
+                                            name="cantidad"
+                                            maxLength="16"
+                                            style={{ width: "30px", height: "30px", backgroundColor: "#FFFFFF", color: "#000000" }}
+                                        /></div>
                                         <div className='col s4'>
                                             <button type="submit" class="btn" style={{  width: "30px", height: "30px",backgroundColor: "#033734",color: "#FFFFFF" }}>
                                                 
@@ -622,7 +625,7 @@ export function    VisualizarProductos(){//casi lista *****
                                 <div style={{ display: "flex", justifyContent: "center" }}>
                                     
                                     <div style={{ marginTop: "10px" }}> {/* Agregar margen superior de 10px */}
-                                        <button type="submit" onClick={() => clickAgregarProducto(location.state.products[i].codigo, 2)} className="btn" style={{ borderRadius: '10px',backgroundColor: "#000000", color: "#FFFFFF " }}>
+                                        <button type="submit" onClick={() => clickAgregarProducto(location.state.products[i].codigo, parseInt(cantidadInput.current.value))} className="btn" style={{ borderRadius: '10px',backgroundColor: "#000000", color: "#FFFFFF " }}>
                                             Agregar al carrito
                                         </button>
                                             
@@ -786,15 +789,13 @@ export function    VisualizarFactura(){
     for (let i = 0; i < numColumnas; i++) {
         suma += location.state.products[i].producto.precio*location.state.products[i].cantidad
         columnas.push(
-            <div className="row">
+            <div className="row" class="grid grid-cols-1 md:grid-cols-2 gap-2">
     <           div className="col s8" >
                     <div className="col s10"  style={{border: "1px solid #000000" }}>
                         <span >{location.state.products[i].producto.nombre}</span>
                     </div>            
                 </div>
-                <div className="col s2" >
-                                
-                </div>
+                
                 <div className="col s2" >
                     <div className="col s10"  style={{border: "1px solid #000000" }}>
                         <span >{location.state.products[i].cantidad}</span>
@@ -811,9 +812,11 @@ export function    VisualizarFactura(){
                 Factura
             </h1>
         </div>
-            <div className="row" >
-                        
-                        <div className="col s6">
+            
+            <div className='row' class="grid grid-cols-1 md:grid-cols-2 gap-2">
+
+            
+                        <div  className="col s6">
                             <div style={{ display: "flex", justifyContent: "center" }}>
                                 <div style={{ backgroundColor: "white", width: "500px", height: "500px", display: "flex", justifyContent: "center", alignItems: "center" }}>
                                     <h1>img</h1>
@@ -841,18 +844,16 @@ export function    VisualizarFactura(){
                                
                             </div>
                         </div>
-                        <div className="col s6" >
+                        <div  className="col s6" >
                             <div  className="col s8"  style={{ backgroundColor: "#FFFFFF", color: "#000000" , fontSize: "26px" }}>
                                 <br/>
-                                <div className="row">
+                                <div className="row" class="grid grid-cols-1 md:grid-cols-2 gap-2">
                                     <div className="col s8" >
                                         <div className="col s10"  >
                                             <span >Detalle de compra</span>
                                         </div>            
                                     </div>
-                                    <div className="col s1" >
-                                                    
-                                    </div>
+                                    
                                     <div className="col s2" >
                                         <div className="col s10"  >
                                             <span >Cantidad</span>
@@ -869,7 +870,7 @@ export function    VisualizarFactura(){
                                         <span>Direccion de entrega</span>
                                     </div>
                                 </div>
-                                <div className="row">
+                                <div className="row" class="grid grid-cols-1 md:grid-cols-3 gap-3">
                                     <div class="input-field col s4">
                                         <select>
                                         <option value="" disabled selected>Provincia</option>
@@ -907,14 +908,17 @@ export function    VisualizarFactura(){
                                 </div>
                                 <div className="row">
                                     <div className="col s12">
-                                        <textarea style={{ width: "300px", height: "200px" }} />
+                                        <textarea style={{ width: "300px", height: "200px",border: "1px solid #000000"}} />
                                     </div>
                                     
                                 </div>
                                 <div className="row">
-                                    <div>
-                                        <div className="col s5" style={{border: "1px solid #000000", marginLeft: "50px",marginRight:"100px"}}>
+                                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                        <div className="col s5" style={{border: "1px solid #000000"}}>
                                             <span>Total de compra</span>
+                                        </div>
+                                        <div>
+
                                         </div>
                                         
                                         <div className="col s3" style={{border: "1px solid #000000" }}>
@@ -930,10 +934,10 @@ export function    VisualizarFactura(){
                             
                         
                         </div>
-                        
+            </div>           
                         
                     
-            </div>
+            
     </div>
 )
     return (
@@ -955,7 +959,7 @@ export function    VisualizarFactura(){
 
 
 
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div >
 
               {/* Hacer un foreach para cada una de las imagenes y tarjetas del arreglo en BD */}
                 {cuando}
