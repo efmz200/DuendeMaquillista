@@ -11,6 +11,8 @@ router.get('/',async (req,res) => {
     res.json(usuario)
 })
 
+
+
 //iniciarSesion
 router.post('/iniciarSesion',async (req,res) => {
     try{
@@ -20,7 +22,11 @@ router.post('/iniciarSesion',async (req,res) => {
             res.json({ success: true, estatus: "Sesion iniciada" });
              return;            
         } 
-res.json({ success: false, estatus: "Correo o contrseña invalidos" });
+        res.json({ 
+            success: false,
+            usuario, 
+            estatus: "Correo o contrseña invalidos" 
+        });
 
     }catch(err){
         console.log(err)
@@ -34,9 +40,9 @@ res.json({ success: false, estatus: "Correo o contrseña invalidos" });
 //Validar Usuario
 router.post('/registrarUsuario', async (req,res) =>{
     try{
-        const {nombre,apellido,correo,contrasena,nacimiento,telefono,genero} = req.body;
+        const {nombre,apellido,correo,contrasena,nacimiento,telefono,genero,admin} = req.body;
         console.log(nacimiento)
-        const carrito = new Carrito({
+        var carrito = new Carrito({
             productos: []
         });
         carrito = await carrito.save();
@@ -48,8 +54,8 @@ router.post('/registrarUsuario', async (req,res) =>{
             nacimiento,
             telefono,
             genero,
-            carrito
-
+            carrito, 
+            admin
         })
         await usuario.save();
         console.log(usuario)

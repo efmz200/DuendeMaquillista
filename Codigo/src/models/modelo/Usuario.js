@@ -9,7 +9,8 @@ const UsuarioSchema = new Schema({
     nacimiento:{type: Date, required: true},
     telefono:{type: Number , required: true},
     genero:{type: String, required: true},
-    carrito: {type: Object}
+    carrito: {type: Object},
+    admin: {type: Boolean, default: false}
 });
 
 module.exports = mongose.model('Usuario',UsuarioSchema)
