@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Header from './Header';
 import {IniciarSesion,RegistrarUsuario} from './FrLogin';
 import {VisualizarCategoriaProductos,VisualizarProductos,FrTienda,VisualizarCarrito,VisualizarPublicacion,VisualizarTienda,VisualizarFactura} from './FrTienda';
@@ -27,7 +27,7 @@ class App extends Component {
     render() {
         return (
 
-            <BrowserRouter>
+            <Router>
             <Routes>
                 <Route path="/" element={<LoginPage />} />
                 <Route path="/signUp" element={<SignUpPage />} />
@@ -40,7 +40,7 @@ class App extends Component {
                 <Route path="/entregasClientes" element={<EntregasClientes />} />
                 <Route path="/mensajesAdmin" element={<MensajesAdmin />} />
             </Routes>
-            </BrowserRouter>
+            </Router>
             /**
             <div style={{ backgroundColor: "#033734" }}>
                 <h1>
