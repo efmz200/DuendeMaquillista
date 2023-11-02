@@ -1,6 +1,8 @@
-import React, {useEffect,useState }  from 'react';
+import React, {Fragment,useEffect,useState }  from 'react';
+import { Link, useNavigate } from "react-router-dom";
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { Link, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+import Modal from "../components/Modal/Modal.js";
 
 
 /**export default class FrTienda {
@@ -18,11 +20,35 @@ function    handleChange(e){
     
     }
     
-export function    VisualizarCarrito(){
+export function    VisualizarCarrito(){//casilita
+    let navigate = useNavigate();
+
+
+
+    const handleGaleria = () => {
+        navigate('/galeriaDuende', {});
+    }
+
+    const handleAgenda = () => {
+        navigate('/menuAgenda', {});
+    }
+
+    const handleTienda = () => {
+        navigate('/tiendaDuende', {});
+    }
+
+    const handleMensajes = () => {
+        navigate('/mensajesAdmin', {});
+    }
+
+    const handleMenuAdmin = () => {
+        navigate('/menuAdmin', {});
+    }
+        
         const [listaProductos, setlistaProductos] = useState([]);
         
         const idCarrito = '6537366bd6e4e15f3beb9b0f'; // Reemplaza con el ID del carrito que estás buscando
-        const url = '/api/productos/getCarrito'; // Reemplaza con la URL de tu servidor
+        const url = 'http://localhost:3000/api/productos/getCarrito'; // Reemplaza con la URL de tu servidor
         var response = '';
         useEffect(() => {
             response =fetch(url, {
@@ -101,32 +127,142 @@ export function    VisualizarCarrito(){
         }
         
     return (
-        <div>
-                <div style={{ color: "#FFFFFF" }}>
-                    <h1>Carrito de Compras  </h1>
-                </div>
-                <div className="row">
-                    <div className="row">
-                        {columnas}
-                        
-                    </div>
-                    
-                </div>
-                <div style={{ display: "flex", justifyContent: "center" }}>
-                <div style={{ marginTop: "10px" }}> {/* Agregar margen superior de 10px */}
-                    <button type="submit" className="btn" style={{ backgroundColor: "#000000", color: "# " }}>
-                    
-                        <Link to="/factura" state={{  products:listaProductos }} style={{ backgroundColor: "#000000", color: "#FFFFFF"}}>Realizar Compra</Link>
-                                            
-                    </button>
-                </div>
-                </div>
+        <Fragment>
+      <div className="main-h-screen bg-black flex flex-col justify-center py-4">
+        <div className="sm:mx-auto sm:w-full sm:max-w-md">
+          <h2 className="text-center text-3xl font-regular text-white">
+            DUENDE MAQUILLISTA
+          </h2>
+          <br />
         </div>
+
+
+        <div className="bg-medGreen flex flex-col justify-center py-4 sm:px-6 lg:px-8">
+          <div class="inline-flex rounded-md shadow-sm" role="group">
+            <button
+              onClick={handleGaleria}
+              type="button"
+              class="inline-flex items-center px-4 py-2 text-sm font-medium text-green bg-transparent border border-green rounded-l-lg hover:bg-green hover:text-white focus:z-10 focus:ring-2 focus:ring-green focus:bg-green focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-green dark:focus:bg-green"
+            >
+              La Galería del Duende
+            </button>
+            <button
+              onClick={handleAgenda}
+              type="button"
+              class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-transparent border-t border-b border-gray-900 hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-green dark:focus:bg-green"
+            >
+              La Agenda del Duende
+            </button>
+            <button
+              onClick={handleTienda}
+              type="button"
+              class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-transparent border border-gray-900 rounded-r-md hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-green dark:focus:bg-green"
+            >
+              La Tienda del Duende
+            </button>
+
+            <div className="ml-auto flex space-x-2">
+              {" "}
+              {/* Utilizamos ml-auto para mover estos botones al lado derecho */}
+              <button
+                onClick={handleMensajes}
+                type="button"
+                class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-medGreen rounded-lg hover:bg-medGreen focus:ring-4 focus:outline-none focus:ring-green dark:bg-medGreen dark:hover:bg-green dark:focus:ring-green"
+              >
+                Mensajes
+                <span class="inline-flex items-center justify-center w-4 h-4 ml-2 text-xs font-semibold text-white bg-green rounded-full">
+                  2
+                </span>
+              </button>
+              <button
+                onClick={handleMenuAdmin}
+                type="button"
+                class="text-white focus:ring-4 focus:ring-green font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-medgreen dark:hover:bg-green dark:focus:ring-green"
+              >
+                Menú Principal
+                <svg
+                  class="w-3.5 h-3.5 ml-2"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 14 10"
+                >
+                  <path
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M1 5h12m0 0L9 1m4 4L9 9"
+                  />
+                </svg>
+              </button>
+            </div>
+
+          </div>
+        </div>
+
+
+        <div class="bg-darkGreen flex flex-col justify-center py-4 px-10 sm:px-24lg:px-8">
+          <div>
+            <div className="sm:mx-auto sm:w-full sm:max-w-md">
+              <h3 className="text-center text-xl font-regular text-white">
+                Carrito de Compras
+              </h3>
+            </div>
+
+            
+
+
+
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+
+              {/* Hacer un foreach para cada una de las imagenes y tarjetas del arreglo en BD */}
+                {columnas}
+              
+
+            </div>
+          </div>
+          <div className="text-center">
+          <button type="submit" className="btn" style={{ backgroundColor: "#000000", color: "#FFFFFF " }}>
+                    
+                    <Link to="/factura" state={{  products:listaProductos }} style={{ backgroundColor: "#000000", color: "#FFFFFF"}}>Realizar Compra</Link>
+                                        
+                </button>
+          </div>
+        </div>
+      </div>
+      
+
+    </Fragment>
         );
         
     }
 
-export function   VisualizarPublicacion(){
+export function   VisualizarPublicacion(){//casi no lista
+    let navigate = useNavigate();
+
+
+
+    const handleGaleria = () => {
+        navigate('/galeriaDuende', {});
+    }
+
+    const handleAgenda = () => {
+        navigate('/menuAgenda', {});
+    }
+
+    const handleTienda = () => {
+        navigate('/tiendaDuende', {});
+    }
+
+    const handleMensajes = () => {
+        navigate('/mensajesAdmin', {});
+    }
+
+    const handleMenuAdmin = () => {
+        navigate('/menuAdmin', {});
+    }
         const location = useLocation();
         console.log('hola');
         console.log(location.state);//"any type"
@@ -165,7 +301,7 @@ export function   VisualizarPublicacion(){
                 </div>
                     <div className="row" >
                                 
-                                <div className="col s6">
+                                <div class="col s6">
                                     <div style={{ display: "flex", justifyContent: "center" }}>
                                         <div style={{ backgroundColor: "white", width: "500px", height: "500px", display: "flex", justifyContent: "center", alignItems: "center" }}>
                                             <img src={objeto.imagen} alt="Descripción de la imagen" style={{  width: "500px", height: "500px" }}/>
@@ -203,7 +339,7 @@ export function   VisualizarPublicacion(){
                                         </div>
                                     </div>
                                 </div>
-                                <div className="col s6" >
+                                <div class="col s6" style={{ backgroundColor: "#FFFFFF", color: "#000000" }}>
                                     <div  className="col s8"  style={{ margin: '20px',borderRadius: '10px',backgroundColor: "#FFFFFF", color: "#000000" , fontSize: "26px" }}>
                                         <br/>
                                         <div className="col s12">
@@ -276,23 +412,139 @@ export function   VisualizarPublicacion(){
             </div>
         )
         return (
-            <div className="row">
-                {cuadro}
+            <Fragment>
+      <div className="main-h-screen bg-black flex flex-col justify-center py-4">
+        <div className="sm:mx-auto sm:w-full sm:max-w-md">
+          <h2 className="text-center text-3xl font-regular text-white">
+            DUENDE MAQUILLISTA
+          </h2>
+          <br />
+        </div>
+
+
+        <div className="bg-medGreen flex flex-col justify-center py-4 sm:px-6 lg:px-8">
+          <div class="inline-flex rounded-md shadow-sm" role="group">
+            <button
+              onClick={handleGaleria}
+              type="button"
+              class="inline-flex items-center px-4 py-2 text-sm font-medium text-green bg-transparent border border-green rounded-l-lg hover:bg-green hover:text-white focus:z-10 focus:ring-2 focus:ring-green focus:bg-green focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-green dark:focus:bg-green"
+            >
+              La Galería del Duende
+            </button>
+            <button
+              onClick={handleAgenda}
+              type="button"
+              class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-transparent border-t border-b border-gray-900 hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-green dark:focus:bg-green"
+            >
+              La Agenda del Duende
+            </button>
+            <button
+              onClick={handleTienda}
+              type="button"
+              class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-transparent border border-gray-900 rounded-r-md hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-green dark:focus:bg-green"
+            >
+              La Tienda del Duende
+            </button>
+
+            <div className="ml-auto flex space-x-2">
+              {" "}
+              {/* Utilizamos ml-auto para mover estos botones al lado derecho */}
+              <button
+                onClick={handleMensajes}
+                type="button"
+                class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-medGreen rounded-lg hover:bg-medGreen focus:ring-4 focus:outline-none focus:ring-green dark:bg-medGreen dark:hover:bg-green dark:focus:ring-green"
+              >
+                Mensajes
+                <span class="inline-flex items-center justify-center w-4 h-4 ml-2 text-xs font-semibold text-white bg-green rounded-full">
+                  2
+                </span>
+              </button>
+              <button
+                onClick={handleMenuAdmin}
+                type="button"
+                class="text-white focus:ring-4 focus:ring-green font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-medgreen dark:hover:bg-green dark:focus:ring-green"
+              >
+                Menú Principal
+                <svg
+                  class="w-3.5 h-3.5 ml-2"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 14 10"
+                >
+                  <path
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M1 5h12m0 0L9 1m4 4L9 9"
+                  />
+                </svg>
+              </button>
             </div>
+
+          </div>
+        </div>
+
+
+        <div class="bg-darkGreen flex flex-col justify-center py-4 px-10 sm:px-24lg:px-8">
+          <div>
             
-        )
+
+            
+
+
+
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+
+              {/* Hacer un foreach para cada una de las imagenes y tarjetas del arreglo en BD */}
+                {cuadro}
+              
+
+            </div>
+          </div>
+        </div>
+      </div>
+      
+
+    </Fragment>)
     }
-export function    VisualizarCategoriaProductos(){
+export function    VisualizarCategoriaProductos(){//lista
+    let navigate = useNavigate();
+
+
+
+    const handleGaleria = () => {
+        navigate('/galeriaDuende', {});
+    }
+
+    const handleAgenda = () => {
+        navigate('/menuAgenda', {});
+    }
+
+    const handleTienda = () => {
+        navigate('/tiendaDuende', {});
+    }
+
+    const handleMensajes = () => {
+        navigate('/mensajesAdmin', {});
+    }
+
+    const handleMenuAdmin = () => {
+        navigate('/menuAdmin', {});
+    }
+    
     const [categorias2, setCategorias] = useState([]);
-    const [numColumnas, setNumColumnas] = useState(0);
+
 
     useEffect(() => {
-        fetch('/api/productos/getCategoriaProductos')
+        fetch('http://localhost:3000/api/productos/getCategoriaProductos')
             .then(res => res.json())
             .then(data => {
                 console.log(data);
                 setCategorias(data.cats);
-                setNumColumnas(categorias2.length); // Establece el número de columnas
+                
                 
             });
     }, []);
@@ -306,44 +558,172 @@ export function    VisualizarCategoriaProductos(){
     for (let i = 0; i < categorias2.length; i++) {
         const data = { id: i, name: 'Ejemplo' };
         columnas2.push(
-            <div className="col s4" id= {categorias2[i].id}>
+            <div class="block rounded-lg bg-white shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-medGreen">
+                <a href="#!" class="flex items-center justify-center">
+                  <img
+                    class="mx-auto rounded-t-lg"
+                    src="https://i.pinimg.com/564x/3c/73/93/3c7393c4d177db993866c2752cb0e708.jpg"
+                    alt=""
+                  />
+                </a>
                 
-                                <div style={{ display: "flex", justifyContent: "center" }}>
-                                    <div style={{ backgroundColor: "white", width: "250px", height: "250px", display: "flex", justifyContent: "center", alignItems: "center" }}>
-                                        <h1>img</h1>
-                                    </div>
-                                    
-                                    
-                                </div>
-                                <div style={{ display: "flex", justifyContent: "center" }}>
-                                    
-                                    <div style={{ marginTop: "10px" }}> {/* Agregar margen superior de 10px */}
-                                        <button type="submit" className="btn" style={{ backgroundColor: "#FFFFFF", color: "#000000" }}>
+
+                <div class="mb-4 flex items-center justify-center">
+                  <div
+                    class="inline-flex rounded-md shadow-[0_4px_9px_-4px_rgba(51,45,45,0.7)] transition duration-150 ease-in-out hover:bg-neutral-800 hover:shadow-[0_8px_9px_-4px_rgba(51,45,45,0.2),0_4px_18px_0_rgba(51,45,45,0.1)] focus:bg-neutral-800 focus:shadow-[0_8px_9px_-4px_rgba(51,45,45,0.2),0_4px_18px_0_rgba(51,45,45,0.1)] focus:outline-none focus:ring-0 active:bg-neutral-900 active:shadow-[0_8px_9px_-4px_rgba(51,45,45,0.2),0_4px_18px_0_rgba(51,45,45,0.1)] dark:bg-neutral-900 dark:shadow-[0_4px_9px_-4px_#030202] dark:hover:bg-neutral-900 dark:hover:shadow-[0_8px_9px_-4px_rgba(3,2,2,0.3),0_4px_18px_0_rgba(3,2,2,0.2)] dark:focus:bg-neutral-900 dark:focus:shadow-[0_8px_9px_-4px_rgba(3,2,2,0.3),0_4px_18px_0_rgba(3,2,2,0.2)] dark:active:bg-neutral-900 dark:active:shadow-[0_8px_9px_-4px_rgba(3,2,2,0.3),0_4px_18px_0_rgba(3,2,2,0.2)]"
+                    role="group">
+                    
+                    
+                    <button
+                      type="button"
+                      class="inline-block rounded-r bg-black px-2 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-neutral-50 transition duration-150 ease-in-out hover:bg-neutral-800 focus:bg-neutral-800 focus:outline-none focus:ring-0 active:bg-neutral-900 dark:bg-black dark:hover:bg-black dark:focus:bg-black dark:active:bg-black"
+                      data-te-ripple-init
+                      data-te-ripple-color="light"
+                      >
+                      <Link to="/categoriaproductos" state={{ name: categorias2[i].nombre, products:categorias2[i].Productos }} class="inline-block rounded-r bg-black px-2 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-neutral-50 transition duration-150 ease-in-out hover:bg-neutral-800 focus:bg-neutral-800 focus:outline-none focus:ring-0 active:bg-neutral-900 dark:bg-black dark:hover:bg-black dark:focus:bg-black dark:active:bg-black">{ categorias2[i].nombre }</Link>
+                                                              
+                    </button>
+                    <button type="submit" className="btn" style={{ backgroundColor: "#FFFFFF", color: "#000000" }}>
                                             
                                         
-                                            <Link to="/categoriaproductos" state={{ name: categorias2[i].nombre, products:categorias2[i].Productos }} style={{ backgroundColor: "#FFFFFF", color: "#000000"}}>{ categorias2[i].nombre }</Link>
                                             
                                         </button>
-                                    </div>
-                                </div>
-                                
-                    </div>
+                  </div>
+                </div>
+
+              </div>
                 
         );
     }
 
     return (
-        <div>
-            <div style={{ color: "#FFFFFF" }}>
-                <h1>La Tienda del Duende</h1>
-                <div className="row">
-                    {columnas2}
-                </div>
-            </div>
+        <Fragment>
+      <div className="main-h-screen bg-black flex flex-col justify-center py-4">
+        <div className="sm:mx-auto sm:w-full sm:max-w-md">
+          <h2 className="text-center text-3xl font-regular text-white">
+            DUENDE MAQUILLISTA
+          </h2>
+          <br />
         </div>
+
+
+        <div className="bg-medGreen flex flex-col justify-center py-4 sm:px-6 lg:px-8">
+          <div class="inline-flex rounded-md shadow-sm" role="group">
+            <button
+              onClick={handleGaleria}
+              type="button"
+              class="inline-flex items-center px-4 py-2 text-sm font-medium text-green bg-transparent border border-green rounded-l-lg hover:bg-green hover:text-white focus:z-10 focus:ring-2 focus:ring-green focus:bg-green focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-green dark:focus:bg-green"
+            >
+              La Galería del Duende
+            </button>
+            <button
+              onClick={handleAgenda}
+              type="button"
+              class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-transparent border-t border-b border-gray-900 hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-green dark:focus:bg-green"
+            >
+              La Agenda del Duende
+            </button>
+            <button
+              onClick={handleTienda}
+              type="button"
+              class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-transparent border border-gray-900 rounded-r-md hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-green dark:focus:bg-green"
+            >
+              La Tienda del Duende
+            </button>
+
+            <div className="ml-auto flex space-x-2">
+              {" "}
+              {/* Utilizamos ml-auto para mover estos botones al lado derecho */}
+              <button
+                onClick={handleMensajes}
+                type="button"
+                class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-medGreen rounded-lg hover:bg-medGreen focus:ring-4 focus:outline-none focus:ring-green dark:bg-medGreen dark:hover:bg-green dark:focus:ring-green"
+              >
+                Mensajes
+                <span class="inline-flex items-center justify-center w-4 h-4 ml-2 text-xs font-semibold text-white bg-green rounded-full">
+                  2
+                </span>
+              </button>
+              <button
+                onClick={handleMenuAdmin}
+                type="button"
+                class="text-white focus:ring-4 focus:ring-green font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-medgreen dark:hover:bg-green dark:focus:ring-green"
+              >
+                Menú Principal
+                <svg
+                  class="w-3.5 h-3.5 ml-2"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 14 10"
+                >
+                  <path
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M1 5h12m0 0L9 1m4 4L9 9"
+                  />
+                </svg>
+              </button>
+            </div>
+
+          </div>
+        </div>
+
+
+        <div class="bg-darkGreen flex flex-col justify-center py-4 px-10 sm:px-24lg:px-8">
+          <div>
+            <div className="sm:mx-auto sm:w-full sm:max-w-md">
+              <h3 className="text-center text-xl font-regular text-white">
+                La Tienda de DUENDE
+              </h3>
+            </div>
+
+            
+
+
+
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+
+              {/* Hacer un foreach para cada una de las imagenes y tarjetas del arreglo en BD */}
+                {columnas2}
+              
+
+            </div>
+          </div>
+        </div>
+      </div>
+      
+
+    </Fragment>
     );
 }
-export function    VisualizarProductos(){
+export function    VisualizarProductos(){//casi lista
+    let navigate = useNavigate();
+
+
+
+    const handleGaleria = () => {
+        navigate('/galeriaDuende', {});
+    }
+
+    const handleAgenda = () => {
+        navigate('/menuAgenda', {});
+    }
+
+    const handleTienda = () => {
+        navigate('/tiendaDuende', {});
+    }
+
+    const handleMensajes = () => {
+        navigate('/mensajesAdmin', {});
+    }
+
+    const handleMenuAdmin = () => {
+        navigate('/menuAdmin', {});
+    }
         
         const location = useLocation();
         console.log('hola');
@@ -405,10 +785,107 @@ export function    VisualizarProductos(){
         );
         }
         return (
-            <div className="row">
-                <h1>{location.state.name}</h1>
+            <Fragment>
+      <div className="main-h-screen bg-black flex flex-col justify-center py-4">
+        <div className="sm:mx-auto sm:w-full sm:max-w-md">
+          <h2 className="text-center text-3xl font-regular text-white">
+            DUENDE MAQUILLISTA
+          </h2>
+          <br />
+        </div>
+
+
+        <div className="bg-medGreen flex flex-col justify-center py-4 sm:px-6 lg:px-8">
+          <div class="inline-flex rounded-md shadow-sm" role="group">
+            <button
+              onClick={handleGaleria}
+              type="button"
+              class="inline-flex items-center px-4 py-2 text-sm font-medium text-green bg-transparent border border-green rounded-l-lg hover:bg-green hover:text-white focus:z-10 focus:ring-2 focus:ring-green focus:bg-green focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-green dark:focus:bg-green"
+            >
+              La Galería del Duende
+            </button>
+            <button
+              onClick={handleAgenda}
+              type="button"
+              class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-transparent border-t border-b border-gray-900 hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-green dark:focus:bg-green"
+            >
+              La Agenda del Duende
+            </button>
+            <button
+              onClick={handleTienda}
+              type="button"
+              class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-transparent border border-gray-900 rounded-r-md hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-green dark:focus:bg-green"
+            >
+              La Tienda del Duende
+            </button>
+
+            <div className="ml-auto flex space-x-2">
+              {" "}
+              {/* Utilizamos ml-auto para mover estos botones al lado derecho */}
+              <button
+                onClick={handleMensajes}
+                type="button"
+                class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-medGreen rounded-lg hover:bg-medGreen focus:ring-4 focus:outline-none focus:ring-green dark:bg-medGreen dark:hover:bg-green dark:focus:ring-green"
+              >
+                Mensajes
+                <span class="inline-flex items-center justify-center w-4 h-4 ml-2 text-xs font-semibold text-white bg-green rounded-full">
+                  2
+                </span>
+              </button>
+              <button
+                onClick={handleMenuAdmin}
+                type="button"
+                class="text-white focus:ring-4 focus:ring-green font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-medgreen dark:hover:bg-green dark:focus:ring-green"
+              >
+                Menú Principal
+                <svg
+                  class="w-3.5 h-3.5 ml-2"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 14 10"
+                >
+                  <path
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M1 5h12m0 0L9 1m4 4L9 9"
+                  />
+                </svg>
+              </button>
+            </div>
+
+          </div>
+        </div>
+
+
+        <div class="bg-darkGreen flex flex-col justify-center py-4 px-10 sm:px-24lg:px-8">
+          <div>
+            <div className="sm:mx-auto sm:w-full sm:max-w-md">
+              <h3 className="text-center text-xl font-regular text-white">
+              {location.state.name}
+              </h3>
+            </div>
+
+            
+
+
+
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+
+              {/* Hacer un foreach para cada una de las imagenes y tarjetas del arreglo en BD */}
                 {columnas}
-            </div>)
+              
+
+            </div>
+          </div>
+        </div>
+      </div>
+      
+
+    </Fragment>)
 
     }
 
@@ -430,13 +907,36 @@ export function    FrTienda() {
     }
 
     
-export function    VisualizarTienda(){
+export function    VisualizarTienda(){//casi lista
+    let navigate = useNavigate();
+
+
+
+    const handleGaleria = () => {
+        navigate('/galeriaDuende', {});
+    }
+
+    const handleAgenda = () => {
+        navigate('/menuAgenda', {});
+    }
+
+    const handleTienda = () => {
+        navigate('/tiendaDuende', {});
+    }
+
+    const handleMensajes = () => {
+        navigate('/mensajesAdmin', {});
+    }
+
+    const handleMenuAdmin = () => {
+        navigate('/menuAdmin', {});
+    }
         
         const [contenidos, setCategorias] = useState([]);
         const [numColumnas, setNumColumnas] = useState(0);
     
         useEffect(() => {
-            fetch('/api/contenido/getContenidos')
+            fetch('http://localhost:3000/api/contenido/getContenidos')
                 .then(res => res.json())
                 .then(data => {
                     console.log(data);
@@ -478,18 +978,134 @@ export function    VisualizarTienda(){
         }
     
         return (
-            <div>
-                <div style={{ color: "#FFFFFF" }}>
-                    <h1>La Tienda del Duende</h1>
-                    <div className="row">
-                        {columnas2}
-                    </div>
-                </div>
+            <Fragment>
+      <div className="main-h-screen bg-black flex flex-col justify-center py-4">
+        <div className="sm:mx-auto sm:w-full sm:max-w-md">
+          <h2 className="text-center text-3xl font-regular text-white">
+            DUENDE MAQUILLISTA
+          </h2>
+          <br />
+        </div>
+
+
+        <div className="bg-medGreen flex flex-col justify-center py-4 sm:px-6 lg:px-8">
+          <div class="inline-flex rounded-md shadow-sm" role="group">
+            <button
+              onClick={handleGaleria}
+              type="button"
+              class="inline-flex items-center px-4 py-2 text-sm font-medium text-green bg-transparent border border-green rounded-l-lg hover:bg-green hover:text-white focus:z-10 focus:ring-2 focus:ring-green focus:bg-green focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-green dark:focus:bg-green"
+            >
+              La Galería del Duende
+            </button>
+            <button
+              onClick={handleAgenda}
+              type="button"
+              class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-transparent border-t border-b border-gray-900 hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-green dark:focus:bg-green"
+            >
+              La Agenda del Duende
+            </button>
+            <button
+              onClick={handleTienda}
+              type="button"
+              class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-transparent border border-gray-900 rounded-r-md hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-green dark:focus:bg-green"
+            >
+              La Tienda del Duende
+            </button>
+
+            <div className="ml-auto flex space-x-2">
+              {" "}
+              {/* Utilizamos ml-auto para mover estos botones al lado derecho */}
+              <button
+                onClick={handleMensajes}
+                type="button"
+                class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-medGreen rounded-lg hover:bg-medGreen focus:ring-4 focus:outline-none focus:ring-green dark:bg-medGreen dark:hover:bg-green dark:focus:ring-green"
+              >
+                Mensajes
+                <span class="inline-flex items-center justify-center w-4 h-4 ml-2 text-xs font-semibold text-white bg-green rounded-full">
+                  2
+                </span>
+              </button>
+              <button
+                onClick={handleMenuAdmin}
+                type="button"
+                class="text-white focus:ring-4 focus:ring-green font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-medgreen dark:hover:bg-green dark:focus:ring-green"
+              >
+                Menú Principal
+                <svg
+                  class="w-3.5 h-3.5 ml-2"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 14 10"
+                >
+                  <path
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M1 5h12m0 0L9 1m4 4L9 9"
+                  />
+                </svg>
+              </button>
             </div>
-        );
+
+          </div>
+        </div>
+
+
+        <div class="bg-darkGreen flex flex-col justify-center py-4 px-10 sm:px-24lg:px-8">
+          <div>
+            <div className="sm:mx-auto sm:w-full sm:max-w-md">
+              <h3 className="text-center text-xl font-regular text-white">
+              La galeria del duende
+              </h3>
+            </div>
+
+            
+
+
+
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+
+              {/* Hacer un foreach para cada una de las imagenes y tarjetas del arreglo en BD */}
+                {columnas2}
+              
+
+            </div>
+          </div>
+        </div>
+      </div>
+      
+
+    </Fragment>)
     }
 
 export function    VisualizarFactura(){
+    let navigate = useNavigate();
+
+
+
+    const handleGaleria = () => {
+        navigate('/galeriaDuende', {});
+    }
+
+    const handleAgenda = () => {
+        navigate('/menuAgenda', {});
+    }
+
+    const handleTienda = () => {
+        navigate('/tiendaDuende', {});
+    }
+
+    const handleMensajes = () => {
+        navigate('/mensajesAdmin', {});
+    }
+
+    const handleMenuAdmin = () => {
+        navigate('/menuAdmin', {});
+    }
+    
     const location = useLocation();
     console.log('hola');
     console.log(location.state);//"any type"
@@ -519,120 +1135,223 @@ export function    VisualizarFactura(){
            
         );
         }
-    return (
-        <div>
-            <div className="row" style={{ color: "#FFFFFF" }} >
-                <h1>
-                    Factura
-                </h1>
-            </div>
-                <div className="row" >
-                            
-                            <div className="col s6">
-                                <div style={{ display: "flex", justifyContent: "center" }}>
-                                    <div style={{ backgroundColor: "white", width: "500px", height: "500px", display: "flex", justifyContent: "center", alignItems: "center" }}>
-                                        <h1>img</h1>
-                                    </div>
-                                    
-                                    
+
+    const cuando = (<div>
+        <div className="row" style={{ color: "#FFFFFF" }} >
+            <h1>
+                Factura
+            </h1>
+        </div>
+            <div className="row" >
+                        
+                        <div className="col s6">
+                            <div style={{ display: "flex", justifyContent: "center" }}>
+                                <div style={{ backgroundColor: "white", width: "500px", height: "500px", display: "flex", justifyContent: "center", alignItems: "center" }}>
+                                    <h1>img</h1>
                                 </div>
-                                <div >
-                                    <div className='row' style={{ display: "flex", justifyContent: "center" }}>
-                                        <div style={{ marginTop: "10px" }}> {/* Agregar margen superior de 10px */}                             
-                                                <button type="submit" className="btn" style={{ backgroundColor: "#000000", color: "#FFFFFF " }}>
-                                                    Adjuntar Comprobante
-                                                </button>                                 
-                                        </div>
-                                    </div>
-                                    
-                                    <br/>
-                                    <div className='row' style={{ display: "flex", justifyContent: "center" }}>
-                                        <div style={{ marginTop: "10px" }}> {/* Agregar margen superior de 10px */}                             
-                                                <button type="submit" className="btn" style={{ backgroundColor: "#000000", color: "#FFFFFF " }}>
-                                                    Pagar
-                                                </button>                                 
-                                        </div>
-                                    </div>
-                                   
-                                </div>
+                                
+                                
                             </div>
-                            <div className="col s6" >
-                                <div  className="col s8"  style={{ backgroundColor: "#FFFFFF", color: "#000000" , fontSize: "26px" }}>
-                                    <br/>
-                                    <div className="row">
-                                        <div className="col s8" >
-                                            <div className="col s10"  >
-                                                <span >Detalle de compra</span>
-                                            </div>            
-                                        </div>
-                                        <div className="col s1" >
-                                                        
-                                        </div>
-                                        <div className="col s2" >
-                                            <div className="col s10"  >
-                                                <span >Cantidad</span>
-                                            </div>            
-                                        </div>
+                            <div >
+                                <div className='row' style={{ display: "flex", justifyContent: "center" }}>
+                                    <div style={{ marginTop: "10px" }}> {/* Agregar margen superior de 10px */}                             
+                                            <button type="submit" className="btn" style={{ backgroundColor: "#000000", color: "#FFFFFF " }}>
+                                                Adjuntar Comprobante
+                                            </button>                                 
                                     </div>
-                                    {columnas}
-                                    
-                                    
-    
-                                    
-                                    <div className="row">
-                                        <div className="col s12">
-                                            <span>Direccion de entrega</span>
-                                        </div>
+                                </div>
+                                
+                                <br/>
+                                <div className='row' style={{ display: "flex", justifyContent: "center" }}>
+                                    <div style={{ marginTop: "10px" }}> {/* Agregar margen superior de 10px */}                             
+                                            <button type="submit" className="btn" style={{ backgroundColor: "#000000", color: "#FFFFFF " }}>
+                                                Pagar
+                                            </button>                                 
                                     </div>
-                                    <div className="row">
-                                        <div class="input-field col s12">
-                                            <select>
-                                            <option value="" disabled selected>Choose your option</option>
-                                            <option value="1">Option 1</option>
-                                            <option value="2">Option 2</option>
-                                            <option value="3">Option 3</option>
-                                            </select>
-                                            <label>Materialize Select</label>
-                                        </div>
-                                    </div>
-                                    
-                                    
-                                    <div className="row">
-                                        <div className="col s12">
-                                            <span>Detalles de direccion</span>
-                                        </div>
-                                    </div>
-                                    <div className="row">
-                                        <div className="col s12">
-                                            <textarea style={{ width: "300px", height: "200px" }} />
-                                        </div>
-                                        
-                                    </div>
-                                    <div className="row">
-                                        <div>
-                                            <div className="col s5" style={{border: "1px solid #000000", marginLeft: "50px",marginRight:"100px"}}>
-                                                <span>Total de compra</span>
-                                            </div>
-                                            
-                                            <div className="col s3" style={{border: "1px solid #000000" }}>
-                                                <span>{suma}</span>
-                                            </div>
-                                        </div>
-                                        
-                                    </div>
-                                    
                                 </div>
                                
-                                
-                                
-                            
                             </div>
+                        </div>
+                        <div className="col s6" >
+                            <div  className="col s8"  style={{ backgroundColor: "#FFFFFF", color: "#000000" , fontSize: "26px" }}>
+                                <br/>
+                                <div className="row">
+                                    <div className="col s8" >
+                                        <div className="col s10"  >
+                                            <span >Detalle de compra</span>
+                                        </div>            
+                                    </div>
+                                    <div className="col s1" >
+                                                    
+                                    </div>
+                                    <div className="col s2" >
+                                        <div className="col s10"  >
+                                            <span >Cantidad</span>
+                                        </div>            
+                                    </div>
+                                </div>
+                                {columnas}
+                                
+                                
+
+                                
+                                <div className="row">
+                                    <div className="col s12">
+                                        <span>Direccion de entrega</span>
+                                    </div>
+                                </div>
+                                <div className="row">
+                                    <div class="input-field col s12">
+                                        <select>
+                                        <option value="" disabled selected>Choose your option</option>
+                                        <option value="1">Option 1</option>
+                                        <option value="2">Option 2</option>
+                                        <option value="3">Option 3</option>
+                                        </select>
+                                        <label>Materialize Select</label>
+                                    </div>
+                                </div>
+                                
+                                
+                                <div className="row">
+                                    <div className="col s12">
+                                        <span>Detalles de direccion</span>
+                                    </div>
+                                </div>
+                                <div className="row">
+                                    <div className="col s12">
+                                        <textarea style={{ width: "300px", height: "200px" }} />
+                                    </div>
+                                    
+                                </div>
+                                <div className="row">
+                                    <div>
+                                        <div className="col s5" style={{border: "1px solid #000000", marginLeft: "50px",marginRight:"100px"}}>
+                                            <span>Total de compra</span>
+                                        </div>
+                                        
+                                        <div className="col s3" style={{border: "1px solid #000000" }}>
+                                            <span>{suma}</span>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                                
+                            </div>
+                           
                             
                             
                         
-                </div>
+                        </div>
+                        
+                        
+                    
+            </div>
+    </div>
+)
+    return (
+        <Fragment>
+      <div className="main-h-screen bg-black flex flex-col justify-center py-4">
+        <div className="sm:mx-auto sm:w-full sm:max-w-md">
+          <h2 className="text-center text-3xl font-regular text-white">
+            DUENDE MAQUILLISTA
+          </h2>
+          <br />
         </div>
-    
+
+
+        <div className="bg-medGreen flex flex-col justify-center py-4 sm:px-6 lg:px-8">
+          <div class="inline-flex rounded-md shadow-sm" role="group">
+            <button
+              onClick={handleGaleria}
+              type="button"
+              class="inline-flex items-center px-4 py-2 text-sm font-medium text-green bg-transparent border border-green rounded-l-lg hover:bg-green hover:text-white focus:z-10 focus:ring-2 focus:ring-green focus:bg-green focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-green dark:focus:bg-green"
+            >
+              La Galería del Duende
+            </button>
+            <button
+              onClick={handleAgenda}
+              type="button"
+              class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-transparent border-t border-b border-gray-900 hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-green dark:focus:bg-green"
+            >
+              La Agenda del Duende
+            </button>
+            <button
+              onClick={handleTienda}
+              type="button"
+              class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-transparent border border-gray-900 rounded-r-md hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-green dark:focus:bg-green"
+            >
+              La Tienda del Duende
+            </button>
+
+            <div className="ml-auto flex space-x-2">
+              {" "}
+              {/* Utilizamos ml-auto para mover estos botones al lado derecho */}
+              <button
+                onClick={handleMensajes}
+                type="button"
+                class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-medGreen rounded-lg hover:bg-medGreen focus:ring-4 focus:outline-none focus:ring-green dark:bg-medGreen dark:hover:bg-green dark:focus:ring-green"
+              >
+                Mensajes
+                <span class="inline-flex items-center justify-center w-4 h-4 ml-2 text-xs font-semibold text-white bg-green rounded-full">
+                  2
+                </span>
+              </button>
+              <button
+                onClick={handleMenuAdmin}
+                type="button"
+                class="text-white focus:ring-4 focus:ring-green font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-medgreen dark:hover:bg-green dark:focus:ring-green"
+              >
+                Menú Principal
+                <svg
+                  class="w-3.5 h-3.5 ml-2"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 14 10"
+                >
+                  <path
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M1 5h12m0 0L9 1m4 4L9 9"
+                  />
+                </svg>
+              </button>
+            </div>
+
+          </div>
+        </div>
+
+
+        <div class="bg-darkGreen flex flex-col justify-center py-4 px-10 sm:px-24lg:px-8">
+          <div>
+            <div className="sm:mx-auto sm:w-full sm:max-w-md">
+              <h3 className="text-center text-xl font-regular text-white">
+                La Tienda de DUENDE
+              </h3>
+            </div>
+
+            
+
+
+
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+
+              {/* Hacer un foreach para cada una de las imagenes y tarjetas del arreglo en BD */}
+                {cuando}
+              
+
+            </div>
+          </div>
+        </div>
+      </div>
+      
+
+    </Fragment>
+        
                         
     
         );

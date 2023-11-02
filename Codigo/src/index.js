@@ -2,6 +2,7 @@ const express = require('express');
 const morgan = require('morgan');
 const path = require('path');
 const { mongoose } = require('./database');
+const cors = require('cors');
 //const fileRoutes = require('./routes/file-upload-routes')
 //minto 14 parte 2
 
@@ -14,6 +15,9 @@ app.set('port', process.env.PORT || 3000)
 //funciones antes de las rutas
 app.use(morgan('dev'));
 app.use(express.json());
+app.use(cors({
+    origin: 'http://localhost:3001',
+  }));
 
 //rutas
 app.use('/api/tasks',require('./routes/task.routes'));
