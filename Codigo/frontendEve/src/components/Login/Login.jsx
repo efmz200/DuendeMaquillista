@@ -5,6 +5,7 @@ import styles from "../../styles/styles.js"
 
 function Login() {
     //Declaracion variables
+    
     const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -12,6 +13,7 @@ function Login() {
 
     return (
     <div >
+        
         <div className='main-h-screen bg-black flex flex-col justify-center py-4'>
             <div className='sm:mx-auto sm:w-full sm:max-w-md'>
                 <h2 className='text-center text-3xl font-regular text-white'>

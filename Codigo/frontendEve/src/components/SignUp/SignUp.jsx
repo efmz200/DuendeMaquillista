@@ -4,6 +4,7 @@ import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import styles from "../../styles/styles.js"
 
 function SignUp() {
+    
     //Declaracion variables
     const navigate = useNavigate();
     const [nombre, setNombre] = useState("");
@@ -14,6 +15,43 @@ function SignUp() {
     const [telefono, setTelefono] = useState("");
     const [genero, setGenero] = useState("");
     const [visible, setVisible] = useState(false);
+
+    function registrarUsuarioClick(){
+        var datos = {
+            nombre: nombre,
+            apellido: apellidos,
+            correo: email,
+            contrasena: password,
+            nacimiento: fechaNacimiento,
+            telefono: telefono,
+            genero: "F",
+        }
+        console.log("Valores a registrar:", datos);
+        console.log('are');
+        fetch('http://localhost:3000/api/usuario/registrarUsuario',{
+            
+            method: 'POST',
+            body: JSON.stringify(datos),
+            headers:{
+                'Accept': 'application/json',
+                'Content-Type':'application/json'
+            }
+
+        })
+            .then(res => res.json())
+            .then(data => {
+                console.log(data)
+                //M.toast({html:'archivo comprimido'});
+                //this.setState({ruta: '', compresion:"",tipo_archivo:'',etiqueta:''})
+                //this.demelosArchivos(this.state.propietario);
+
+            })
+            .catch(err => console.err(err));
+        navigate('/', {});
+
+}
+
+    
 
     return (
         <div >
@@ -122,6 +160,7 @@ function SignUp() {
                                     </div>
                                     <div>
                                         <button
+                                            onClick={registrarUsuarioClick}
                                             type="submit"
                                             className="group relative w-full h-[40px] flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-black hover:bg-green">
                                             Registrarse
