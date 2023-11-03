@@ -41,7 +41,32 @@ function GaleriaDuende() {
         'Content-Type': 'application/json'
       }
     })
-    
+    .then(res => res.json())
+    .then(data => {
+        console.log(data);
+
+    })
+    .catch(err => console.err(err));
+  }
+
+
+  //Funcion agregar una subCategoria
+  function agregarSubCategoria() {
+    var categoria = {
+      categoria: "Pestañas",
+      nombre: nuevaSubCategoria
+    };
+  
+    console.log("Valores a registrar:", categoria);
+  
+    fetch('http://localhost:3000/api/contenido/agregarSubcategoria', {
+      method: 'POST',
+      body: JSON.stringify(categoria),
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    })
     .then(res => res.json())
     .then(data => {
         console.log(data);
@@ -450,7 +475,7 @@ function GaleriaDuende() {
               </button>
 
               <button 
-              
+              onClick={agregarSubCategoria}
               data-modal-hide="popup-modal" 
               type="button" 
               class="text-white bg-white hover:bg-green focus:ring-4 focus:outline-none rounded-lg border-darkGreen text-sm font-medium px-5 py-2.5 hover:text-white focus:z-10 dark:bg-darkGreen dark:text-white dark:hover:text-white dark:focus:ring-green mr-2">
