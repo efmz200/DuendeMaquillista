@@ -19,7 +19,7 @@ app.use(cors({
     origin: 'http://localhost:3001',
   }));
 
-//rutas
+//rutas 
 app.use('/api/tasks',require('./routes/task.routes'));
 app.use('/api/usuario',require('./routes/admUsuario.routes'));
 app.use('/api/contenido',require('./routes/admGestionContenido.routes'));

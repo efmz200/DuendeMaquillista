@@ -21,10 +21,36 @@ function GaleriaDuende() {
 
   const [categoria, setCategoria] = useState("");
   const [nuevaCategoria, setNuevaCategoria] = useState("");
-  
   const [nuevaSubCategoria, setNuevaSubCategoria] = useState("");
 
+  //Funciones acciones post get en la pagina
 
+  //Funcion agregar una categoria a BD
+  function agregarCategoria() {
+    var categoria = {
+      pNombreCategoria: nuevaCategoria
+    };
+  
+    console.log("Valores a registrar:", categoria);
+  
+    fetch('http://localhost:3000/api/contenido/agregarCategorias', {
+      method: 'POST',
+      body: JSON.stringify(categoria),
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    })
+    
+    .then(res => res.json())
+    .then(data => {
+        console.log(data);
+
+    })
+    .catch(err => console.err(err));
+  }
+
+  //Funciones para navegar entre menus
   const handleGaleria = () => {
     navigate('/galeriaDuende', {});
   }
@@ -415,11 +441,19 @@ function GaleriaDuende() {
               className='appearance-none block w-full px-3 py-2 border border-gray-200 rounded-md shadow-sm placeholder-gray-800 focus:outline-none focus:ring-green focus:border-green sm:text-sm' placeholder="Nueva subcategoría" />
 
             <div class="p-4 text-center">
-              <button data-modal-hide="popup-modal" type="button" class="text-white bg-white hover:bg-green focus:ring-4 focus:outline-none rounded-lg border-darkGreen text-sm font-medium px-5 py-2.5 hover:text-white focus:z-10 dark:bg-darkGreen dark:text-white dark:hover:text-white dark:focus:ring-green mr-2">
+              <button 
+              onClick={agregarCategoria}
+              data-modal-hide="popup-modal" 
+              type="button" 
+              class="text-white bg-white hover:bg-green focus:ring-4 focus:outline-none rounded-lg border-darkGreen text-sm font-medium px-5 py-2.5 hover:text-white focus:z-10 dark:bg-darkGreen dark:text-white dark:hover:text-white dark:focus:ring-green mr-2">
                 Agregar Categoría
               </button>
 
-              <button data-modal-hide="popup-modal" type="button" class="text-white bg-white hover:bg-green focus:ring-4 focus:outline-none rounded-lg border-darkGreen text-sm font-medium px-5 py-2.5 hover:text-white focus:z-10 dark:bg-darkGreen dark:text-white dark:hover:text-white dark:focus:ring-green mr-2">
+              <button 
+              
+              data-modal-hide="popup-modal" 
+              type="button" 
+              class="text-white bg-white hover:bg-green focus:ring-4 focus:outline-none rounded-lg border-darkGreen text-sm font-medium px-5 py-2.5 hover:text-white focus:z-10 dark:bg-darkGreen dark:text-white dark:hover:text-white dark:focus:ring-green mr-2">
                 Agregar SubCategoría
               </button>
 

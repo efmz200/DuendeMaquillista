@@ -49,7 +49,7 @@ function SignUp() {
             .catch(err => console.err(err));
         navigate('/', {});
 
-}
+    }
 
     
 
