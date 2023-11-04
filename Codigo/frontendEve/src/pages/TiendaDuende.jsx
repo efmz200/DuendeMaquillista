@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styles from "../styles/styles.js";
 import Modal from "../components/Modal/Modal.js";
@@ -18,10 +18,96 @@ function TiendaDuende() {
     const [cantidadProducto, setCantidadProducto] = useState("");
     const [precio, setPrecio] = useState("");
 
-    const [categoria, setCategoria] = useState("");
-    const [nuevaCategoria, setNuevaCategoria] = useState("");
+
     const [subCategoria, setSubCategoria] = useState("");
+    const [categorias, setCategorias] = useState([]); //Arreglo donde se cargan las categorias
+    const [selectedCategoria, setSelectedCategoria] = useState(""); //Categoria seleccionada en el select
+    const [nuevaCategoria, setNuevaCategoria] = useState("");
     const [nuevaSubCategoria, setNuevaSubCategoria] = useState("");
+
+    //*********************** Funciones acciones post get en la pagina ***********************
+
+    //Funcion para cargar las categorias
+    useEffect(() => {
+        // Hacer una solicitud para obtener las categorías desde la API
+        fetch("http://localhost:3000/api/contenido/getCategorias")
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error("Error al obtener categorías");
+                }
+                return response.json();
+            })
+            .then((data) => {
+                setCategorias(data);
+            })
+            .catch((error) => {
+                console.error("Error al obtener categorías:", error);
+            });
+    }, []);
+
+    //Funcion agregar una categoria a BD
+    function agregarCategoria() {
+        var categoria = {
+            pNombreCategoria: nuevaCategoria
+        };
+
+        console.log("Valores a registrar:", categoria);
+
+        fetch('http://localhost:3000/api/contenido/agregarCategorias', {
+            method: 'POST',
+            body: JSON.stringify(categoria),
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(res => res.json())
+            .then(data => {
+                console.log(data);
+
+            })
+            .catch(err => console.err(err));
+    }
+
+    //Funcion agregar una subCategoria
+    function agregarSubCategoria() {
+        console.log(selectedCategoria);
+        var categoria = {
+            categoria: selectedCategoria,
+            nombre: nuevaSubCategoria
+        };
+
+        console.log("Valores a registrar:", categoria);
+
+        fetch('http://localhost:3000/api/contenido/agregarSubcategoria', {
+            method: 'POST',
+            body: JSON.stringify(categoria),
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(res => res.json())
+            .then(data => {
+                console.log(data);
+
+            })
+            .catch(err => console.err(err));
+    }
+
+    //Funcion obtener lista categorias para el select
+    function cargarCategorias() {
+        // Realizar una solicitud GET a la API para obtener las categorías
+        fetch('http://localhost:3000/api/contenido/getCategorias')
+            .then(response => response.json())
+            .then(data => {
+                this.setState({ categorias: data });
+            })
+            .catch(error => {
+                console.error('Error al obtener las categorías:', error);
+            });
+    }
+
 
     const handleServicios = () => {
         navigate("/servicioMaquillaje", {});
@@ -582,80 +668,52 @@ function TiendaDuende() {
                 </div>
             </Modal>
 
-            <Modal
-                isVisible={showModalAddCat}
-                onClose={() => setShowModalAddCat(false)}
-            >
+            <Modal isVisible={showModalAddCat} onClose={() => setShowModalAddCat(false)}>
                 <div className="p-6">
                     <form className="space-y-2">
                         <div>
-                            <h3 className="text-center text-2xl font-semibold text-white">
-                                Agregar Categorías
-                            </h3>
-                            <br />
+                            <h3 className='text-center text-2xl font-semibold text-white'>Agregar Categorías</h3><br />
                         </div>
 
-                        <input
-                            name="nuevaCategoria"
-                            type="text"
-                            required
-                            value={nuevaCategoria}
-                            onChange={(e) => setNuevaCategoria(e.target.value)}
-                            className="appearance-none block w-full px-3 py-2 border border-gray-200 rounded-md shadow-sm placeholder-gray-800 focus:outline-none focus:ring-green focus:border-green sm:text-sm"
-                            placeholder="Nueva categoría"
-                        />
+                        <input name='nuevaCategoria' type='text' required value={nuevaCategoria} onChange={(e) => setNuevaCategoria(e.target.value)}
+                            className='appearance-none block w-full px-3 py-2 border border-gray-200 rounded-md shadow-sm placeholder-gray-800 focus:outline-none focus:ring-green focus:border-green sm:text-sm' placeholder="Nueva categoría" />
 
                         <div>
-                            <h3 className="text-center text-xl font-semibold py-2 text-white">
-                                Agregar SubCategorías
-                            </h3>
-                            <br />
+                            <h3 className='text-center text-xl font-semibold py-2 text-white'>Agregar SubCategorías</h3><br />
                         </div>
 
                         <select
-                            id="underline_select"
-                            class="block py-2.5 px-6 w-full bg-white rounded-lg border-0 border-b-2 border-medGreen text-gray-800 text-sm peer"
-                        >
-                            <option selected>Categoría</option>
-                            <option value="A">A</option>
-                            <option value="B">B</option>
+                            value={selectedCategoria} onChange={(e) => setSelectedCategoria(e.target.value)}
+                            id="underline_select" class="block py-2.5 px-6 w-full bg-white rounded-lg border-0 border-b-2 border-medGreen text-gray-800 text-sm peer">
+                            <option value="">Selecciona una categoría</option>
+                            {categorias.map((categoria) => (
+                                <option key={categoria.nombre} value={categoria.nombre}>
+                                    {categoria.nombre}
+                                </option>
+                            ))}
                         </select>
 
-                        <input
-                            name="nuevaSubCategoria"
-                            type="text"
-                            required
-                            value={nuevaSubCategoria}
-                            onChange={(e) => setNuevaSubCategoria(e.target.value)}
-                            className="appearance-none block w-full px-3 py-2 border border-gray-200 rounded-md shadow-sm placeholder-gray-800 focus:outline-none focus:ring-green focus:border-green sm:text-sm"
-                            placeholder="Nueva subcategoría"
-                        />
+                        <input name='nuevaSubCategoria' type='text' required value={nuevaSubCategoria} onChange={(e) => setNuevaSubCategoria(e.target.value)}
+                            className='appearance-none block w-full px-3 py-2 border border-gray-200 rounded-md shadow-sm placeholder-gray-800 focus:outline-none focus:ring-green focus:border-green sm:text-sm' placeholder="Nueva subcategoría" />
 
                         <div class="p-4 text-center">
                             <button
+                                onClick={agregarCategoria}
                                 data-modal-hide="popup-modal"
                                 type="button"
-                                class="text-white bg-white hover:bg-green focus:ring-4 focus:outline-none rounded-lg border-darkGreen text-sm font-medium px-5 py-2.5 hover:text-white focus:z-10 dark:bg-darkGreen dark:text-white dark:hover:text-white dark:focus:ring-green mr-2"
-                            >
+                                class="text-white bg-white hover:bg-green focus:ring-4 focus:outline-none rounded-lg border-darkGreen text-sm font-medium px-5 py-2.5 hover:text-white focus:z-10 dark:bg-darkGreen dark:text-white dark:hover:text-white dark:focus:ring-green mr-2">
                                 Agregar Categoría
                             </button>
 
                             <button
+                                onClick={agregarSubCategoria}
                                 data-modal-hide="popup-modal"
                                 type="button"
-                                class="text-white bg-white hover:bg-green focus:ring-4 focus:outline-none rounded-lg border-darkGreen text-sm font-medium px-5 py-2.5 hover:text-white focus:z-10 dark:bg-darkGreen dark:text-white dark:hover:text-white dark:focus:ring-green mr-2"
-                            >
+                                class="text-white bg-white hover:bg-green focus:ring-4 focus:outline-none rounded-lg border-darkGreen text-sm font-medium px-5 py-2.5 hover:text-white focus:z-10 dark:bg-darkGreen dark:text-white dark:hover:text-white dark:focus:ring-green mr-2">
                                 Agregar SubCategoría
                             </button>
 
-                            <button
-                                onClick={() => setShowModalAddCat(false)}
-                                data-modal-hide="popup-modal"
-                                type="button"
-                                class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center"
-                            >
-                                Cancelar
-                            </button>
+                            <button onClick={() => setShowModalAddCat(false)} data-modal-hide="popup-modal" type="button" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">Cancelar</button>
                         </div>
                     </form>
                 </div>

@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styles from "../styles/styles.js";
 import Modal from "../components/Modal/Modal.js";
@@ -19,11 +19,30 @@ function GaleriaDuende() {
   const [palabraClave, setPalabraClave] = useState("");
   const [tags, setTags] = useState("");
 
-  const [categoria, setCategoria] = useState("");
+  const [categorias, setCategorias] = useState([]); //Arreglo donde se cargan las categorias
+  const [selectedCategoria, setSelectedCategoria] = useState(""); //Categoria seleccionada en el select
   const [nuevaCategoria, setNuevaCategoria] = useState("");
   const [nuevaSubCategoria, setNuevaSubCategoria] = useState("");
 
-  //Funciones acciones post get en la pagina
+  //*********************** Funciones acciones post get en la pagina ***********************
+
+  //Funcion para cargar las categorias
+  useEffect(() => {
+    // Hacer una solicitud para obtener las categorías desde la API
+    fetch("http://localhost:3000/api/contenido/getCategorias")
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error("Error al obtener categorías");
+            }
+            return response.json();
+        })
+        .then((data) => {
+            setCategorias(data);
+        })
+        .catch((error) => {
+            console.error("Error al obtener categorías:", error);
+        });
+}, []);
 
   //Funcion agregar una categoria a BD
   function agregarCategoria() {
@@ -49,11 +68,11 @@ function GaleriaDuende() {
     .catch(err => console.err(err));
   }
 
-
   //Funcion agregar una subCategoria
   function agregarSubCategoria() {
+    console.log(selectedCategoria);
     var categoria = {
-      categoria: "Pestañas",
+      categoria: selectedCategoria,
       nombre: nuevaSubCategoria
     };
   
@@ -74,6 +93,20 @@ function GaleriaDuende() {
     })
     .catch(err => console.err(err));
   }
+
+  //Funcion obtener lista categorias para el select
+  function cargarCategorias() {
+    // Realizar una solicitud GET a la API para obtener las categorías
+    fetch('http://localhost:3000/api/contenido/getCategorias')
+      .then(response => response.json())
+      .then(data => {
+        this.setState({ categorias: data });
+      })
+      .catch(error => {
+        console.error('Error al obtener las categorías:', error);
+      });
+  }
+
 
   //Funciones para navegar entre menus
   const handleGaleria = () => {
@@ -329,9 +362,9 @@ function GaleriaDuende() {
         <div className="p-6">
           <form className="space-y-6">
             <div>
-              <h3 className='text-center text-2xl font-semibold text-white'>Actualizar Imagen</h3>
+              <h3 className='text-center py-4 text-2xl font-semibold text-white'>Actualizar Imagen</h3>
             </div>
-            <label htmlFor='text' className='text-gray-100'>Nueva imagen</label>
+            <label htmlFor='text' className='p-24 text-center text-gray-100'>Seleccione la nueva imagen que desea cargar</label>
             <input class="block w-full text-m py-2 px-2 text-white border border-green rounded-lg cursor-pointer bg-medGreen dark:text-white focus:outline-none dark:bg-darkGreen dark:border-green dark:placeholder-gray-400" id="file_input" type="file"/>
             <div class="p-4 text-center">
               <button data-modal-hide="popup-modal" type="button" class="text-white bg-white hover:bg-green focus:ring-4 focus:outline-none rounded-lg border-darkGreen text-sm font-medium px-5 py-2.5 hover:text-white focus:z-10 dark:bg-darkGreen dark:text-white dark:hover:text-white dark:focus:ring-green mr-2">
@@ -456,10 +489,15 @@ function GaleriaDuende() {
               <h3 className='text-center text-xl font-semibold py-2 text-white'>Agregar SubCategorías</h3><br />
             </div>
 
-            <select id="underline_select" class="block py-2.5 px-6 w-full bg-white rounded-lg border-0 border-b-2 border-medGreen text-gray-800 text-sm peer">
-              <option selected>Categoría</option>
-              <option value="A">A</option>
-              <option value="B">B</option>
+            <select 
+              value={selectedCategoria} onChange={(e) => setSelectedCategoria(e.target.value)}
+              id="underline_select" class="block py-2.5 px-6 w-full bg-white rounded-lg border-0 border-b-2 border-medGreen text-gray-800 text-sm peer">
+                <option value="">Selecciona una categoría</option>
+                {categorias.map((categoria) => (
+                    <option key={categoria.nombre} value={categoria.nombre}>
+                        {categoria.nombre}
+                    </option>
+                ))}
             </select>
 
             <input name='nuevaSubCategoria' type='text' required value={nuevaSubCategoria} onChange={(e) => setNuevaSubCategoria(e.target.value)}
