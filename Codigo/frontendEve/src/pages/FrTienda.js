@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import Modal from "../components/Modal/Modal.js";
-import { AiFillDelete } from "react-icons/ai";
+import { AiFillDelete,AiOutlineShoppingCart  } from "react-icons/ai";
 
 
 /**export default class FrTienda {
@@ -79,7 +79,12 @@ function MenuSuperior2() {
                     type="button"
                     class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-medGreen rounded-lg hover:bg-medGreen focus:ring-4 focus:outline-none focus:ring-green dark:bg-medGreen dark:hover:bg-green dark:focus:ring-green"
                   >
-                    C
+                    <div className='col s3'>
+                        <AiOutlineShoppingCart 
+                            className=' cursor-pointer'
+                            size={25}
+                        />
+                    </div>
                     
                   </button>
                   {/*<button
@@ -633,14 +638,7 @@ export function    VisualizarProductos(){//casi lista *****
                                             maxLength="16"
                                             style={{ width: "30px", height: "30px", backgroundColor: "#FFFFFF", color: "#000000" }}
                                         /></div>
-                                        <div className='col s4'>
-                                            <button type="submit" class="btn" style={{  width: "30px", height: "30px",backgroundColor: "#033734",color: "#FFFFFF" }}>
-                                                
-                                                <span class="material-icons">
-                                                    favorite
-                                                </span>
-                                            </button>
-                                        </div>
+                                        
                                     </div>
                                 </div>
 
@@ -799,7 +797,26 @@ export function    VisualizarTienda(){//casi lista ****
     }
 
 export function    VisualizarFactura(){
-    
+    const [imagenSeleccionada, setImagenSeleccionada] = useState('');
+    const [tituloFactura, settituloFactura] = useState('Factura');
+
+    const handleImageChange = (event) => {
+        const archivoImagen = event.target.files[0];
+
+        if (archivoImagen && archivoImagen.type.startsWith('image/')) {
+        const reader = new FileReader();
+
+        reader.onload = () => {
+            setImagenSeleccionada(reader.result);
+        };
+
+        reader.readAsDataURL(archivoImagen);
+        } else {
+        setImagenSeleccionada('');
+        // Puedes manejar el error o mostrar un mensaje al usuario aquí
+        }
+    };
+
     
     const location = useLocation();
     console.log('hola');
@@ -832,7 +849,7 @@ export function    VisualizarFactura(){
     const cuando = (<div>
         <div className="row" style={{ color: "#FFFFFF" }} >
             <h1>
-                Factura
+                {tituloFactura}
             </h1>
         </div>
             
@@ -841,8 +858,13 @@ export function    VisualizarFactura(){
             
                         <div  className="col s6">
                             <div style={{ display: "flex", justifyContent: "center" }}>
-                                <div style={{ backgroundColor: "white", width: "500px", height: "500px", display: "flex", justifyContent: "center", alignItems: "center" }}>
-                                    <h1>img</h1>
+                                <div id="AquiLaimagen" style={{ backgroundColor: "white", width: "500px", height: "500px", display: "flex", justifyContent: "center", alignItems: "center" }}>
+                                {imagenSeleccionada && (
+                                    <div>
+                                    
+                                    <img src={imagenSeleccionada} alt="Imagen seleccionada" style={{ backgroundColor: "white", width: "500px", height: "500px" }}/>
+                                    </div>
+                                )}
                                 </div>
                                 
                                 
@@ -850,16 +872,20 @@ export function    VisualizarFactura(){
                             <div >
                                 <div className='row' style={{ display: "flex", justifyContent: "center" }}>
                                     <div style={{ marginTop: "10px" }}> {/* Agregar margen superior de 10px */}                             
-                                            <button type="submit" className="btn" style={{ backgroundColor: "#000000", color: "#FFFFFF " }}>
-                                                Adjuntar Comprobante
-                                            </button>                                 
+                                    <input
+                                        className="block w-full text-sm py-2 px-2 text-gray-800 border border-gray-300 rounded-lg cursor-pointer bg-gray-100 dark:text-gray-800 focus:outline-none dark:bg-gray-100 dark:placeholder-gray-800"
+                                        id="file_input"
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={handleImageChange}
+                                    />
                                     </div>
                                 </div>
                                 
                                 <br/>
                                 <div className='row' style={{ display: "flex", justifyContent: "center" }}>
                                     <div style={{ marginTop: "10px" }}> {/* Agregar margen superior de 10px */}                             
-                                            <button type="submit" className="btn" style={{ backgroundColor: "#000000", color: "#FFFFFF " }}>
+                                            <button type="submit" onClick={() => settituloFactura('!Factura Pagada!')} className="btn" style={{ backgroundColor: "#000000", color: "#FFFFFF " }}>
                                                 Pagar
                                             </button>                                 
                                     </div>
