@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import Modal from "../components/Modal/Modal.js";
+import { AiFillDelete } from "react-icons/ai";
 
 
 /**export default class FrTienda {
@@ -133,13 +134,44 @@ function    handleChange(e){
         });
     
     }
+
+
+
     
 export function    VisualizarCarrito(){//casilita *****
     
+    const navigate = useNavigate();
 
 
 
-    
+        const Borraritem = (codigoProducto) => {
+            console.log(codigoProducto)
+            const idCarrito = '6537366bd6e4e15f3beb9b0f'; // Reemplaza con el ID del carrito que estás buscando
+            const url = 'http://localhost:3000/api/productos/eliminarProductoCarrito'; // Reemplaza con la URL de tu servidor
+            var response = '';
+            
+                response =fetch(url, {
+                    method: 'POST',
+                    headers:{
+                        'Accept': 'application/json',
+                        'Content-Type':'application/json'
+                    },
+                    body: JSON.stringify({ idCarrito,codigoProducto }),
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        console.log(data)
+                        navigate('/carrito', {});
+                        
+                        
+                        
+                        
+        
+                    })
+                    .catch(err => console.err(err));
+                
+            
+        }
         
         const [listaProductos, setlistaProductos] = useState([]);
         
@@ -195,21 +227,12 @@ export function    VisualizarCarrito(){//casilita *****
                                             
                                             <input type="number" name="cantidad" maxLength="16" value={listaProductos[i].cantidad} style={{  width: "50px", height: "30px",backgroundColor: "#FFFFFF" ,color:'#000000'}}/>
                                         </div>
+                                        
                                         <div className='col s3'>
-                                            <button type="submit" className="btn" style={{ backgroundColor: "#033734",color: "#FFFFFF" }}>
-                                                
-                                                <span class="material-icons">
-                                                    favorite
-                                                </span>
-                                            </button>
-                                        </div>
-                                        <div className='col s3'>
-                                            <button type="submit" className="btn" style={{ backgroundColor: "#033734",color: "#FFFFFF" }}>
-                                                
-                                            <span class="material-icons">
-                                                delete
-                                            </span>
-                                            </button>
+                                                <AiFillDelete
+                                                    className=' cursor-pointer'
+                                                    size={25}
+                                                    onClick={() => Borraritem(listaProductos[i].producto.codigo)} />
                                         </div>
                                     </div>
                                 </div>
