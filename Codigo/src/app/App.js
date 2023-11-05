@@ -5,6 +5,12 @@ import {IniciarSesion,RegistrarUsuario} from './FrLogin';
 import {VisualizarCategoriaProductos,VisualizarProductos,FrTienda,VisualizarCarrito,VisualizarPublicacion,VisualizarTienda,VisualizarFactura} from './FrTienda';
 import MenuSuperior from './MenuSuperior';
 
+import {LoginPage, SignUpPage, MenuAdmin, GaleriaDuende, TiendaDuende, MenuAgenda, 
+    CursosTalleres, ServicioMaquillaje,  EntregasClientes, MensajesAdmin} from "./Routes.js"
+
+import './App.css';
+
+
 class App extends Component {
     
     constructor() {
@@ -20,6 +26,22 @@ class App extends Component {
 
     render() {
         return (
+
+            <Router>
+            <Routes>
+                <Route path="/" element={<LoginPage />} />
+                <Route path="/signUp" element={<SignUpPage />} />
+                <Route path="/menuAdmin" element={<MenuAdmin />} />
+                <Route path="/galeriaDuende" element={<GaleriaDuende />} />
+                <Route path="/tiendaDuende" element={<TiendaDuende />} />
+                <Route path="/menuAgenda" element={<MenuAgenda />} />
+                <Route path="/cursosTalleres" element={<CursosTalleres />} />
+                <Route path="/servicioMaquillaje" element={<ServicioMaquillaje />} />
+                <Route path="/entregasClientes" element={<EntregasClientes />} />
+                <Route path="/mensajesAdmin" element={<MensajesAdmin />} />
+            </Routes>
+            </Router>
+            /**
             <div style={{ backgroundColor: "#033734" }}>
                 <h1>
                     {this.state.myConstant}
@@ -28,6 +50,8 @@ class App extends Component {
                     <MenuSuperior />
                     <Header />
                     <Routes>
+
+                        <Route path="/" element={<LoginPage />} />
                         
                         <Route path="/login" element={<IniciarSesion myConstant={this.state.myConstant} updateConstantValue={this.updateConstantValue} />} />
                         
@@ -43,7 +67,8 @@ class App extends Component {
                     </Routes>
                 </Router>
             </div>
-        );
+        ); */
+        )
     }
 }
 
