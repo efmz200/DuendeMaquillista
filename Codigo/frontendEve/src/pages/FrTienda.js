@@ -799,6 +799,54 @@ export function    VisualizarTienda(){//casi lista ****
 export function    VisualizarFactura(){
     const [imagenSeleccionada, setImagenSeleccionada] = useState('');
     const [tituloFactura, settituloFactura] = useState('Factura');
+    const Baseparacargarproducto = async () => {
+        try {
+        const response = await fetch('http://localhost:3000/api/productos/agregarProducto', {
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                codigo: '741',
+                nombre: 'Paleta de sombras',
+                precio:  3000,
+                disponibilidad: 15,
+                descripcion: 'paleta de disferentes colores',
+                imagen: imagenSeleccionada})
+            
+        });
+    
+        const data = await response.json();
+        console.log(data); // Maneja la respuesta como necesites en tu aplicación React
+        try {
+            const response = await fetch('http://localhost:3000/api/productos/agregarProductoCategoria', {
+                method: 'POST',
+                headers: {
+                'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    nombreCategoria: 'Maquillaje',
+                    pCodigoProducto: '741',
+                    })
+                
+            });
+        
+            const data = await response.json();
+            console.log(data); // Maneja la respuesta como necesites en tu aplicación React
+        
+            // Actualiza la interfaz o el estado según sea necesario
+            } catch (error) {
+            console.error('Error al agregar producto al carrito:', error);
+            // Maneja los errores
+            }
+    
+        // Actualiza la interfaz o el estado según sea necesario
+        } catch (error) {
+        console.error('Error al agregar producto al carrito:', error);
+        // Maneja los errores
+        }
+    };
+    
 
     const handleImageChange = (event) => {
         const archivoImagen = event.target.files[0];
@@ -815,6 +863,7 @@ export function    VisualizarFactura(){
         setImagenSeleccionada('');
         // Puedes manejar el error o mostrar un mensaje al usuario aquí
         }
+        //baseparacargarproducto()
     };
 
     
@@ -859,6 +908,7 @@ export function    VisualizarFactura(){
                         <div  className="col s6">
                             <div style={{ display: "flex", justifyContent: "center" }}>
                                 <div id="AquiLaimagen" style={{ backgroundColor: "white", width: "500px", height: "500px", display: "flex", justifyContent: "center", alignItems: "center" }}>
+                                  
                                 {imagenSeleccionada && (
                                     <div>
                                     
@@ -871,7 +921,8 @@ export function    VisualizarFactura(){
                             </div>
                             <div >
                                 <div className='row' style={{ display: "flex", justifyContent: "center" }}>
-                                    <div style={{ marginTop: "10px" }}> {/* Agregar margen superior de 10px */}                             
+                                    <div style={{ marginTop: "10px" }}> {/* Agregar margen superior de 10px */}       
+                                                      
                                     <input
                                         className="block w-full text-sm py-2 px-2 text-gray-800 border border-gray-300 rounded-lg cursor-pointer bg-gray-100 dark:text-gray-800 focus:outline-none dark:bg-gray-100 dark:placeholder-gray-800"
                                         id="file_input"
@@ -885,7 +936,7 @@ export function    VisualizarFactura(){
                                 <br/>
                                 <div className='row' style={{ display: "flex", justifyContent: "center" }}>
                                     <div style={{ marginTop: "10px" }}> {/* Agregar margen superior de 10px */}                             
-                                            <button type="submit" onClick={() => settituloFactura('!Factura Pagada!')} className="btn" style={{ backgroundColor: "#000000", color: "#FFFFFF " }}>
+                                            <button type="submit" onClick={() => settituloFactura('¡Factura Pagada!')} className="btn" style={{ backgroundColor: "#000000", color: "#FFFFFF " }}>
                                                 Pagar
                                             </button>                                 
                                     </div>

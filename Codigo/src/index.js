@@ -3,6 +3,8 @@ const morgan = require('morgan');
 const path = require('path');
 const { mongoose } = require('./database');
 const cors = require('cors');
+const bodyParser = require('body-parser');
+
 //const fileRoutes = require('./routes/file-upload-routes')
 //minto 14 parte 2
 
@@ -11,6 +13,9 @@ const app = express();
 
 //configuraciones
 app.set('port', process.env.PORT || 3000)
+
+app.use(bodyParser.json({ limit: '50mb' }));
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 
 //funciones antes de las rutas
 app.use(morgan('dev'));
