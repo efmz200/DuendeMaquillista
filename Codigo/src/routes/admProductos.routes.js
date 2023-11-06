@@ -3,7 +3,6 @@ const router            = express.Router();
 const Producto          = require('../models/modelo/Producto');
 const CategoriaProducto = require('../models/modelo/CategoriaProducto');
 const Carrito           = require('../models/modelo/Carrito');
-const Categoria = require('../models/modelo/Categoria');
 
 router.post('/agregarProducto',async(req,res)=>{
     try{
@@ -42,6 +41,27 @@ router.post('/eliminarProducto',async(req,res)=>{
             status:'Hubo un error en la operación'
         })        
     }    
+})
+
+//agregar una categoria 
+router.post('/agregarCategoria',async(req,res)=>{
+    try{
+        const {nombre} = req.body;
+        const categoria = new CategoriaProducto({
+            nombre
+        });
+        await categoria.save();
+        res.json({
+            succes: true,
+            status: 'Categoria guardada'
+        });
+    }catch(err){
+        console.log(err)
+        res.json({
+            succes: false,
+            status:'Hubo un error en la operación'
+        })
+    }
 })
 
 
