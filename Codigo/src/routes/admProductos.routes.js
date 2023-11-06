@@ -78,7 +78,7 @@ router.post('/agregarImagen',async(req,res)=>{
         var img = producto.imagen;
         console.log(producto);
         producto.imagen = imagen;
-        await Producto.updateOne({codigo},producto);
+        await Producto.updateOne({_id:producto._id},producto);
         
         res.json({
             succes: true,
