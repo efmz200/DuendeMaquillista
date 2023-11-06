@@ -75,8 +75,11 @@ router.post('/agregarImagen',async(req,res)=>{
                 status: 'El producto no existe'});
             return;
         }
+        var img = producto.imagen;
+        console.log(producto);
         producto.imagen = imagen;
-        Producto.updateOne({codigo},producto);
+        await Producto.updateOne({codigo},producto);
+        
         res.json({
             succes: true,
             status: 'Imagen agregada al producto'
@@ -296,6 +299,25 @@ router.post('/eliminarProductoCarrito',async(req,res)=>{
         })        
     }
 })
+
+//getPeoductos
+router.get('getProductos',async(req,res)=>{
+    try{
+        const productos = await Producto.find({});
+        res.json({
+            succes: true,
+            status: 'Productos encontrados',
+            productos
+        });
+    }catch(err){    
+        console.log(err)
+        res.json({
+            succes: false,
+            status:'Hubo un error en la operación'
+        })        
+    }
+})
+
 
 //se obtienen los productos del carrito
 router.post('/getCarrito',async(req,res)=>{
