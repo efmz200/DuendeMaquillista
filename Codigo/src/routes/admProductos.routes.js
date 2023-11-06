@@ -301,7 +301,7 @@ router.post('/eliminarProductoCarrito',async(req,res)=>{
 })
 
 //getPeoductos
-router.get('getProductos',async(req,res)=>{
+router.get('/getProductos',async(req,res)=>{
     try{
         const productos = await Producto.find({});
         res.json({
