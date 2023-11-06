@@ -3,6 +3,7 @@ const router            = express.Router();
 const Producto          = require('../models/modelo/Producto');
 const CategoriaProducto = require('../models/modelo/CategoriaProducto');
 const Carrito           = require('../models/modelo/Carrito');
+const Categoria = require('../models/modelo/Categoria');
 
 router.post('/agregarProducto',async(req,res)=>{
     try{
@@ -75,7 +76,7 @@ router.post('/agregarProductoCategoria',async(req,res)=>{
             }
         }
         cat.Productos.push(producto);
-        await cat.findOneAndUpdate({nombre:nombreCategoria},cat, {new: true});
+        await CategoriaProducto.findOneAndUpdate({nombre:nombreCategoria},cat, {new: true});
         console.log(cat);
         res.json({
             succes: true,

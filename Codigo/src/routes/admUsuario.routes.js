@@ -46,7 +46,8 @@ router.post('/registrarUsuario', async (req,res) =>{
         var carrito = new Carrito({
             listaProductos: []
         });
-        carrito = await carrito.save();
+        const carro = await carrito.save();
+        Carrito.insertMany(carro);
         const usuario = new Usuario({
             nombre,
             apellido,
@@ -55,7 +56,7 @@ router.post('/registrarUsuario', async (req,res) =>{
             nacimiento,
             telefono,
             genero,
-            carrito, 
+            carrito:carro, 
             admin
         })
         await usuario.save();
