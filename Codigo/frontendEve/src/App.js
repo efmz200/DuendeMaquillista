@@ -11,7 +11,8 @@ import './App.css';
 const App = () => {
   const [user, setUser] = useState(['valor_inicial']);
   const updateConstantValue = (newValue) => {
-    //setUser(newValue);
+    setUser(newValue);
+    console.log('holasaaaa')
     console.log(newValue)
 }
 

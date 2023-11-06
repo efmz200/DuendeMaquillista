@@ -26,6 +26,8 @@ function GaleriaDuende() {
   const [categoriaSeleccionada, setCategoriaSeleccionada] = useState("");
   const [subCats, setSubCats] = useState([]);
 
+  const [imagenSeleccionada, setImagenSeleccionada] = useState('');
+
   const [formulario, setFormulario] = useState({
     nombre: "",
     imagen: null, // Para almacenar el archivo de imagen
@@ -35,6 +37,55 @@ function GaleriaDuende() {
     palabrasClave: "",
     tags: "",
 });
+const handleImageChange = (event) => {
+  const archivoImagen = event.target.files[0];
+
+  if (archivoImagen && archivoImagen.type.startsWith('image/')) {
+  const reader = new FileReader();
+
+  reader.onload = () => {
+      setImagenSeleccionada(reader.result);
+  };
+
+  reader.readAsDataURL(archivoImagen);
+  } else {
+  setImagenSeleccionada('');
+  // Puedes manejar el error o mostrar un mensaje al usuario aquí
+  }
+  //baseparacargarproducto()
+};
+
+const Baseparacargarproducto = async () => {
+  try {
+
+  const response = await fetch('http://localhost:3000/api/contenido/registarContenido', {
+      method: 'POST',
+      headers: {
+      'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        idContenido:20,
+        imagen:imagenSeleccionada,
+        descripcion: descripcion,
+        categoria:categoriaSeleccionada,
+        subcategoria:subCats,
+        palabrasClave:palabraClave,
+        tags: tags,
+      })
+      
+  });
+
+  const data = await response.json();
+  console.log(data); // Maneja la respuesta como necesites en tu aplicación React
+
+  // Actualiza la interfaz o el estado según sea necesario
+  } catch (error) {
+  console.error('Error al agregar producto al carrito:', error);
+  // Maneja los errores
+  }
+
+
+};
 
 const handleInputChange = (e) => {
     const { name, value, type, files } = e.target;
@@ -44,8 +95,8 @@ const handleInputChange = (e) => {
 
 const handleSubmit = (e) => {
     e.preventDefault();
-
     const formData = new FormData();
+    
     formData.append("nombre", formulario.nombre);
     formData.append("imagen", formulario.imagen);
     formData.append("descripcion", formulario.descripcion);
@@ -591,10 +642,11 @@ const handleSubmit = (e) => {
             <input name='descripcion' type='text' required value={tags} onChange={(e) => setTags(e.target.value)}
               className='appearance-none block w-full px-3 py-2 border border-gray-200 rounded-md shadow-sm placeholder-gray-800 focus:outline-none focus:ring-green focus:border-green sm:text-sm' placeholder="#Tags" />
             
-            <input class="block w-full text-sm py-2 px-2 text-gray-800 border border-gray-300 rounded-lg cursor-pointer bg-gray-100 dark:text-gray-800 focus:outline-none dark:bg-gray-100 dark:placeholder-gray-800" id="file_input" type="file" multiple/>
+            <input class="block w-full text-sm py-2 px-2 text-gray-800 border border-gray-300 rounded-lg cursor-pointer bg-gray-100 dark:text-gray-800 focus:outline-none dark:bg-gray-100 dark:placeholder-gray-800" onChange={handleImageChange} id="file_input" type="file" multiple/>
 
             <div class="p-4 text-center">
-              <button data-modal-hide="popup-modal" type="button" class="text-white bg-white hover:bg-green focus:ring-4 focus:outline-none rounded-lg border-darkGreen text-sm font-medium px-5 py-2.5 hover:text-white focus:z-10 dark:bg-darkGreen dark:text-white dark:hover:text-white dark:focus:ring-green mr-2">
+              <button onClick={Baseparacargarproducto}
+               data-modal-hide="popup-modal" type="button" class="text-white bg-white hover:bg-green focus:ring-4 focus:outline-none rounded-lg border-darkGreen text-sm font-medium px-5 py-2.5 hover:text-white focus:z-10 dark:bg-darkGreen dark:text-white dark:hover:text-white dark:focus:ring-green mr-2">
                 Actualizar Publicación
               </button>
               <button onClick={() => setShowModalAdd(false)} data-modal-hide="popup-modal" type="button" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">Cancelar</button>

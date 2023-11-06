@@ -534,6 +534,15 @@ router.post("/registarContenido", async (req, res) => {
         tags,
     } = req.body;
     const id = idContenido;
+    console.log( {
+        idContenido,
+        imagen,
+        descripcion,
+        categoria,
+        subcategoria,
+        palabrasClave,
+        tags,
+    })
     try {
         if (categoria == null) {
             categoria = [];

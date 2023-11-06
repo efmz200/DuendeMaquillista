@@ -535,9 +535,7 @@ export function    VisualizarCategoriaProductos(props){//lista ****
 
     return (
         <Fragment>
-            <h1>
-                {user}
-            </h1>
+            
       <div className="main-h-screen bg-black flex flex-col justify-center py-4">
         <MenuSuperior2 />
 

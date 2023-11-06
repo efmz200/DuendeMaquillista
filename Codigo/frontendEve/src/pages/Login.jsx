@@ -44,7 +44,7 @@ const CambiarUser = async () => {
     
 
         
-        //updateConstantValue(data.usuario)
+        updateConstantValue(data.usuario)
         if(data.estatus === 'Sesion iniciada'){
             
             if (data.usuario.admin){
@@ -78,9 +78,7 @@ const CambiarUser = async () => {
   
   return (
     <div>
-      <h1>
-        {user}
-      </h1>
+      
       <div >
         
         <div className='main-h-screen bg-black flex flex-col justify-center py-4'>
