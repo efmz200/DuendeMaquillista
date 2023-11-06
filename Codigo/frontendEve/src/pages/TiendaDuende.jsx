@@ -17,6 +17,7 @@ function TiendaDuende() {
     const [descripcion, setDescripcion] = useState("");
     const [cantidadProducto, setCantidadProducto] = useState("");
     const [precio, setPrecio] = useState("");
+    const [codigoproductoUI, setcodigoproductoUI] = useState("");
 
 
     const [subCategoria, setSubCategoria] = useState("");
@@ -27,13 +28,30 @@ function TiendaDuende() {
 
     const [categoriaSeleccionada, setCategoriaSeleccionada] = useState("");
     const [subCats, setSubCats] = useState([]);
+    const [imagenSeleccionada, setImagenSeleccionada] = useState('');
 
     //*********************** Funciones acciones post get en la pagina ***********************
 
+    const handleImageChange = (event) => {
+        const archivoImagen = event.target.files[0];
 
+        if (archivoImagen && archivoImagen.type.startsWith('image/')) {
+        const reader = new FileReader();
+
+        reader.onload = () => {
+            setImagenSeleccionada(reader.result);
+        };
+
+        reader.readAsDataURL(archivoImagen);
+        } else {
+        setImagenSeleccionada('');
+        // Puedes manejar el error o mostrar un mensaje al usuario aquí
+        }
+        //baseparacargarproducto()
+    };
     // Esta función obtiene las categorías disponibles
     const obtenerCategorias = () => {
-        fetch("http://localhost:3000/api/contenido/getCategorias")
+        fetch("http://localhost:3000/api/productos/getCategoriaProductos")
             .then((response) => {
                 if (!response.ok) {
                     throw new Error("Error al obtener categorías");
@@ -41,7 +59,7 @@ function TiendaDuende() {
                 return response.json();
             })
             .then((data) => {
-                setCategorias(data);
+                setCategorias(data.cats);
             })
             .catch((error) => {
                 console.error("Error al obtener categorías:", error);
@@ -51,6 +69,53 @@ function TiendaDuende() {
     useEffect(() => {
         obtenerCategorias(); // Cuando se monta el componente, obtiene las categorías disponibles
     }, []);
+    const Baseparacargarproducto = async () => {
+        try {
+        const response = await fetch('http://localhost:3000/api/productos/agregarProducto', {
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                codigo: codigoproductoUI,
+                nombre: nombreProducto,
+                precio:  precio,
+                disponibilidad: cantidadProducto,
+                descripcion: descripcion,
+                imagen: imagenSeleccionada})
+            
+        });
+    
+        const data = await response.json();
+        console.log(data); // Maneja la respuesta como necesites en tu aplicación React
+        try {
+            const response = await fetch('http://localhost:3000/api/productos/agregarProductoCategoria', {
+                method: 'POST',
+                headers: {
+                'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    nombreCategoria: categoriaSeleccionada,
+                    pCodigoProducto: codigoproductoUI,
+                    })
+                
+            });
+        
+            const data = await response.json();
+            console.log(data); // Maneja la respuesta como necesites en tu aplicación React
+        
+            // Actualiza la interfaz o el estado según sea necesario
+            } catch (error) {
+            console.error('Error al agregar producto al carrito:', error);
+            // Maneja los errores
+            }
+    
+        // Actualiza la interfaz o el estado según sea necesario
+        } catch (error) {
+        console.error('Error al agregar producto al carrito:', error);
+        // Maneja los errores
+        }
+    };
 
     const handleCategoriaChange = (e) => {
         const selectedCategoria = e.target.value;
@@ -636,6 +701,16 @@ function TiendaDuende() {
                             name="nombreProducto"
                             type="text"
                             required
+                            value={codigoproductoUI}
+                            onChange={(e) => setcodigoproductoUI(e.target.value)}
+                            className="appearance-none block w-full px-3 py-2 border border-gray-200 rounded-md shadow-sm placeholder-gray-800 focus:outline-none focus:ring-green focus:border-green sm:text-sm"
+                            placeholder="Codigo Producto"
+                        />
+
+                        <input
+                            name="nombreProducto"
+                            type="text"
+                            required
                             value={nombreProducto}
                             onChange={(e) => setNombreProducto(e.target.value)}
                             className="appearance-none block w-full px-3 py-2 border border-gray-200 rounded-md shadow-sm placeholder-gray-800 focus:outline-none focus:ring-green focus:border-green sm:text-sm"
@@ -683,20 +758,12 @@ function TiendaDuende() {
                     ))}
             </select>
 
-            <select id="underline_select" onChange={(e) => setSubCats([e.target.value])}
-            class="block py-2.5 px-6 w-full bg-white rounded-lg border-0 border-b-2 border-medGreen text-gray-800 text-sm peer">
-            <option value="">Selecciona una subcategoría</option>
-                  {subCats.map((subCat, index) => (
-                        <option key={index} value={subCat}>
-                            {subCat}
-                        </option>
-                    ))}
-            </select>
-
+   
                         <input
                             class="block w-full text-sm py-2 px-2 text-gray-800 border border-gray-300 rounded-lg cursor-pointer bg-gray-100 dark:text-gray-800 focus:outline-none dark:bg-gray-100 dark:placeholder-gray-800"
                             id="file_input"
                             type="file"
+                            onChange={handleImageChange}
                             multiple
                         />
 
@@ -704,6 +771,7 @@ function TiendaDuende() {
                             <button
                                 data-modal-hide="popup-modal"
                                 type="button"
+                                onClick={Baseparacargarproducto}
                                 class="text-white bg-white hover:bg-green focus:ring-4 focus:outline-none rounded-lg border-darkGreen text-sm font-medium px-5 py-2.5 hover:text-white focus:z-10 dark:bg-darkGreen dark:text-white dark:hover:text-white dark:focus:ring-green mr-2"
                             >
                                 Agregar Producto

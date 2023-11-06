@@ -805,9 +805,9 @@ export function    VisualizarFactura(){
             'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                codigo: '741',
-                nombre: 'Paleta de sombras',
-                precio:  3000,
+                codigo: '96549658741236582',
+                nombre: 'Paleta de colores',
+                precio:  4000,
                 disponibilidad: 15,
                 descripcion: 'paleta de disferentes colores',
                 imagen: imagenSeleccionada})
@@ -824,7 +824,7 @@ export function    VisualizarFactura(){
                 },
                 body: JSON.stringify({
                     nombreCategoria: 'Maquillaje',
-                    pCodigoProducto: '741',
+                    pCodigoProducto: '96549658741236582',
                     })
                 
             });
@@ -934,7 +934,7 @@ export function    VisualizarFactura(){
                                 <br/>
                                 <div className='row' style={{ display: "flex", justifyContent: "center" }}>
                                     <div style={{ marginTop: "10px" }}> {/* Agregar margen superior de 10px */}                             
-                                            <button type="submit" onClick={() => settituloFactura('¡Factura Pagada!')} className="btn" style={{ backgroundColor: "#000000", color: "#FFFFFF " }}>
+                                            <button type="submit" onClick={() => settituloFactura('Compra realizada')} className="btn" style={{ backgroundColor: "#000000", color: "#FFFFFF " }}>
                                                 Pagar
                                             </button>                                 
                                     </div>
