@@ -19,6 +19,8 @@ function TiendaDuende() {
     const [precio, setPrecio] = useState("");
     const [codigoproductoUI, setcodigoproductoUI] = useState("");
 
+    const [contenidos, setContenidos] = useState([]);
+
 
     const [subCategoria, setSubCategoria] = useState("");
     const [categorias, setCategorias] = useState([]); //Arreglo donde se cargan las categorias
@@ -170,6 +172,25 @@ function TiendaDuende() {
             });
     }, []);
 
+
+    useEffect(() => {
+        // Hacer una solicitud para obtener las categorías desde la API
+        fetch("http://localhost:3000/api/productos/getProductos")
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error("Error al obtener productos");
+                }
+                return response.json();
+            })
+            .then((data) => {
+                setContenidos(data.productos);
+                console.log(data.productos)
+            })
+            .catch((error) => {
+                console.error("Error al obtener categorías:", error);
+            });
+    }, []);
+
     //Funcion agregar una categoria a BD
     function agregarCategoria() {
         var categoria = {
@@ -291,32 +312,28 @@ function TiendaDuende() {
             <a href="#!" class="flex items-center justify-center">
                 <img
                     class="mx-auto rounded-t-lg"
-                    src="https://m.media-amazon.com/images/I/81LDRu+48lL._AC_UF1000,1000_QL80_.jpg"
+                    src={ contenidos[i].imagen}
                     alt=""
                 />
             </a>
             <div class="p-6">
                 <h5 class="mb-2 text-xl align-it font-medium leading-tight text-medGreen dark:text-neutral-50">
-                    Kit maquillaje
+                { contenidos[i].nombre}
                 </h5>
                 <p class="mb-2 text-base text-medGreen dark:text-neutral-200 flex-wrap">
-                    Descripción
+                { contenidos[i].descripcion}
                 </p>
                 <p class="mb-2 px-16 text-base text-medGreen dark:text-neutral-200 flex-wrap inline-block">
-                    $ precio
+                    $ { contenidos[i].precio}
                 </p>
 
                 <div class="sm:order-1 inline-block">
                     <div class="mx-auto flex h-8 items-stretch text-gray-600">
-                        <button class="flex items-center justify-center rounded-l-md bg-black px-4 transition hover:bg-green hover:text-white text-white">
-                            -
-                        </button>
-                        <div class="flex w-12 items-center justify-center bg-darkGreen px-4 text-xs uppercase transition text-white">
-                            1
+                        
+                        <div class="mb-2 px-16 text-base text-medGreen dark:text-neutral-200 flex-wrap inline-block">
+                            Disponibles:{ contenidos[i].disponibilidad}
                         </div>
-                        <button class="flex items-center justify-center rounded-r-md bg-black px-4 transition hover:bg-green hover:text-white text-white">
-                            +
-                        </button>
+                        
                     </div>
                 </div>
             </div>
@@ -522,75 +539,7 @@ function TiendaDuende() {
                         <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                             {/* Hacer un foreach para cada una de las imagenes y tarjetas del arreglo en BD */}
 
-                            <div class="block rounded-lg bg-white shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-medGreen">
-                                <a href="#!" class="flex items-center justify-center">
-                                    <img
-                                        class="mx-auto rounded-t-lg"
-                                        src="https://m.media-amazon.com/images/I/81LDRu+48lL._AC_UF1000,1000_QL80_.jpg"
-                                        alt=""
-                                    />
-                                </a>
-                                <div class="p-6">
-                                    <h5 class="mb-2 text-xl align-it font-medium leading-tight text-medGreen dark:text-neutral-50">
-                                        Kit maquillaje
-                                    </h5>
-                                    <p class="mb-2 text-base text-medGreen dark:text-neutral-200 flex-wrap">
-                                        Descripción
-                                    </p>
-                                    <p class="mb-2 px-16 text-base text-medGreen dark:text-neutral-200 flex-wrap inline-block">
-                                        $ precio
-                                    </p>
-
-                                    <div class="sm:order-1 inline-block">
-                                        <div class="mx-auto flex h-8 items-stretch text-gray-600">
-                                            <button class="flex items-center justify-center rounded-l-md bg-black px-4 transition hover:bg-green hover:text-white text-white">
-                                                -
-                                            </button>
-                                            <div class="flex w-12 items-center justify-center bg-darkGreen px-4 text-xs uppercase transition text-white">
-                                                1
-                                            </div>
-                                            <button class="flex items-center justify-center rounded-r-md bg-black px-4 transition hover:bg-green hover:text-white text-white">
-                                                +
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="mb-4 flex items-center justify-center">
-                                    <div
-                                        class="inline-flex rounded-md shadow-[0_4px_9px_-4px_rgba(51,45,45,0.7)] transition duration-150 ease-in-out hover:bg-neutral-800 hover:shadow-[0_8px_9px_-4px_rgba(51,45,45,0.2),0_4px_18px_0_rgba(51,45,45,0.1)] focus:bg-neutral-800 focus:shadow-[0_8px_9px_-4px_rgba(51,45,45,0.2),0_4px_18px_0_rgba(51,45,45,0.1)] focus:outline-none focus:ring-0 active:bg-neutral-900 active:shadow-[0_8px_9px_-4px_rgba(51,45,45,0.2),0_4px_18px_0_rgba(51,45,45,0.1)] dark:bg-neutral-900 dark:shadow-[0_4px_9px_-4px_#030202] dark:hover:bg-neutral-900 dark:hover:shadow-[0_8px_9px_-4px_rgba(3,2,2,0.3),0_4px_18px_0_rgba(3,2,2,0.2)] dark:focus:bg-neutral-900 dark:focus:shadow-[0_8px_9px_-4px_rgba(3,2,2,0.3),0_4px_18px_0_rgba(3,2,2,0.2)] dark:active:bg-neutral-900 dark:active:shadow-[0_8px_9px_-4px_rgba(3,2,2,0.3),0_4px_18px_0_rgba(3,2,2,0.2)]"
-                                        role="group"
-                                    >
-                                        <button
-                                            type="button"
-                                            class="inline-block rounded-l bg-black px-2 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-neutral-50 transition duration-150 ease-in-out hover:bg-neutral-800 focus:bg-neutral-800 focus:outline-none focus:ring-0 active:bg-neutral-900 dark:bg-black dark:hover:bg-black dark:focus:bg-black dark:active:bg-black"
-                                            data-te-ripple-init
-                                            data-te-ripple-color="light"
-                                            onClick={() => setShowModal(true)}
-                                        >
-                                            Cambiar imagen
-                                        </button>
-                                        <button
-                                            type="button"
-                                            class="inline-block bg-black px-2 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-neutral-50 transition duration-150 ease-in-out hover:bg-neutral-800 focus:bg-neutral-800 focus:outline-none focus:ring-0 active:bg-neutral-900 dark:bg-black dark:hover:bg-black dark:focus:bg-black dark:active:bg-black"
-                                            data-te-ripple-init
-                                            data-te-ripple-color="light"
-                                            onClick={() => setShowModalEdit(true)}
-                                        >
-                                            Editar Producto
-                                        </button>
-                                        <button
-                                            type="button"
-                                            class="inline-block rounded-r bg-black px-2 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-neutral-50 transition duration-150 ease-in-out hover:bg-neutral-800 focus:bg-neutral-800 focus:outline-none focus:ring-0 active:bg-neutral-900 dark:bg-black dark:hover:bg-black dark:focus:bg-black dark:active:bg-black"
-                                            data-te-ripple-init
-                                            data-te-ripple-color="light"
-                                            onClick={() => setShowModalDel(true)}
-                                        >
-                                            Eliminar
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
+                            {columnas}
                         </div>
                     </div>
                 </div>
