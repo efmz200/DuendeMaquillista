@@ -413,17 +413,7 @@ function TiendaDuende() {
                                     ))}
                                 </select>
 
-                                <label for="underline_select" class="sr-only">Underline select</label>
-                                <select id="underline_select" onChange={(e) => setSubCats([e.target.value])}
-                                    class="block py-2.5 px-6 w-full bg-transparent border-0 border-b-2 border-medGreen text-white text-sm peer">
-                                    <option value="" class="bg-black">Subcategoría  ----</option>
-                                    {subCats.map((subCat, index) => (
-                                        <option class="bg-black" key={index} value={subCat}>
-                                            {subCat}
-                                        </option>
-                                    ))}
-                                </select>
-
+                                
                                 <div class="inline-block relative">
                                     <button
                                         type="button"
@@ -799,23 +789,6 @@ function TiendaDuende() {
                         <input name='nuevaCategoria' type='text' required value={nuevaCategoria} onChange={(e) => setNuevaCategoria(e.target.value)}
                             className='appearance-none block w-full px-3 py-2 border border-gray-200 rounded-md shadow-sm placeholder-gray-800 focus:outline-none focus:ring-green focus:border-green sm:text-sm' placeholder="Nueva categoría" />
 
-                        <div>
-                            <h3 className='text-center text-xl font-semibold py-2 text-white'>Agregar SubCategorías</h3><br />
-                        </div>
-
-                        <select
-                            value={selectedCategoria} onChange={(e) => setSelectedCategoria(e.target.value)}
-                            id="underline_select" class="block py-2.5 px-6 w-full bg-white rounded-lg border-0 border-b-2 border-medGreen text-gray-800 text-sm peer">
-                            <option value="">Selecciona una categoría</option>
-                            {categorias.map((categoria) => (
-                                <option key={categoria.nombre} value={categoria.nombre}>
-                                    {categoria.nombre}
-                                </option>
-                            ))}
-                        </select>
-
-                        <input name='nuevaSubCategoria' type='text' required value={nuevaSubCategoria} onChange={(e) => setNuevaSubCategoria(e.target.value)}
-                            className='appearance-none block w-full px-3 py-2 border border-gray-200 rounded-md shadow-sm placeholder-gray-800 focus:outline-none focus:ring-green focus:border-green sm:text-sm' placeholder="Nueva subcategoría" />
 
                         <div class="p-4 text-center">
                             <button
@@ -826,13 +799,6 @@ function TiendaDuende() {
                                 Agregar Categoría
                             </button>
 
-                            <button
-                                onClick={agregarSubCategoria}
-                                data-modal-hide="popup-modal"
-                                type="button"
-                                class="text-white bg-white hover:bg-green focus:ring-4 focus:outline-none rounded-lg border-darkGreen text-sm font-medium px-5 py-2.5 hover:text-white focus:z-10 dark:bg-darkGreen dark:text-white dark:hover:text-white dark:focus:ring-green mr-2">
-                                Agregar SubCategoría
-                            </button>
 
                             <button onClick={() => setShowModalAddCat(false)} data-modal-hide="popup-modal" type="button" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">Cancelar</button>
                         </div>
