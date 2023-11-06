@@ -44,7 +44,7 @@ router.post('/registrarUsuario', async (req,res) =>{
         const {nombre,apellido,correo,contrasena,nacimiento,telefono,genero,admin} = req.body;
         console.log(nacimiento)
         var carrito = new Carrito({
-            productos: []
+            listaProductos: []
         });
         carrito = await carrito.save();
         const usuario = new Usuario({
