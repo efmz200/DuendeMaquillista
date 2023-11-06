@@ -76,7 +76,7 @@ router.post('/agregarProductoCategoria',async(req,res)=>{
             }
         }
         cat.Productos.push(producto);
-        await Categoria.findOneAndUpdate({nombre:nombreCategoria},cat, {new: true});
+        await CategoriaProducto.findOneAndUpdate({nombre:nombreCategoria},cat, {new: true});
         console.log(cat);
         res.json({
             succes: true,
