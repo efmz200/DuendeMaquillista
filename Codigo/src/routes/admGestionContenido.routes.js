@@ -491,7 +491,6 @@ router.post("/actualizarContenido", async (req, res) => {
         }
         if (descripcion != null) {
             contenido.descripcion = descripcion;
-            6;
         }
         if (categoria != null) {
             contenido.categoria = categoria;

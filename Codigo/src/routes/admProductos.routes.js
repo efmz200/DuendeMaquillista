@@ -64,6 +64,31 @@ router.post('/agregarCategoria',async(req,res)=>{
     }
 })
 
+//agregar imagen a producto
+router.post('/agregarImagen',async(req,res)=>{
+    try{
+        const {codigo,imagen} = req.body;
+        var producto = Producto.findOne({codigo});
+        if (producto == null){
+            res.json({
+                succes:false,
+                status: 'El producto no existe'});
+            return;
+        }
+        producto.imagen = imagen;
+        Producto.updateOne({codigo},producto);
+        res.json({
+            succes: true,
+            status: 'Imagen agregada al producto'
+        });
+    }catch(err){
+        console.log(err)
+        res.json({
+            succes: false,
+            status:'Hubo un error en la operación'
+        })
+    }
+})
 
 //agregar producto a una categoria
 router.post('/agregarProductoCategoria',async(req,res)=>{
