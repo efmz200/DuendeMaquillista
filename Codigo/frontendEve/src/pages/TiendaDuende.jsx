@@ -29,8 +29,8 @@ function TiendaDuende() {
     const [subCats, setSubCats] = useState([]);
 
     //*********************** Funciones acciones post get en la pagina ***********************
-    
-  
+
+
     // Esta función obtiene las categorías disponibles
     const obtenerCategorias = () => {
         fetch("http://localhost:3000/api/contenido/getCategorias")
@@ -47,45 +47,45 @@ function TiendaDuende() {
                 console.error("Error al obtener categorías:", error);
             });
     };
-  
+
     useEffect(() => {
         obtenerCategorias(); // Cuando se monta el componente, obtiene las categorías disponibles
     }, []);
-  
+
     const handleCategoriaChange = (e) => {
-      const selectedCategoria = e.target.value;
-      setCategoriaSeleccionada(selectedCategoria);
-      setSubCats([]); // Limpia las subcategorías al cambiar la categoría seleccionada
-      console.log(selectedCategoria);
-  
-      if (selectedCategoria) {
-          // Si se seleccionó una categoría, obtener las subcategorías correspondientes
-          fetch(`http://localhost:3000/api/contenido/getSubcategoria?categoria=${selectedCategoria}`, {
-              method: 'GET',
-              headers: {
-                  'Accept': 'application/json',
-                  'Content-Type': 'application/json'
-              }
-          })
-              .then((response) => {
-                  if (!response.ok) {
-                      throw new Error("Error al obtener subcategorías");
-                  }
-                  return response.json();
-              })
-              .then((data) => {
-                  if (data.status) {
-                      setSubCats(data.subCats);
-                  } else {
-                      console.error(data.descripcion);
-                  }
-              })
-              .catch((error) => {
-                  console.error("Error al obtener subcategorías:", error);
-              });
-      }
-  };
-  
+        const selectedCategoria = e.target.value;
+        setCategoriaSeleccionada(selectedCategoria);
+        setSubCats([]); // Limpia las subcategorías al cambiar la categoría seleccionada
+        console.log(selectedCategoria);
+
+        if (selectedCategoria) {
+            // Si se seleccionó una categoría, obtener las subcategorías correspondientes
+            fetch(`http://localhost:3000/api/contenido/getSubcategoria?categoria=${selectedCategoria}`, {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error("Error al obtener subcategorías");
+                    }
+                    return response.json();
+                })
+                .then((data) => {
+                    if (data.status) {
+                        setSubCats(data.subCats);
+                    } else {
+                        console.error(data.descripcion);
+                    }
+                })
+                .catch((error) => {
+                    console.error("Error al obtener subcategorías:", error);
+                });
+        }
+    };
+
     //---------------------------------------------------------------------------------------
     //Funcion para cargar las categorias
     useEffect(() => {
@@ -337,27 +337,27 @@ function TiendaDuende() {
                             </form>
 
                             <div class="p-10 px-20 flex items-center">
-                            <label for="underline_select" class="sr-only">Underline select</label>
-                <select id="underline_select" value={categoriaSeleccionada} onChange={handleCategoriaChange}
-                class="block py-2.5 px-6 w-full bg-transparent border-0 border-b-2 border-medGreen text-white text-sm peer">
-                  <option value="" class="bg-black">Categoría</option>
-                    {categorias.map((cat, index) => (
-                          <option class="bg-black" key={index} value={cat.nombre}>
-                              {cat.nombre}
-                          </option>
-                    ))}
-                  </select>
+                                <label for="underline_select" class="sr-only">Underline select</label>
+                                <select id="underline_select" value={categoriaSeleccionada} onChange={handleCategoriaChange}
+                                    class="block py-2.5 px-6 w-full bg-transparent border-0 border-b-2 border-medGreen text-white text-sm peer">
+                                    <option value="" class="bg-black">Categoría</option>
+                                    {categorias.map((cat, index) => (
+                                        <option class="bg-black" key={index} value={cat.nombre}>
+                                            {cat.nombre}
+                                        </option>
+                                    ))}
+                                </select>
 
-                <label for="underline_select" class="sr-only">Underline select</label>
-                <select id="underline_select" onChange={(e) => setSubCats([e.target.value])}
-                class="block py-2.5 px-6 w-full bg-transparent border-0 border-b-2 border-medGreen text-white text-sm peer">
-                  <option value="" class="bg-black">Subcategoría  ----</option>
-                  {subCats.map((subCat, index) => (
-                        <option class="bg-black" key={index} value={subCat}>
-                            {subCat}
-                        </option>
-                    ))}
-                </select>
+                                <label for="underline_select" class="sr-only">Underline select</label>
+                                <select id="underline_select" onChange={(e) => setSubCats([e.target.value])}
+                                    class="block py-2.5 px-6 w-full bg-transparent border-0 border-b-2 border-medGreen text-white text-sm peer">
+                                    <option value="" class="bg-black">Subcategoría  ----</option>
+                                    {subCats.map((subCat, index) => (
+                                        <option class="bg-black" key={index} value={subCat}>
+                                            {subCat}
+                                        </option>
+                                    ))}
+                                </select>
 
                                 <div class="inline-block relative">
                                     <button
@@ -540,23 +540,26 @@ function TiendaDuende() {
                             placeholder="Precio Producto"
                         />
 
-                        <select
-                            id="underline_select"
-                            class="block py-2.5 px-6 w-full bg-white rounded-lg border-0 border-b-2 border-medGreen text-gray-800 text-sm peer"
-                        >
-                            <option selected>Categoría</option>
-                            <option value="A">A</option>
-                            <option value="B">B</option>
-                        </select>
+<select 
+              value={categoriaSeleccionada} onChange={handleCategoriaChange}
+              id="underline_select" class="block py-2.5 px-6 w-full bg-white rounded-lg border-0 border-b-2 border-medGreen text-gray-800 text-sm peer">
+                <option value="" >Selecciona una categoría</option>
+                    {categorias.map((cat, index) => (
+                          <option key={index} value={cat.nombre}>
+                              {cat.nombre}
+                          </option>
+                    ))}
+            </select>
 
-                        <select
-                            id="underline_select"
-                            class="block py-2.5 px-6 w-full bg-white rounded-lg border-0 border-b-2 border-medGreen text-gray-800 text-sm peer"
-                        >
-                            <option selected>Subcategoría</option>
-                            <option value="A">A</option>
-                            <option value="B">B</option>
-                        </select>
+            <select id="underline_select" onChange={(e) => setSubCats([e.target.value])}
+            class="block py-2.5 px-6 w-full bg-white rounded-lg border-0 border-b-2 border-medGreen text-gray-800 text-sm peer">
+            <option value="">Selecciona una subcategoría</option>
+                  {subCats.map((subCat, index) => (
+                        <option key={index} value={subCat}>
+                            {subCat}
+                        </option>
+                    ))}
+            </select>
 
                         <div class="p-4 text-center">
                             <button
@@ -669,23 +672,26 @@ function TiendaDuende() {
                             placeholder="Precio Producto"
                         />
 
-                        <select
-                            id="underline_select"
-                            class="block py-2.5 px-6 w-full bg-white rounded-lg border-0 border-b-2 border-medGreen text-gray-800 text-sm peer"
-                        >
-                            <option selected>Categoría</option>
-                            <option value="A">A</option>
-                            <option value="B">B</option>
-                        </select>
+<select 
+              value={categoriaSeleccionada} onChange={handleCategoriaChange}
+              id="underline_select" class="block py-2.5 px-6 w-full bg-white rounded-lg border-0 border-b-2 border-medGreen text-gray-800 text-sm peer">
+                <option value="" >Selecciona una categoría</option>
+                    {categorias.map((cat, index) => (
+                          <option key={index} value={cat.nombre}>
+                              {cat.nombre}
+                          </option>
+                    ))}
+            </select>
 
-                        <select
-                            id="underline_select"
-                            class="block py-2.5 px-6 w-full bg-white rounded-lg border-0 border-b-2 border-medGreen text-gray-800 text-sm peer"
-                        >
-                            <option selected>Subcategoría</option>
-                            <option value="A">A</option>
-                            <option value="B">B</option>
-                        </select>
+            <select id="underline_select" onChange={(e) => setSubCats([e.target.value])}
+            class="block py-2.5 px-6 w-full bg-white rounded-lg border-0 border-b-2 border-medGreen text-gray-800 text-sm peer">
+            <option value="">Selecciona una subcategoría</option>
+                  {subCats.map((subCat, index) => (
+                        <option key={index} value={subCat}>
+                            {subCat}
+                        </option>
+                    ))}
+            </select>
 
                         <input
                             class="block w-full text-sm py-2 px-2 text-gray-800 border border-gray-300 rounded-lg cursor-pointer bg-gray-100 dark:text-gray-800 focus:outline-none dark:bg-gray-100 dark:placeholder-gray-800"
