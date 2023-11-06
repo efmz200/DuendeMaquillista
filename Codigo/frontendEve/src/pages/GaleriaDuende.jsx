@@ -27,6 +27,7 @@ function GaleriaDuende() {
   const [subCats, setSubCats] = useState([]);
 
   const [imagenSeleccionada, setImagenSeleccionada] = useState('');
+  const [contenidos, setContenidos] = useState([]);
 
   const [formulario, setFormulario] = useState({
     nombre: "",
@@ -37,6 +38,18 @@ function GaleriaDuende() {
     palabrasClave: "",
     tags: "",
 });
+
+//------------------------------------
+useEffect(() => {
+  // Hacer una solicitud GET a tu API para obtener la lista de contenidos
+  fetch("/getContenidos")
+    .then((response) => response.json())
+    .then((data) => setContenidos(data))
+    .catch((error) => console.error("Error al obtener contenidos:", error));
+}, []);
+
+//----------------------------------------
+
 const handleImageChange = (event) => {
   const archivoImagen = event.target.files[0];
 
@@ -64,7 +77,7 @@ const Baseparacargarproducto = async () => {
       'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        idContenido:20,
+        idContenido: nombrePublicacion,
         imagen:imagenSeleccionada,
         descripcion: descripcion,
         categoria:categoriaSeleccionada,
@@ -254,18 +267,18 @@ const handleSubmit = (e) => {
     .catch(err => console.err(err));
   }
 
-  //Funcion obtener lista categorias para el select
-  function cargarCategorias() {
-    // Realizar una solicitud GET a la API para obtener las categorías
-    fetch('http://localhost:3000/api/contenido/getCategorias')
-      .then(response => response.json())
-      .then(data => {
-        this.setState({ categorias: data });
+  
+  useEffect(() => {
+    // Realizar una solicitud al servidor para obtener los contenidos
+    fetch("http://localhost:3000/api/contenido/getContenidos")
+      .then((response) => response.json())
+      .then((data) => {
+        setContenidos(data);
       })
-      .catch(error => {
-        console.error('Error al obtener las categorías:', error);
+      .catch((error) => {
+        console.error("Error al obtener los contenidos:", error);
       });
-  }
+  }, []);
 
 
   //Funciones para navegar entre menus
@@ -288,6 +301,67 @@ const handleSubmit = (e) => {
   const handleMenuAdmin = () => {
     navigate('/menuAdmin', {});
   }
+
+  const columnas = [];
+
+    for (let i = 0; i < contenidos.length; i++) {
+        const data = { id: contenidos.id};
+        columnas.push(
+          <div class="block rounded-lg bg-white shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-medGreen">
+          <a href="#!" class="flex items-center justify-center">
+            <img
+              class="mx-auto rounded-t-lg"
+              src={ contenidos[i].imagen}
+              alt=""
+            />
+          </a>
+          <div class="p-6">
+            
+            <p class="mb-4 text-base text-medGreen dark:text-neutral-200 flex-wrap">
+            { contenidos[i].descripcion}
+            </p>
+            <p class="mb-4 text-base text-medGreen dark:text-neutral-200">
+            { contenidos[i].tags}
+            </p>
+
+            
+          </div>
+
+          <div class="mb-4 flex items-center justify-center">
+            <div
+              class="inline-flex rounded-md shadow-[0_4px_9px_-4px_rgba(51,45,45,0.7)] transition duration-150 ease-in-out hover:bg-neutral-800 hover:shadow-[0_8px_9px_-4px_rgba(51,45,45,0.2),0_4px_18px_0_rgba(51,45,45,0.1)] focus:bg-neutral-800 focus:shadow-[0_8px_9px_-4px_rgba(51,45,45,0.2),0_4px_18px_0_rgba(51,45,45,0.1)] focus:outline-none focus:ring-0 active:bg-neutral-900 active:shadow-[0_8px_9px_-4px_rgba(51,45,45,0.2),0_4px_18px_0_rgba(51,45,45,0.1)] dark:bg-neutral-900 dark:shadow-[0_4px_9px_-4px_#030202] dark:hover:bg-neutral-900 dark:hover:shadow-[0_8px_9px_-4px_rgba(3,2,2,0.3),0_4px_18px_0_rgba(3,2,2,0.2)] dark:focus:bg-neutral-900 dark:focus:shadow-[0_8px_9px_-4px_rgba(3,2,2,0.3),0_4px_18px_0_rgba(3,2,2,0.2)] dark:active:bg-neutral-900 dark:active:shadow-[0_8px_9px_-4px_rgba(3,2,2,0.3),0_4px_18px_0_rgba(3,2,2,0.2)]"
+              role="group">
+              <button
+                type="button"
+                class="inline-block rounded-l bg-black px-2 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-neutral-50 transition duration-150 ease-in-out hover:bg-neutral-800 focus:bg-neutral-800 focus:outline-none focus:ring-0 active:bg-neutral-900 dark:bg-black dark:hover:bg-black dark:focus:bg-black dark:active:bg-black"
+                data-te-ripple-init
+                data-te-ripple-color="light"
+                onClick={() => setShowModal(true)}>
+                Cambiar imagen
+              </button>
+              <button
+                type="button"
+                class="inline-block bg-black px-2 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-neutral-50 transition duration-150 ease-in-out hover:bg-neutral-800 focus:bg-neutral-800 focus:outline-none focus:ring-0 active:bg-neutral-900 dark:bg-black dark:hover:bg-black dark:focus:bg-black dark:active:bg-black"
+                data-te-ripple-init
+                data-te-ripple-color="light"
+                onClick={() => setShowModalEdit(true)}>
+                Editar Publicación
+              </button>
+              <button
+                type="button"
+                class="inline-block rounded-r bg-black px-2 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-neutral-50 transition duration-150 ease-in-out hover:bg-neutral-800 focus:bg-neutral-800 focus:outline-none focus:ring-0 active:bg-neutral-900 dark:bg-black dark:hover:bg-black dark:focus:bg-black dark:active:bg-black"
+                data-te-ripple-init
+                data-te-ripple-color="light"
+                onClick={() => setShowModalDel(true)}>
+                Eliminar
+              </button>
+            </div>
+          </div>
+
+        </div>
+                
+        );
+    }
 
   return (
     <Fragment>
@@ -364,7 +438,6 @@ const handleSubmit = (e) => {
           </div>
         </div>
 
-
         <div class="bg-darkGreen flex flex-col justify-center py-4 px-10 sm:px-24lg:px-8">
           <div>
             <div className="sm:mx-auto sm:w-full sm:max-w-md">
@@ -374,8 +447,6 @@ const handleSubmit = (e) => {
             </div>
 
             <div class="flex justify-center">
-
-
 
               <form class="flex items-center">
                 <label for="simple-search" class="sr-only">Search</label>
@@ -443,78 +514,10 @@ const handleSubmit = (e) => {
               </div>
             </div>
 
-
-
-
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
 
               {/* Hacer un foreach para cada una de las imagenes y tarjetas del arreglo en BD */}
-
-              <div class="block rounded-lg bg-white shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-medGreen">
-                <a href="#!" class="flex items-center justify-center">
-                  <img
-                    class="mx-auto rounded-t-lg"
-                    src="https://i.pinimg.com/564x/3c/73/93/3c7393c4d177db993866c2752cb0e708.jpg"
-                    alt=""
-                  />
-                </a>
-                <div class="p-6">
-                  <h5 class="mb-2 text-xl align-it font-medium leading-tight text-medGreen dark:text-neutral-50">
-                    Nombre maquillaje
-                  </h5>
-                  <p class="mb-4 text-base text-medGreen dark:text-neutral-200 flex-wrap">
-                    Descripción
-                  </p>
-                  <p class="mb-4 text-base text-medGreen dark:text-neutral-200">
-                    #hashtag
-                  </p>
-
-                  <form>
-                    <div class="flex items-center px-3 py-2 rounded-lg bg-green dark:bg-medGreen">
-
-                      <textarea id="chat" rows="1" class="block mx-4 p-4 w-full text-sm text-white bg-green rounded-lg border border-green focus:ring-green focus:border-green dark:bg-black dark:border-medGreen dark:placeholder-gray-400 dark:text-green dark:focus:ring-green dark:focus:border-green" placeholder="Tu mensaje..."></textarea>
-                      <button type="submit" class="inline-flex justify-center p-2 text-green rounded-full cursor-pointer hover:bg-green dark:text-black dark:hover:bg-green">
-                        <svg class="w-5 h-5 rotate-90" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 20">
-                          <path d="m17.914 18.594-8-18a1 1 0 0 0-1.828 0l-8 18a1 1 0 0 0 1.157 1.376L8 18.281V9a1 1 0 0 1 2 0v9.281l6.758 1.689a1 1 0 0 0 1.156-1.376Z" />
-                        </svg>
-                        <span class="sr-only">Enviar mensaje</span>
-                      </button>
-                    </div>
-                  </form>
-                </div>
-
-                <div class="mb-4 flex items-center justify-center">
-                  <div
-                    class="inline-flex rounded-md shadow-[0_4px_9px_-4px_rgba(51,45,45,0.7)] transition duration-150 ease-in-out hover:bg-neutral-800 hover:shadow-[0_8px_9px_-4px_rgba(51,45,45,0.2),0_4px_18px_0_rgba(51,45,45,0.1)] focus:bg-neutral-800 focus:shadow-[0_8px_9px_-4px_rgba(51,45,45,0.2),0_4px_18px_0_rgba(51,45,45,0.1)] focus:outline-none focus:ring-0 active:bg-neutral-900 active:shadow-[0_8px_9px_-4px_rgba(51,45,45,0.2),0_4px_18px_0_rgba(51,45,45,0.1)] dark:bg-neutral-900 dark:shadow-[0_4px_9px_-4px_#030202] dark:hover:bg-neutral-900 dark:hover:shadow-[0_8px_9px_-4px_rgba(3,2,2,0.3),0_4px_18px_0_rgba(3,2,2,0.2)] dark:focus:bg-neutral-900 dark:focus:shadow-[0_8px_9px_-4px_rgba(3,2,2,0.3),0_4px_18px_0_rgba(3,2,2,0.2)] dark:active:bg-neutral-900 dark:active:shadow-[0_8px_9px_-4px_rgba(3,2,2,0.3),0_4px_18px_0_rgba(3,2,2,0.2)]"
-                    role="group">
-                    <button
-                      type="button"
-                      class="inline-block rounded-l bg-black px-2 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-neutral-50 transition duration-150 ease-in-out hover:bg-neutral-800 focus:bg-neutral-800 focus:outline-none focus:ring-0 active:bg-neutral-900 dark:bg-black dark:hover:bg-black dark:focus:bg-black dark:active:bg-black"
-                      data-te-ripple-init
-                      data-te-ripple-color="light"
-                      onClick={() => setShowModal(true)}>
-                      Cambiar imagen
-                    </button>
-                    <button
-                      type="button"
-                      class="inline-block bg-black px-2 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-neutral-50 transition duration-150 ease-in-out hover:bg-neutral-800 focus:bg-neutral-800 focus:outline-none focus:ring-0 active:bg-neutral-900 dark:bg-black dark:hover:bg-black dark:focus:bg-black dark:active:bg-black"
-                      data-te-ripple-init
-                      data-te-ripple-color="light"
-                      onClick={() => setShowModalEdit(true)}>
-                      Editar Publicación
-                    </button>
-                    <button
-                      type="button"
-                      class="inline-block rounded-r bg-black px-2 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-neutral-50 transition duration-150 ease-in-out hover:bg-neutral-800 focus:bg-neutral-800 focus:outline-none focus:ring-0 active:bg-neutral-900 dark:bg-black dark:hover:bg-black dark:focus:bg-black dark:active:bg-black"
-                      data-te-ripple-init
-                      data-te-ripple-color="light"
-                      onClick={() => setShowModalDel(true)}>
-                      Eliminar
-                    </button>
-                  </div>
-                </div>
-
-              </div>
+              {columnas}
 
             </div>
           </div>
@@ -609,8 +612,8 @@ const handleSubmit = (e) => {
               <h3 className='text-center text-2xl font-semibold text-white'>Agregar Publicación</h3><br />
             </div>
 
-            <input name='nombrePublicacion' type='text' required value={nombrePublicacion} onChange={(e) => setNombrePublicacion(e.target.value)}
-              className='appearance-none block w-full px-3 py-2 border border-gray-200 rounded-md shadow-sm placeholder-gray-800 focus:outline-none focus:ring-green focus:border-green sm:text-sm' placeholder="Nombre Publicación" />
+            <input name='nombrePublicacion' type='number' required value={nombrePublicacion} onChange={(e) => setNombrePublicacion(e.target.value)}
+              className='appearance-none block w-full px-3 py-2 border border-gray-200 rounded-md shadow-sm placeholder-gray-800 focus:outline-none focus:ring-green focus:border-green sm:text-sm' placeholder="id Publicación" />
 
             <textarea name='descripcion' type='text' required value={descripcion} onChange={(e) => setDescripcion(e.target.value)}
               className='appearance-none block w-full px-3 py-2 border border-gray-200 rounded-md shadow-sm placeholder-gray-800 focus:outline-none focus:ring-green focus:border-green sm:text-sm' placeholder="Descripción" />
@@ -647,7 +650,7 @@ const handleSubmit = (e) => {
             <div class="p-4 text-center">
               <button onClick={Baseparacargarproducto}
                data-modal-hide="popup-modal" type="button" class="text-white bg-white hover:bg-green focus:ring-4 focus:outline-none rounded-lg border-darkGreen text-sm font-medium px-5 py-2.5 hover:text-white focus:z-10 dark:bg-darkGreen dark:text-white dark:hover:text-white dark:focus:ring-green mr-2">
-                Actualizar Publicación
+                Agregar Publicación
               </button>
               <button onClick={() => setShowModalAdd(false)} data-modal-hide="popup-modal" type="button" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">Cancelar</button>
             </div>

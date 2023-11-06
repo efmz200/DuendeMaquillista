@@ -713,22 +713,74 @@ export function    FrTienda() {
 
     
 export function    VisualizarTienda(){//casi lista ****
+        const [categorias, setCategorias] = useState([]); //Arreglo donde se cargan las categorias
     
         
-        const [contenidos, setCategorias] = useState([]);
+        const [contenidos, setCotenido] = useState([]);
         const [numColumnas, setNumColumnas] = useState(0);
+        const [categoriaSeleccionada, setCategoriaSeleccionada] = useState("");
     
         useEffect(() => {
             fetch('http://localhost:3000/api/contenido/getContenidos')
                 .then(res => res.json())
                 .then(data => {
                     console.log(data);
-                    setCategorias(data);
+                    setCotenido(data);
                     setNumColumnas(contenidos.length); // Establece el número de columnas
                     
                 });
         }, []);
+
+        useEffect(() => {
+            // Hacer una solicitud para obtener las categorías desde la API
+            fetch("http://localhost:3000/api/contenido/getCategorias")
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error("Error al obtener categorías");
+                    }
+                    return response.json();
+                })
+                .then((data) => {
+                    setCategorias(data);
+                })
+                .catch((error) => {
+                    console.error("Error al obtener categorías:", error);
+                });
+        }, []);
+        const handleCategoriaChange = (e) => {
+            const selectedCategoria = e.target.value;
+            setCategoriaSeleccionada(selectedCategoria);
+            setSubCats([]); // Limpia las subcategorías al cambiar la categoría seleccionada
+            console.log(selectedCategoria);
         
+            if (selectedCategoria) {
+                // Si se seleccionó una categoría, obtener las subcategorías correspondientes
+                fetch(`http://localhost:3000/api/contenido/getSubcategoria?categoria=${selectedCategoria}`, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    }
+                })
+                    .then((response) => {
+                        if (!response.ok) {
+                            throw new Error("Error al obtener subcategorías");
+                        }
+                        return response.json();
+                    })
+                    .then((data) => {
+                        if (data.status) {
+                            setSubCats(data.subCats);
+                        } else {
+                            console.error(data.descripcion);
+                        }
+                    })
+                    .catch((error) => {
+                        console.error("Error al obtener subcategorías:", error);
+                    });
+            }
+        };
+        const [subCats, setSubCats] = useState([]);
         //console.log(numColumnas)
         console.log(contenidos)
         
@@ -773,6 +825,62 @@ export function    VisualizarTienda(){//casi lista ****
               La galeria del duende
               </h3>
             </div>
+
+            <div class="flex justify-center">
+
+
+
+              <form class="flex items-center">
+                <label for="simple-search" class="sr-only">Search</label>
+                <div class="relative w-80">
+
+                  <input type="text" id="simple-search" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green focus:border-green block w-full pl-10 p-2.5  dark:bg-black dark:border-medGreen dark:placeholder-gray-400 dark:text-white dark:focus:ring-green dark:focus:border-green" placeholder="Realizar búsqueda" required />
+                </div>
+                <button type="submit" class="p-2.5 ml-2 text-sm font-medium text-white bg-medGreen rounded-lg border border-medGreen hover:bg-green focus:ring-4 focus:outline-none focus:ring-green dark:bg-medGreen dark:hover:bg-green dark:focus:ring-green">
+                  <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+                  </svg>
+                  <span class="sr-only">Search</span>
+                </button>
+              </form>
+
+              <div class="p-10 px-20 flex items-center">
+
+                <label for="underline_select" class="sr-only">Underline select</label>
+                <select id="underline_select" value={categoriaSeleccionada} onChange={handleCategoriaChange}
+                class="block py-2.5 px-6 w-full bg-transparent border-0 border-b-2 border-medGreen text-white text-sm peer">
+                  <option value="" class="bg-black">Categoría</option>
+                    {categorias.map((cat, index) => (
+                          <option class="bg-black" key={index} value={cat.nombre}>
+                              {cat.nombre}
+                          </option>
+                    ))}
+                  </select>
+
+                <label for="underline_select" class="sr-only">Underline select</label>
+                <select id="underline_select" onChange={(e) => setSubCats([e.target.value])}
+                class="block py-2.5 px-6 w-full bg-transparent border-0 border-b-2 border-medGreen text-white text-sm peer">
+                  <option value="" class="bg-black">Subcategoría  ----</option>
+                  {subCats.map((subCat, index) => (
+                        <option class="bg-black" key={index} value={subCat}>
+                            {subCat}
+                        </option>
+                    ))}
+                </select>
+
+                <div class="inline-block relative">
+                  <button
+                    type="button"
+                    class="bg-medGreen text-white font-semibold py-2.5 px-8 rounded inline-flex items-center dark:hover:bg-green dark:focus:ring-green">
+                    Filtrar
+                  </button>
+                </div>
+
+                
+
+              </div>
+            </div>
+
 
             
 
