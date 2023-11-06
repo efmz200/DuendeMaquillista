@@ -3,7 +3,6 @@ const router            = express.Router();
 const Producto          = require('../models/modelo/Producto');
 const CategoriaProducto = require('../models/modelo/CategoriaProducto');
 const Carrito           = require('../models/modelo/Carrito');
-const Categoria = require('../models/modelo/Categoria');
 
 router.post('/agregarProducto',async(req,res)=>{
     try{
@@ -48,7 +47,7 @@ router.post('/eliminarProducto',async(req,res)=>{
 router.post('/agregarCategoria',async(req,res)=>{
     try{
         const {nombre} = req.body;
-        const categoria = new Categoria({
+        const categoria = new CategoriaProducto({
             nombre
         });
         await categoria.save();
