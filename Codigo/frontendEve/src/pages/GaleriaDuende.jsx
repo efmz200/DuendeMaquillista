@@ -23,8 +23,71 @@ function GaleriaDuende() {
   const [selectedCategoria, setSelectedCategoria] = useState(""); //Categoria seleccionada en el select
   const [nuevaCategoria, setNuevaCategoria] = useState("");
   const [nuevaSubCategoria, setNuevaSubCategoria] = useState("");
+  const [categoria, setCategoria] = useState([]);
+
+  const [categoriaSeleccionada, setCategoriaSeleccionada] = useState("");
+  const [subCats, setSubCats] = useState([]);
 
   //*********************** Funciones acciones post get en la pagina ***********************
+  
+  
+
+  // Esta función obtiene las categorías disponibles
+  const obtenerCategorias = () => {
+      fetch("http://localhost:3000/api/contenido/getCategorias")
+          .then((response) => {
+              if (!response.ok) {
+                  throw new Error("Error al obtener categorías");
+              }
+              return response.json();
+          })
+          .then((data) => {
+              setCategorias(data);
+          })
+          .catch((error) => {
+              console.error("Error al obtener categorías:", error);
+          });
+  };
+
+  useEffect(() => {
+      obtenerCategorias(); // Cuando se monta el componente, obtiene las categorías disponibles
+  }, []);
+
+  const handleCategoriaChange = (e) => {
+    const selectedCategoria = e.target.value;
+    setCategoriaSeleccionada(selectedCategoria);
+    setSubCats([]); // Limpia las subcategorías al cambiar la categoría seleccionada
+    console.log(selectedCategoria);
+
+    if (selectedCategoria) {
+        // Si se seleccionó una categoría, obtener las subcategorías correspondientes
+        fetch(`http://localhost:3000/api/contenido/getSubcategoria?categoria=${selectedCategoria}`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error("Error al obtener subcategorías");
+                }
+                return response.json();
+            })
+            .then((data) => {
+                if (data.status) {
+                    setSubCats(data.subCats);
+                } else {
+                    console.error(data.descripcion);
+                }
+            })
+            .catch((error) => {
+                console.error("Error al obtener subcategorías:", error);
+            });
+    }
+};
+
+  //---------------------------------------------------------------------------------------
 
   //Funcion para cargar las categorias
   useEffect(() => {
@@ -234,24 +297,26 @@ function GaleriaDuende() {
               <div class="p-10 px-20 flex items-center">
 
                 <label for="underline_select" class="sr-only">Underline select</label>
-                <select id="underline_select" class="block py-2.5 px-6 w-full bg-transparent border-0 border-b-2 border-medGreen text-white text-sm peer">
-                  <option selected class="bg-black">Categoría</option>
-                  <option value="A" class="bg-black">A</option>
-                  <option value="B" class="bg-black">B</option>
-                  <option value="C" class="bg-black">C</option>
-                  <option value="D" class="bg-black">D</option>
-                </select>
+                <select id="underline_select" value={categoriaSeleccionada} onChange={handleCategoriaChange}
+                class="block py-2.5 px-6 w-full bg-transparent border-0 border-b-2 border-medGreen text-white text-sm peer">
+                  <option value="" class="bg-black">Categoría</option>
+                    {categorias.map((cat, index) => (
+                          <option class="bg-black" key={index} value={cat.nombre}>
+                              {cat.nombre}
+                          </option>
+                    ))}
+                  </select>
 
                 <label for="underline_select" class="sr-only">Underline select</label>
-                <select id="underline_select" class="block py-2.5 px-6 w-full bg-transparent border-0 border-b-2 border-medGreen text-white text-sm peer">
-                  <option selected class="bg-black">Subcategoría  ----</option>
-                  <option value="A" class="bg-black">A</option>
-                  <option value="B" class="bg-black">B</option>
-                  <option value="C" class="bg-black">C</option>
-                  <option value="D" class="bg-black">D</option>
+                <select id="underline_select" onChange={(e) => setSubCats([e.target.value])}
+                class="block py-2.5 px-6 w-full bg-transparent border-0 border-b-2 border-medGreen text-white text-sm peer">
+                  <option value="" class="bg-black">Subcategoría  ----</option>
+                  {subCats.map((subCat, index) => (
+                        <option class="bg-black" key={index} value={subCat}>
+                            {subCat}
+                        </option>
+                    ))}
                 </select>
-
-
 
                 <div class="inline-block relative">
                   <button
@@ -390,10 +455,15 @@ function GaleriaDuende() {
               className='appearance-none block w-full px-3 py-2 border border-gray-200 rounded-md shadow-sm placeholder-gray-800 focus:outline-none focus:ring-green focus:border-green sm:text-sm' placeholder="Palabras Clave" />
 
 
-            <select id="underline_select" class="block py-2.5 px-6 w-full bg-white rounded-lg border-0 border-b-2 border-medGreen text-gray-800 text-sm peer">
-              <option selected>Categoría</option>
-              <option value="A">A</option>
-              <option value="B">B</option>
+            <select 
+              value={selectedCategoria} onChange={(e) => setSelectedCategoria(e.target.value)}
+              id="underline_select" class="block py-2.5 px-6 w-full bg-white rounded-lg border-0 border-b-2 border-medGreen text-gray-800 text-sm peer">
+                <option value="">Selecciona una categoría</option>
+                {categorias.map((categoria) => (
+                    <option key={categoria.nombre} value={categoria.nombre}>
+                        {categoria.nombre}
+                    </option>
+                ))}
             </select>
 
             <select id="underline_select" class="block py-2.5 px-6 w-full bg-white rounded-lg border-0 border-b-2 border-medGreen text-gray-800 text-sm peer">
@@ -448,10 +518,14 @@ function GaleriaDuende() {
             <input name='descripcion' type='text' required value={palabraClave} onChange={(e) => setPalabraClave(e.target.value)}
               className='appearance-none block w-full px-3 py-2 border border-gray-200 rounded-md shadow-sm placeholder-gray-800 focus:outline-none focus:ring-green focus:border-green sm:text-sm' placeholder="Palabras Clave" />
 
-            <select id="underline_select" class="block py-2.5 px-6 w-full bg-white rounded-lg border-0 border-b-2 border-medGreen text-gray-800 text-sm peer">
-              <option selected>Categoría</option>
-              <option value="A">A</option>
-              <option value="B">B</option>
+            <select value={categoria} onChange={handleCategoriaChange} id="underline_select" 
+            class="block py-2.5 px-6 w-full bg-white rounded-lg border-0 border-b-2 border-medGreen text-gray-800 text-sm peer">
+              <option value="">Categoría</option>
+              {categorias.map((cat, index) => (
+                        <option key={index} value={cat.nombre}>
+                            {cat.nombre}
+                        </option>
+                    ))}
             </select>
 
             <select id="underline_select" class="block py-2.5 px-6 w-full bg-white rounded-lg border-0 border-b-2 border-medGreen text-gray-800 text-sm peer">

@@ -25,8 +25,68 @@ function TiendaDuende() {
     const [nuevaCategoria, setNuevaCategoria] = useState("");
     const [nuevaSubCategoria, setNuevaSubCategoria] = useState("");
 
-    //*********************** Funciones acciones post get en la pagina ***********************
+    const [categoriaSeleccionada, setCategoriaSeleccionada] = useState("");
+    const [subCats, setSubCats] = useState([]);
 
+    //*********************** Funciones acciones post get en la pagina ***********************
+    
+  
+    // Esta función obtiene las categorías disponibles
+    const obtenerCategorias = () => {
+        fetch("http://localhost:3000/api/contenido/getCategorias")
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error("Error al obtener categorías");
+                }
+                return response.json();
+            })
+            .then((data) => {
+                setCategorias(data);
+            })
+            .catch((error) => {
+                console.error("Error al obtener categorías:", error);
+            });
+    };
+  
+    useEffect(() => {
+        obtenerCategorias(); // Cuando se monta el componente, obtiene las categorías disponibles
+    }, []);
+  
+    const handleCategoriaChange = (e) => {
+      const selectedCategoria = e.target.value;
+      setCategoriaSeleccionada(selectedCategoria);
+      setSubCats([]); // Limpia las subcategorías al cambiar la categoría seleccionada
+      console.log(selectedCategoria);
+  
+      if (selectedCategoria) {
+          // Si se seleccionó una categoría, obtener las subcategorías correspondientes
+          fetch(`http://localhost:3000/api/contenido/getSubcategoria?categoria=${selectedCategoria}`, {
+              method: 'GET',
+              headers: {
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json'
+              }
+          })
+              .then((response) => {
+                  if (!response.ok) {
+                      throw new Error("Error al obtener subcategorías");
+                  }
+                  return response.json();
+              })
+              .then((data) => {
+                  if (data.status) {
+                      setSubCats(data.subCats);
+                  } else {
+                      console.error(data.descripcion);
+                  }
+              })
+              .catch((error) => {
+                  console.error("Error al obtener subcategorías:", error);
+              });
+      }
+  };
+  
+    //---------------------------------------------------------------------------------------
     //Funcion para cargar las categorias
     useEffect(() => {
         // Hacer una solicitud para obtener las categorías desde la API
@@ -99,6 +159,19 @@ function TiendaDuende() {
     function cargarCategorias() {
         // Realizar una solicitud GET a la API para obtener las categorías
         fetch('http://localhost:3000/api/contenido/getCategorias')
+            .then(response => response.json())
+            .then(data => {
+                this.setState({ categorias: data });
+            })
+            .catch(error => {
+                console.error('Error al obtener las categorías:', error);
+            });
+    }
+
+    //Funcion obtener lista categorias para el select
+    function cargarSubCategorias() {
+        // Realizar una solicitud GET a la API para obtener las categorías
+        fetch('http://localhost:3000/api/contenido/getSubcategoria')
             .then(response => response.json())
             .then(data => {
                 this.setState({ categorias: data });
@@ -264,53 +337,27 @@ function TiendaDuende() {
                             </form>
 
                             <div class="p-10 px-20 flex items-center">
-                                <label for="underline_select" class="sr-only">
-                                    Underline select
-                                </label>
-                                <select
-                                    id="underline_select"
-                                    class="block py-2.5 px-6 w-full bg-transparent border-0 border-b-2 border-medGreen text-white text-sm peer"
-                                >
-                                    <option selected class="bg-black">
-                                        Categoría
-                                    </option>
-                                    <option value="A" class="bg-black">
-                                        A
-                                    </option>
-                                    <option value="B" class="bg-black">
-                                        B
-                                    </option>
-                                    <option value="C" class="bg-black">
-                                        C
-                                    </option>
-                                    <option value="D" class="bg-black">
-                                        D
-                                    </option>
-                                </select>
+                            <label for="underline_select" class="sr-only">Underline select</label>
+                <select id="underline_select" value={categoriaSeleccionada} onChange={handleCategoriaChange}
+                class="block py-2.5 px-6 w-full bg-transparent border-0 border-b-2 border-medGreen text-white text-sm peer">
+                  <option value="" class="bg-black">Categoría</option>
+                    {categorias.map((cat, index) => (
+                          <option class="bg-black" key={index} value={cat.nombre}>
+                              {cat.nombre}
+                          </option>
+                    ))}
+                  </select>
 
-                                <label for="underline_select" class="sr-only">
-                                    Underline select
-                                </label>
-                                <select
-                                    id="underline_select"
-                                    class="block py-2.5 px-6 w-full bg-transparent border-0 border-b-2 border-medGreen text-white text-sm peer"
-                                >
-                                    <option selected class="bg-black">
-                                        Subcategoría ----
-                                    </option>
-                                    <option value="A" class="bg-black">
-                                        A
-                                    </option>
-                                    <option value="B" class="bg-black">
-                                        B
-                                    </option>
-                                    <option value="C" class="bg-black">
-                                        C
-                                    </option>
-                                    <option value="D" class="bg-black">
-                                        D
-                                    </option>
-                                </select>
+                <label for="underline_select" class="sr-only">Underline select</label>
+                <select id="underline_select" onChange={(e) => setSubCats([e.target.value])}
+                class="block py-2.5 px-6 w-full bg-transparent border-0 border-b-2 border-medGreen text-white text-sm peer">
+                  <option value="" class="bg-black">Subcategoría  ----</option>
+                  {subCats.map((subCat, index) => (
+                        <option class="bg-black" key={index} value={subCat}>
+                            {subCat}
+                        </option>
+                    ))}
+                </select>
 
                                 <div class="inline-block relative">
                                     <button

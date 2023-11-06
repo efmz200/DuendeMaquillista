@@ -57,24 +57,20 @@ router.get("/getCategorias", async (req, res) => {
 });
 
 //listar SubCategorias de una categoria
-router.post("/getSubcategoria", async (req, res) => {
+router.get("/getSubcategoria", async (req, res) => {
     try {
-        const { categoria } = req.body;
+        const { categoria } = req.query;
         const cat = await CategoriaSchema.find({ nombre: categoria });
-        console.log(cat);
-        var subCats = [];
-        if (cat.length == 0) {
-            res.json({
+        
+        if (cat.length === 0) {
+            return res.json({
                 status: false,
-                descripcion: "No hay subcategorias que mostrar",
+                descripcion: "No hay subcategorías que mostrar",
             });
-            return;
         }
-        for (var i = 0; i < cat.length; i++) {
-            for (var j = 0; j < cat[i].subcategorias.length; j++) {
-                subCats.push(cat[i].subcategorias[j]);
-            }
-        }
+
+        const subCats = cat[0].subcategorias.map(subcategoria => subcategoria.nombre);
+
         res.json({
             status: true,
             subCats: subCats,
