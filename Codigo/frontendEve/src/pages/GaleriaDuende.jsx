@@ -14,7 +14,6 @@ function GaleriaDuende() {
   const [showModalAddCat, setShowModalAddCat] = useState(false);
 
   const [nombrePublicacion, setNombrePublicacion] = useState("");
-  const [imagen, setImagen] = useState("");
   const [descripcion, setDescripcion] = useState("");
   const [palabraClave, setPalabraClave] = useState("");
   const [tags, setTags] = useState("");
@@ -23,15 +22,62 @@ function GaleriaDuende() {
   const [selectedCategoria, setSelectedCategoria] = useState(""); //Categoria seleccionada en el select
   const [nuevaCategoria, setNuevaCategoria] = useState("");
   const [nuevaSubCategoria, setNuevaSubCategoria] = useState("");
-  const [categoria, setCategoria] = useState([]);
 
   const [categoriaSeleccionada, setCategoriaSeleccionada] = useState("");
   const [subCats, setSubCats] = useState([]);
 
+  const [formulario, setFormulario] = useState({
+    nombre: "",
+    imagen: null, // Para almacenar el archivo de imagen
+    descripcion: "",
+    categoria: "",
+    subcategoria: "",
+    palabrasClave: "",
+    tags: "",
+});
+
+const handleInputChange = (e) => {
+    const { name, value, type, files } = e.target;
+    const newValue = type === "file" ? files[0] : value;
+    setFormulario({ ...formulario, [name]: newValue });
+};
+
+const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const formData = new FormData();
+    formData.append("nombre", formulario.nombre);
+    formData.append("imagen", formulario.imagen);
+    formData.append("descripcion", formulario.descripcion);
+    formData.append("categoria", formulario.categoria);
+    formData.append("subcategoria", formulario.subcategoria);
+    formData.append("palabrasClave", formulario.palabrasClave);
+    formData.append("tags", formulario.tags);
+
+    fetch("/registrarContenido", {
+        method: "POST",
+        body: formData,
+    })
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error("Error al registrar contenido");
+            }
+            return response.json();
+        })
+        .then((data) => {
+            if (data.success) {
+                console.log("Contenido registrado exitosamente");
+            } else {
+                console.error(data.status);
+            }
+        })
+        .catch((error) => {
+            console.error("Error al registrar contenido:", error);
+        });
+};
+
   //*********************** Funciones acciones post get en la pagina ***********************
   
-  
-
   // Esta función obtiene las categorías disponibles
   const obtenerCategorias = () => {
       fetch("http://localhost:3000/api/contenido/getCategorias")
@@ -454,22 +500,25 @@ function GaleriaDuende() {
             <input name='descripcion' type='text' required value={palabraClave} onChange={(e) => setPalabraClave(e.target.value)}
               className='appearance-none block w-full px-3 py-2 border border-gray-200 rounded-md shadow-sm placeholder-gray-800 focus:outline-none focus:ring-green focus:border-green sm:text-sm' placeholder="Palabras Clave" />
 
-
             <select 
-              value={selectedCategoria} onChange={(e) => setSelectedCategoria(e.target.value)}
+              value={categoriaSeleccionada} onChange={handleCategoriaChange}
               id="underline_select" class="block py-2.5 px-6 w-full bg-white rounded-lg border-0 border-b-2 border-medGreen text-gray-800 text-sm peer">
-                <option value="">Selecciona una categoría</option>
-                {categorias.map((categoria) => (
-                    <option key={categoria.nombre} value={categoria.nombre}>
-                        {categoria.nombre}
-                    </option>
-                ))}
+                <option value="" >Selecciona una categoría</option>
+                    {categorias.map((cat, index) => (
+                          <option key={index} value={cat.nombre}>
+                              {cat.nombre}
+                          </option>
+                    ))}
             </select>
 
-            <select id="underline_select" class="block py-2.5 px-6 w-full bg-white rounded-lg border-0 border-b-2 border-medGreen text-gray-800 text-sm peer">
-              <option selected>Subcategoría</option>
-              <option value="A">A</option>
-              <option value="B">B</option>
+            <select id="underline_select" onChange={(e) => setSubCats([e.target.value])}
+            class="block py-2.5 px-6 w-full bg-white rounded-lg border-0 border-b-2 border-medGreen text-gray-800 text-sm peer">
+            <option value="">Selecciona una subcategoría</option>
+                  {subCats.map((subCat, index) => (
+                        <option key={index} value={subCat}>
+                            {subCat}
+                        </option>
+                    ))}
             </select>
 
             <input name='descripcion' type='text' required value={tags} onChange={(e) => setTags(e.target.value)}
@@ -518,20 +567,25 @@ function GaleriaDuende() {
             <input name='descripcion' type='text' required value={palabraClave} onChange={(e) => setPalabraClave(e.target.value)}
               className='appearance-none block w-full px-3 py-2 border border-gray-200 rounded-md shadow-sm placeholder-gray-800 focus:outline-none focus:ring-green focus:border-green sm:text-sm' placeholder="Palabras Clave" />
 
-            <select value={categoria} onChange={handleCategoriaChange} id="underline_select" 
-            class="block py-2.5 px-6 w-full bg-white rounded-lg border-0 border-b-2 border-medGreen text-gray-800 text-sm peer">
-              <option value="">Categoría</option>
-              {categorias.map((cat, index) => (
-                        <option key={index} value={cat.nombre}>
-                            {cat.nombre}
-                        </option>
+<select 
+              value={categoriaSeleccionada} onChange={handleCategoriaChange}
+              id="underline_select" class="block py-2.5 px-6 w-full bg-white rounded-lg border-0 border-b-2 border-medGreen text-gray-800 text-sm peer">
+                <option value="" >Selecciona una categoría</option>
+                    {categorias.map((cat, index) => (
+                          <option key={index} value={cat.nombre}>
+                              {cat.nombre}
+                          </option>
                     ))}
             </select>
 
-            <select id="underline_select" class="block py-2.5 px-6 w-full bg-white rounded-lg border-0 border-b-2 border-medGreen text-gray-800 text-sm peer">
-              <option selected>Subcategoría</option>
-              <option value="A">A</option>
-              <option value="B">B</option>
+            <select id="underline_select" onChange={(e) => setSubCats([e.target.value])}
+            class="block py-2.5 px-6 w-full bg-white rounded-lg border-0 border-b-2 border-medGreen text-gray-800 text-sm peer">
+            <option value="">Selecciona una subcategoría</option>
+                  {subCats.map((subCat, index) => (
+                        <option key={index} value={subCat}>
+                            {subCat}
+                        </option>
+                    ))}
             </select>
 
             <input name='descripcion' type='text' required value={tags} onChange={(e) => setTags(e.target.value)}
