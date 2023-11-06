@@ -225,11 +225,16 @@ export function    VisualizarCarrito(props){//casilita *****
                                 <div style={{ display: "flex", justifyContent: "center" }}>
                                     <div className='row' style={{  width: "200px", display: "flex", justifyContent: "center", alignItems: "center", marginTop: "10px" , color: "#FFFFFF  " }}>
                                         <div className='col s3'>
-                                            <span> {listaProductos[i].producto.precio}</span>
+                                            <span> $ {listaProductos[i].producto.precio}          /{listaProductos[i].cantidad} unidades</span>
                                         </div>
-                                        <div className='col s3'>
+                                        <br/>
+                                        <div className='col s12'>
                                             
-                                            <input type="number" name="cantidad" maxLength="16" value={listaProductos[i].cantidad} style={{  width: "50px", height: "30px",backgroundColor: "#FFFFFF" ,color:'#000000'}}/>
+                                            {/*<input type="number" name="cantidad" maxLength="16" value={listaProductos[i].cantidad} style={{  width: "50px", height: "30px",backgroundColor: "#FFFFFF" ,color:'#000000'}}/>
+                                        
+                                        
+                                        <span>cantidad = {listaProductos[i].cantidad} </span>*/}
+                                            
                                         </div>
                                         
                                         <div className='col s3'>
