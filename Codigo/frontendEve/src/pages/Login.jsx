@@ -1,22 +1,81 @@
 
 import Login from "../components/Login/Login.jsx"
 
-import React, { useState } from 'react'
+import React, { useState,useEffect } from 'react'
 import { Link, useNavigate } from "react-router-dom";
 import {AiOutlineEye, AiOutlineEyeInvisible} from "react-icons/ai";
 import styles from "../styles/styles.js"
 
-function LoginPage(props) {
+function     cancelareventos(e){
+    e.preventDefault();
+}
+
+
+
+export function LoginPage(props) {
   const { user,updateConstantValue} = props;
+  const { userdatos,updateuserdatos} = useState([]);
+  
+  
   const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [visible, setVisible] = useState(false);
+const CambiarUser = async () => {
+    var response = ''
+    
+    try {
+        response = await fetch('http://localhost:3000/api/usuario/iniciarSesion', {
+                method: 'POST',
+                headers:{
+                    'Accept': 'application/json',
+                    'Content-Type':'application/json'
+                },
+                body: JSON.stringify({
+                    correo: email, // Asigna los valores adecuados
+                    contrasena: password,
+                    
+                }),
+            })
+        const data = await response.json();
+        console.log(data); 
 
-  const cambiarUser = (newValue) => {
-    updateConstantValue(newValue)
-    navigate('/categorias', {});
-  }
+            
+    
+
+        
+        //updateConstantValue(data.usuario)
+        if(data.estatus === 'Sesion iniciada'){
+            
+            if (data.usuario.admin){
+                            navigate('/galeriaDuende', {});
+                            console.log('1')
+            }else{
+                            navigate('/categorias', {});
+                            console.log('2')
+                        }
+
+        }
+            
+                //.catch(err => console.err(err));
+
+
+
+        
+ 
+        }catch (error) {
+            console.error('Error al agregar producto al carrito:', error);
+            // Maneja los errores
+            }
+        
+    } 
+    
+
+                
+
+        
+            
+  
   return (
     <div>
       <h1>
@@ -35,7 +94,8 @@ function LoginPage(props) {
             <div class="bg-[url('./loginBackground.png')] bg-no-repeat bg-cover bg-center bg-fixed w-full">
             <div className="my-60  sm:mx-auto sm:w-full sm:max-w-md">
                     <div className='bg-darkGreen py-4 px-6 shadow sm:rounded-lg sm:px-10'>
-                        <form className="space-y-10">
+
+                        <form  onSubmit={cancelareventos} className="space-y-10">
                             <div>
                                 <h1  className='mt-4 text-center text-4xl font-semibold text-white'>
                                     Login
@@ -87,7 +147,7 @@ function LoginPage(props) {
                                     </div>
                                     <div>
                                     <button 
-                                        onClick={() => cambiarUser(email)}
+                                        onClick={() => CambiarUser()}
                                         type="submit"
                                         className="group relative w-full h-[40px] flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-black hover:bg-green">
                                         Iniciar Sesión
@@ -113,5 +173,3 @@ function LoginPage(props) {
     </div>
   )
 }
-
-export default LoginPage

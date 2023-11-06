@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState,useEffect } from 'react'
 import { Link, useNavigate } from "react-router-dom";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import styles from "../../styles/styles.js"
@@ -25,6 +25,7 @@ function SignUp() {
             nacimiento: fechaNacimiento,
             telefono: telefono,
             genero: "F",
+            admin: true,
         }
         console.log("Valores a registrar:", datos);
         console.log('are');

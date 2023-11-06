@@ -1,4 +1,4 @@
-import LoginPage from "./pages/Login.jsx";
+import {LoginPage,cambiarUser} from "./pages/Login.jsx";
 import SignUpPage from "./pages/SignUpPage.jsx";
 import MenuAdmin from "./pages/MenuAdmin.jsx";
 import GaleriaDuende from "./pages/GaleriaDuende.jsx";
@@ -11,6 +11,7 @@ import MensajesAdmin from "./pages/MensajesAdmin.jsx";
 
 export {
     LoginPage,
+    
     SignUpPage,
     MenuAdmin,
     GaleriaDuende, 

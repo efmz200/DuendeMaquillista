@@ -16,10 +16,11 @@ router.get("/", async (req, res) => {
 //iniciarSesion
 router.post('/iniciarSesion',async (req,res) => {
     try{
-                const {correo,contrasena} = req.body;
+        const {correo,contrasena} = req.body;
         const usuario =await Usuario.findOne({correo,contrasena})
         if (usuario != null){
-            res.json({ success: true, estatus: "Sesion iniciada" });
+            console.log({ success: true,usuario: usuario, estatus: "Sesion iniciada" })
+            res.json({ success: true,usuario: usuario, estatus: "Sesion iniciada" });
              return;            
         } 
         res.json({ 

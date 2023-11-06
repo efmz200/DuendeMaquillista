@@ -143,7 +143,8 @@ function    handleChange(e){
 
 
     
-export function    VisualizarCarrito(){//casilita *****
+export function    VisualizarCarrito(props){//casilita *****
+    const { user} = props;
     
     const navigate = useNavigate();
 
@@ -151,7 +152,7 @@ export function    VisualizarCarrito(){//casilita *****
 
         const Borraritem = (codigoProducto) => {
             console.log(codigoProducto)
-            const idCarrito = '6537366bd6e4e15f3beb9b0f'; // Reemplaza con el ID del carrito que estás buscando
+            const idCarrito = user.carrito; // Reemplaza con el ID del carrito que estás buscando
             const url = 'http://localhost:3000/api/productos/eliminarProductoCarrito'; // Reemplaza con la URL de tu servidor
             var response = '';
             
@@ -180,7 +181,7 @@ export function    VisualizarCarrito(){//casilita *****
         
         const [listaProductos, setlistaProductos] = useState([]);
         
-        const idCarrito = '6537366bd6e4e15f3beb9b0f'; // Reemplaza con el ID del carrito que estás buscando
+        const idCarrito = user.carrito; // Reemplaza con el ID del carrito que estás buscando
         const url = 'http://localhost:3000/api/productos/getCarrito'; // Reemplaza con la URL de tu servidor
         var response = '';
         useEffect(() => {
@@ -196,14 +197,12 @@ export function    VisualizarCarrito(){//casilita *****
                 .then(data => {
                     console.log(data)
                     setlistaProductos(data.productos);
-                    
-                    
-                    
-    
                 })
                 .catch(err => console.err(err));
             
         }, []);
+
+        
         console.log('listaProductos')
         console.log(listaProductos)
 
@@ -571,7 +570,8 @@ export function    VisualizarCategoriaProductos(props){//lista ****
     </Fragment>
     );
 }
-export function    VisualizarProductos(){//casi lista *****
+export function    VisualizarProductos(props){//casi lista *****
+        const { user} = props;
         
         const clickAgregarProducto = (codigo,cantidad) => {
             
@@ -586,7 +586,7 @@ export function    VisualizarProductos(){//casi lista *****
                 'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    idCarrito: '6537366bd6e4e15f3beb9b0f', // Asigna los valores adecuados
+                    idCarrito: user.carrito, // Asigna los valores adecuados
                     codigoProducto: codigo,
                     cantidad: cantidad
                 })

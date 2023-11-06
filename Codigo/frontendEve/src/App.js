@@ -11,7 +11,8 @@ import './App.css';
 const App = () => {
   const [user, setUser] = useState(['valor_inicial']);
   const updateConstantValue = (newValue) => {
-    setUser(newValue);
+    //setUser(newValue);
+    console.log(newValue)
 }
 
   return (
@@ -19,23 +20,25 @@ const App = () => {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<LoginPage user={user} updateConstantValue={updateConstantValue}/>} />
-        <Route path="/signUp" element={<SignUpPage />} />
-        <Route path="/menuAdmin" element={<MenuAdmin />} />
-        <Route path="/galeriaDuende" element={<GaleriaDuende />} />
-        <Route path="/tiendaDuende" element={<TiendaDuende />} />
-        <Route path="/menuAgenda" element={<MenuAgenda />} />
-        <Route path="/cursosTalleres" element={<CursosTalleres />} />
-        <Route path="/servicioMaquillaje" element={<ServicioMaquillaje />} />
-        <Route path="/entregasClientes" element={<EntregasClientes />} />
-        <Route path="/mensajesAdmin" element={<MensajesAdmin />} />
+        <Route path="/signUp" element={<SignUpPage user={user}/>} />
+        <Route path="/menuAdmin" element={<MenuAdmin user={user}/>} />
+        <Route path="/galeriaDuende" element={<GaleriaDuende user={user}/>} />
+        <Route path="/tiendaDuende" element={<TiendaDuende user={user}/>} />
+        <Route path="/menuAgenda" element={<MenuAgenda user={user}/>} />
+        <Route path="/cursosTalleres" element={<CursosTalleres user={user}/>} />
+        <Route path="/servicioMaquillaje" element={<ServicioMaquillaje user={user}/>} />
+        <Route path="/entregasClientes" element={<EntregasClientes user={user}/>} />
+        <Route path="/mensajesAdmin" element={<MensajesAdmin user={user}/>} />
         
         
         <Route path="/categorias" element={<VisualizarCategoriaProductos user={user}  />} />
-        <Route path="/categoriaproductos" element={<VisualizarProductos />} />
-        <Route path="/carrito" element={<VisualizarCarrito />} />
-        <Route path="/factura" element={<VisualizarFactura />} />
-        <Route path="/contenido" element={<VisualizarTienda />} />
-        <Route path="/publicacion" element={<VisualizarPublicacion />} />
+        <Route path="/categoriaproductos" element={<VisualizarProductos user={user}/>} />
+        <Route path="/carrito" element={<VisualizarCarrito user={user}/>} />
+        <Route path="/factura" element={<VisualizarFactura user={user}/>} />
+        <Route path="/contenido" element={<VisualizarTienda user={user}/>} />
+        <Route path="/publicacion" element={<VisualizarPublicacion user={user}/>} />
+
+        
       </Routes>
     </BrowserRouter>
   )
