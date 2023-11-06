@@ -51,7 +51,7 @@ useEffect(() => {
 
 //----------------------------------------
 
-const handleDelete = () => {
+const handleDelete = (idpubli) => {
 
   console.log("Valores a registrar:", idContenidoToDelete);
 
@@ -62,7 +62,7 @@ const handleDelete = () => {
           'Accept': 'application/json',
           'Content-Type':'application/json'
       },
-      body: JSON.stringify({ idContenidoToDelete}),
+      body: JSON.stringify({ idContenido:idContenidoToDelete}),
   })
       .then(res => res.json())
       .then(data => {
@@ -338,7 +338,7 @@ const Baseparacargarproducto = async () => {
                 class="inline-block rounded-r bg-black px-2 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-neutral-50 transition duration-150 ease-in-out hover:bg-neutral-800 focus:bg-neutral-800 focus:outline-none focus:ring-0 active:bg-neutral-900 dark:bg-black dark:hover:bg-black dark:focus:bg-black dark:active:bg-black"
                 data-te-ripple-init
                 data-te-ripple-color="light"
-                onClick={() => {setIdContenidoToDelete(contenidos.id); setShowModalDel(true); }}>
+                onClick={() => {setIdContenidoToDelete(contenidos[i].id); setShowModalDel(true); }}>
                 Eliminar
               </button>
             </div>
