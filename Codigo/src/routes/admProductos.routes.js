@@ -44,6 +44,27 @@ router.post('/eliminarProducto',async(req,res)=>{
     }    
 })
 
+//agregar una categoria 
+router.post('/agregarCategoria',async(req,res)=>{
+    try{
+        const {nombre} = req.body;
+        const categoria = new Categoria({
+            nombre
+        });
+        await categoria.save();
+        res.json({
+            succes: true,
+            status: 'Categoria guardada'
+        });
+    }catch(err){
+        console.log(err)
+        res.json({
+            succes: false,
+            status:'Hubo un error en la operación'
+        })
+    }
+})
+
 
 //agregar producto a una categoria
 router.post('/agregarProductoCategoria',async(req,res)=>{
