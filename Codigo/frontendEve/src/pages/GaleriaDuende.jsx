@@ -28,6 +28,7 @@ function GaleriaDuende() {
 
   const [imagenSeleccionada, setImagenSeleccionada] = useState('');
   const [contenidos, setContenidos] = useState([]);
+  const [idContenidoToDelete, setIdContenidoToDelete] = useState("");
 
   const [formulario, setFormulario] = useState({
     nombre: "",
@@ -42,13 +43,38 @@ function GaleriaDuende() {
 //------------------------------------
 useEffect(() => {
   // Hacer una solicitud GET a tu API para obtener la lista de contenidos
-  fetch("/getContenidos")
+  fetch("http://localhost:3000/api/contenido/getContenidos")
     .then((response) => response.json())
     .then((data) => setContenidos(data))
     .catch((error) => console.error("Error al obtener contenidos:", error));
 }, []);
 
 //----------------------------------------
+
+const handleDelete = () => {
+
+  console.log("Valores a registrar:", idContenidoToDelete);
+
+  var url = "http://localhost:3000/api/contenido/eliminarContenido";
+  var response =fetch(url, {
+      method: 'POST',
+      headers:{
+          'Accept': 'application/json',
+          'Content-Type':'application/json'
+      },
+      body: JSON.stringify({ idContenidoToDelete}),
+  })
+      .then(res => res.json())
+      .then(data => {
+          console.log(data)
+          
+
+      })
+      .catch(err => console.err(err));
+};
+
+
+  // -------------------------------------------
 
 const handleImageChange = (event) => {
   const archivoImagen = event.target.files[0];
@@ -98,46 +124,6 @@ const Baseparacargarproducto = async () => {
   }
 
 
-};
-
-const handleInputChange = (e) => {
-    const { name, value, type, files } = e.target;
-    const newValue = type === "file" ? files[0] : value;
-    setFormulario({ ...formulario, [name]: newValue });
-};
-
-const handleSubmit = (e) => {
-    e.preventDefault();
-    const formData = new FormData();
-    
-    formData.append("nombre", formulario.nombre);
-    formData.append("imagen", formulario.imagen);
-    formData.append("descripcion", formulario.descripcion);
-    formData.append("categoria", formulario.categoria);
-    formData.append("subcategoria", formulario.subcategoria);
-    formData.append("palabrasClave", formulario.palabrasClave);
-    formData.append("tags", formulario.tags);
-
-    fetch("/registrarContenido", {
-        method: "POST",
-        body: formData,
-    })
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error("Error al registrar contenido");
-            }
-            return response.json();
-        })
-        .then((data) => {
-            if (data.success) {
-                console.log("Contenido registrado exitosamente");
-            } else {
-                console.error(data.status);
-            }
-        })
-        .catch((error) => {
-            console.error("Error al registrar contenido:", error);
-        });
 };
 
   //*********************** Funciones acciones post get en la pagina ***********************
@@ -352,7 +338,7 @@ const handleSubmit = (e) => {
                 class="inline-block rounded-r bg-black px-2 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-neutral-50 transition duration-150 ease-in-out hover:bg-neutral-800 focus:bg-neutral-800 focus:outline-none focus:ring-0 active:bg-neutral-900 dark:bg-black dark:hover:bg-black dark:focus:bg-black dark:active:bg-black"
                 data-te-ripple-init
                 data-te-ripple-color="light"
-                onClick={() => setShowModalDel(true)}>
+                onClick={() => {setIdContenidoToDelete(contenidos.id); setShowModalDel(true); }}>
                 Eliminar
               </button>
             </div>
@@ -596,7 +582,9 @@ const handleSubmit = (e) => {
               <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
             </svg>
             <h3 class="mb-5 text-lg font-normal dark:text-white">¿Está seguro que desea eliminar está publicación?</h3>
-            <button data-modal-hide="popup-modal" type="button" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2">
+            <button
+            onClick={handleDelete}
+            data-modal-hide="popup-modal" type="button" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2">
               Sí, Estoy seguro
             </button>
             <button data-modal-hide="popup-modal" onClick={() => setShowModalDel(false)} type="button" class="text-white rounded-lg text-sm font-medium px-5 py-2.5 hover:text-green focus:z-10 dark:bg-darkGreen dark:text-white dark:hover:text-white dark:hover:bg-green dark:focus:ring-green">No, cancelar</button>
