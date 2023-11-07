@@ -27,7 +27,7 @@ function Factory(type, data) {
         });
     }
     actividad = new Actividad({
-        fehca : data.fecha,
+        fecha : data.fecha,
         descripcion : data.descripcion,
         actividadConcreta : actividadConcreta
     });
