@@ -50,14 +50,14 @@ router.post('/agendarEntrega',async(req,res)=>{
 //agendar Servicio
 router.post('/agendarServicio',async(req,res)=>{
     try{
-        const {pFecha,pDescripcion,pNombre,pTelefono,pNotas,pImagen} = req.body;
+        const {Fecha,Descripcion,Nombre,Telefono,Notas,Imagen} = req.body;
         data = {
-            fecha: pFecha,
-            descripcion: pDescripcion,
-            nombre: pNombre,
-            telefono: pTelefono,
-            notas: pNotas,
-            imagen: pImagen
+            fecha: Fecha,
+            descripcion: Descripcion,
+            nombre: Nombre,
+            telefono: Telefono,
+            notas: Notas,
+            imagen: Imagen
         }
         var actividad = Factory("Servicio",data);
         await actividad.save();
@@ -109,7 +109,7 @@ router.get('/getAgenda',async(req,res)=>{
 
 
 //DESDE AQUI II INTEGRACIÓN
-router.post('/getAgendaPor',async(req,res)=>{
+router.post('/filtrarPor',async(req,res)=>{
     try{
         var agenda;
         //filtro puede ser dia, mes, semana
@@ -174,7 +174,7 @@ router.post('/getAgendaPor',async(req,res)=>{
     }    
 })
 
-router.post('/addAgenda',async(req,res)=>{
+router.post('/agregar',async(req,res)=>{
     try{
         const {Fecha,DuracionHoras,DuracionMinutos,Asunto,Estado,CorreoSolicitante} = req.body;
         data = {
@@ -186,6 +186,7 @@ router.post('/addAgenda',async(req,res)=>{
             correoSolicitante: CorreoSolicitante
         }
         var agenda = new Agenda(data);
+        //aca debo verificar colisiones
         await agenda.save();
         res.json({
             succes: true,
@@ -200,5 +201,102 @@ router.post('/addAgenda',async(req,res)=>{
     }
 })
 
-router.
+router.post('/borrar',async(req,res)=>{
+    try{
+        const {fecha,asunto,correoSolicitante} = req.body;
+        await Agenda.findOneAndDelete({fecha: fecha,asunto: asunto,correoSolicitante: correoSolicitante});
+        //await Agenda.findByIdAndDelete(idAgenda);
+        res.json({
+            succes: true,
+            status: 'Agenda eliminada'
+        });
+    }catch{
+        console.log(err)
+        res.json({
+            succes: false,
+            status:'Hubo un error en la operación'
+        })        
+    }
+})
+
+router.post('/editar',async(req,res)=>{
+    try{
+        const {fechaOriginal,asuntoOriginal,correoSolicitanteOriginal,//datos para buscar la agenda anterior
+                fecha,Descripcion,Nombre,Telefono,Notas,Imagen } = req.body;    //datos actualizados
+        data = {
+            fecha: Fecha,
+            descripcion: Descripcion,
+            nombre: Nombre,
+            telefono: Telefono,
+            notas: Notas,
+            imagen: Imagen
+        }
+        const actualizado = await Agenda.findOneAndUpdate({fecha: fechaOriginal,asunto: asuntoOriginal,correoSolicitante: correoSolicitanteOriginal},data, {new: true});
+        res.json({
+            succes: true,
+            status: 'Agenda actualizada',
+            agenda: actualizado
+        });
+    }catch{
+        console.log(err)
+        res.json({
+            succes: false,
+            status:'Hubo un error en la operación'
+        })
+    }
+})
+
+router.post('/actualizarEstado',async(req,res)=>{
+    try{
+        const {fecha,asunto,correoSolicitante,estado} = req.body;
+        const actualizado = await Agenda.findOneAndUpdate({fecha: fecha,asunto: asunto,correoSolicitante: correoSolicitante},{estado: estado}, {new: true});
+        res.json({
+            succes: true,
+            status: 'Agenda actualizada',
+            agenda: actualizado
+        });
+    }catch{
+        console.log(err)
+        res.json({
+            succes: false,
+            status:'Hubo un error en la operación'
+        })
+    }
+})
+
+router.post('/verTodas',async(req,res)=>{
+    try{
+        const todas = await Agenda.find({});
+        res.json({
+            succes: true,
+            status: 'Agenda encontrada',
+            agenda: todas
+        });
+    }catch{
+        console.log(err)
+        res.json({
+            succes: false,
+            status:'Hubo un error en la operación'
+        })
+    }
+})
+
+router.post('/verUna',async(req,res)=>{
+    try{
+        const {fecha,asunto,correoSolicitante} = req.body;
+        const agenda = await Agenda.findOne({fecha: fecha,asunto: asunto,correoSolicitante: correoSolicitante});
+        res.json({
+            succes: true,
+            status: 'Agenda encontrada',
+            agenda: agenda
+        });
+    }catch{
+        console.log(err)
+        res.json({
+            succes: false,
+            status:'Hubo un error en la operación'
+        })
+    }
+})
+
 module.exports = router;
