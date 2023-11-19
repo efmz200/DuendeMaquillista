@@ -2,7 +2,7 @@ const express   = require('express');
 const router    = express.Router();
 const Actividad = require('../models/modelo/Actividad');
 const Factory   = require('../models/modelo/AbstractCreator');
-
+const Agenda = require ('../models/modelo/Agenda');
 //fechas formato AAAA-MM-DD
 //agendar curso
 router.post('/agendarCurso',async(req,res)=>{
@@ -107,4 +107,98 @@ router.get('/getAgenda',async(req,res)=>{
     }    
 })
 
+
+//DESDE AQUI II INTEGRACIÓN
+router.post('/getAgendaPor',async(req,res)=>{
+    try{
+        var agenda;
+        //filtro puede ser dia, mes, semana
+        const {filtro,dia,mes,semana} = req.body;
+
+        switch (filtro){
+            case 'dia':
+                if (dia == null){
+                    res.json({
+                        succes:false,
+                        status: 'No se ingreso un dia'
+                    });
+                }
+                agenda = Agenda.find({
+                    $expr: {
+                        $eq: [{ $dayOfMonth: "$fecha" }, { $dayOfMonth: dia }]
+                    }
+                })
+
+                break;
+            case 'mes':
+                if (mes == null){
+                    res.json({status: 'No se ingreso un mes'});
+                }
+                agenda = Agenda.find({
+                    $expr: {
+                        $eq: [{ $month: "$fecha" }, { $month: mes }]
+                    }
+                })
+                break;
+            case 'semana':
+                if (semana == null){
+                    res.json({
+                        succes: false,
+                        status: 'No se ingreso una semana'});
+                }
+                agenda = Agenda.find({
+                    $expr: {
+                        $eq: [{ $week: "$fecha" }, { $week: semana }]
+                    }
+                })
+                break;
+            default:
+                res.json({
+                    succes:false,
+                    status: 'No se ingreso un filtro'
+                });
+                break;
+        }
+        res.json({
+            succes: true,
+            status: 'Agenda encontrada',
+            agenda: agenda
+        });
+        
+    }catch{
+        console.log(err)
+        res.json({
+            succes: false,
+            status:'Hubo un error en la operación'
+        })        
+    }    
+})
+
+router.post('/addAgenda',async(req,res)=>{
+    try{
+        const {Fecha,DuracionHoras,DuracionMinutos,Asunto,Estado,CorreoSolicitante} = req.body;
+        data = {
+            fecha: Fecha,
+            duracionHoras: DuracionHoras,
+            duracionMinutos: DuracionMinutos,
+            asunto: Asunto,
+            estado: Estado,
+            correoSolicitante: CorreoSolicitante
+        }
+        var agenda = new Agenda(data);
+        await agenda.save();
+        res.json({
+            succes: true,
+            status: 'Agenda guardada'
+        });
+    }catch{
+        console.log(err)
+        res.json({
+            succes: false,
+            status:'Hubo un error en la operación'
+        })        
+    }
+})
+
+router.
 module.exports = router;
