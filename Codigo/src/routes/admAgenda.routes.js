@@ -86,7 +86,7 @@ router.post('/cambiarEstado',async(req,res)=>{
             }
         }
         res.json({status: 'No se encontro la entrega'});
-    }catch{
+    }catch(err){
         console.log(err)
         res.json({
             status:'Hubo un error en la operación'
@@ -99,7 +99,7 @@ router.get('/getAgenda',async(req,res)=>{
     try{
         var actividades = await Actividad.find({});
         res.json({status: 'Agenda encontrada',agenda: actividades});
-    }catch{
+    }catch(err){
         console.log(err)
         res.json({
             status:'Hubo un error en la operación'
@@ -109,6 +109,7 @@ router.get('/getAgenda',async(req,res)=>{
 
 
 //DESDE AQUI II INTEGRACIÓN
+//las fechas se arman con fecha y hora 
 router.post('/filtrarPor',async(req,res)=>{
     try{
         var agenda;
@@ -165,7 +166,7 @@ router.post('/filtrarPor',async(req,res)=>{
             agenda: agenda
         });
         
-    }catch{
+    }catch(err){
         console.log(err)
         res.json({
             succes: false,
@@ -174,6 +175,8 @@ router.post('/filtrarPor',async(req,res)=>{
     }    
 })
 
+
+//ver bien
 router.post('/agregar',async(req,res)=>{
     try{
         const {Fecha,DuracionHoras,DuracionMinutos,Asunto,Estado,CorreoSolicitante} = req.body;
@@ -192,7 +195,7 @@ router.post('/agregar',async(req,res)=>{
             succes: true,
             status: 'Agenda guardada'
         });
-    }catch{
+    }catch(err){
         console.log(err)
         res.json({
             succes: false,
@@ -210,7 +213,7 @@ router.post('/borrar',async(req,res)=>{
             succes: true,
             status: 'Agenda eliminada'
         });
-    }catch{
+    }catch(err){
         console.log(err)
         res.json({
             succes: false,
@@ -237,7 +240,7 @@ router.post('/editar',async(req,res)=>{
             status: 'Agenda actualizada',
             agenda: actualizado
         });
-    }catch{
+    }catch(err){
         console.log(err)
         res.json({
             succes: false,
@@ -255,7 +258,7 @@ router.post('/actualizarEstado',async(req,res)=>{
             status: 'Agenda actualizada',
             agenda: actualizado
         });
-    }catch{
+    }catch(err){
         console.log(err)
         res.json({
             succes: false,
@@ -272,7 +275,7 @@ router.post('/verTodas',async(req,res)=>{
             status: 'Agenda encontrada',
             agenda: todas
         });
-    }catch{
+    }catch(err){
         console.log(err)
         res.json({
             succes: false,
@@ -290,7 +293,7 @@ router.post('/verUna',async(req,res)=>{
             status: 'Agenda encontrada',
             agenda: agenda
         });
-    }catch{
+    }catch(err){
         console.log(err)
         res.json({
             succes: false,

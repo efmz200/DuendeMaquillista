@@ -10,4 +10,4 @@ const AgendaSchema = new Schema({
     correoSolicitante: {type: String, default: ''},//correo
 });
 
-module.export = mongoose.model('Agenda',AgendaSchema);
+module.exports = mongoose.model('Agenda',AgendaSchema);
