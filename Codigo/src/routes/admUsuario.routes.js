@@ -41,13 +41,17 @@ router.post('/iniciarSesion',async (req,res) => {
 //Validar Usuario
 router.post('/registrarUsuario', async (req,res) =>{
     try{
-        const {nombre,apellido,correo,contrasena,nacimiento,telefono,genero,admin} = req.body;
-        console.log(nacimiento)
+        var {nombre,apellido,correo,contrasena,nacimiento,telefono,genero,admin} = req.body;
         var carrito = new Carrito({
             listaProductos: []
         });
-        const carro = await carrito.save();
-        Carrito.insertMany(carro);
+        //console.log(carrito);
+        if (admin == null){
+            admin = false;
+        }
+        //const carro = await carrito.save();
+        
+        Carrito.insertMany(carrito);
         const usuario = new Usuario({
             nombre,
             apellido,
@@ -56,11 +60,11 @@ router.post('/registrarUsuario', async (req,res) =>{
             nacimiento,
             telefono,
             genero,
-            carrito:carro, 
+            carrito, 
             admin
         })
         await usuario.save();
-        console.log(usuario);
+        //console.log(usuario);
         res.json({
             status: "Usuario guardado",
             success: true,
@@ -198,6 +202,9 @@ router.post("/eliminarUsuario", async (req, res) => {
     }
 });
 
-//validar usuario == iniciar sesion?
+router.get('/actualizar',async (req,res) => {
+    var usr = req.params.usuario
+    console.log("actualizando: ",usr)
+})
 
 module.exports = router;

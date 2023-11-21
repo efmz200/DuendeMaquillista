@@ -10,7 +10,8 @@ const UsuarioSchema = new Schema({
     telefono:{type: Number , required: true},
     genero:{type: String, required: true},
     carrito: {type: Object},
-    admin: {type: Boolean, default: false}
+    admin: {type: Boolean, default: false},
+    notificaciones: {type: [Object], default: []}
 });
 
 module.exports = mongose.model('Usuario',UsuarioSchema)
