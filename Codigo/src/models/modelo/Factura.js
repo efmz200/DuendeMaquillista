@@ -7,6 +7,7 @@ const FacturaSchema = new Schema({
     fecha: {type: Date, default: Date.now()},
     total: {type: Number, default: 0},
     direccion: {type: Object, default: null},
+    estado: {type: String, default: 'Pendiente'},
     comprobante: {type: String, default: null} // dice que deberia ser tipo imagen
 });
 
