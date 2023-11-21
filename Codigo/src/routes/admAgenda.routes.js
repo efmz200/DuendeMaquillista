@@ -110,46 +110,41 @@ router.get('/getAgenda',async(req,res)=>{
 
 //DESDE AQUI II INTEGRACIÓN
 //las fechas se arman con fecha y hora 
+//2020-10-12T00:00:00
 router.post('/filtrarPor',async(req,res)=>{
     try{
         var agenda;
         //filtro puede ser dia, mes, semana
-        const {filtro,dia,mes,semana} = req.body;
-
+        const {filtro,fecha} = req.body;
+        if (fecha == null){
+            res.json({
+                succes: false,
+                status: 'No se ingreso una fecha para filtrar'});
+        }
+        console.log(filtro,fecha)
         switch (filtro){
             case 'dia':
-                if (dia == null){
-                    res.json({
-                        succes:false,
-                        status: 'No se ingreso un dia'
-                    });
-                }
-                agenda = Agenda.find({
+                
+                agenda = await Agenda.find({
                     $expr: {
-                        $eq: [{ $dayOfMonth: "$fecha" }, { $dayOfMonth: dia }]
+                        $eq: [{ $dayOfMonth: "$fecha" }, { $dayOfMonth: fecha }]
                     }
                 })
 
                 break;
             case 'mes':
-                if (mes == null){
-                    res.json({status: 'No se ingreso un mes'});
-                }
-                agenda = Agenda.find({
+                
+                agenda = await Agenda.find({
                     $expr: {
-                        $eq: [{ $month: "$fecha" }, { $month: mes }]
+                        $eq: [{ $month: "$fecha" }, { $month: fecha }]
                     }
                 })
                 break;
             case 'semana':
-                if (semana == null){
-                    res.json({
-                        succes: false,
-                        status: 'No se ingreso una semana'});
-                }
-                agenda = Agenda.find({
+                
+                agenda = await Agenda.find({
                     $expr: {
-                        $eq: [{ $week: "$fecha" }, { $week: semana }]
+                        $eq: [{ $week: "$fecha" }, { $week: fecha }]
                     }
                 })
                 break;
@@ -175,6 +170,74 @@ router.post('/filtrarPor',async(req,res)=>{
     }    
 })
 
+router.post('/filtrarPor2', async (req, res) => {
+    try {
+        const { filtro, fecha } = req.body;
+        if (fecha == null) {
+            return res.json({
+                succes: false,
+                status: 'No se ingresó una fecha para filtrar'
+            });
+        }
+
+        let agenda;
+
+        switch (filtro) {
+            case 'dia':
+                agenda = await Agenda.find({
+                    $expr: {
+                        $eq: [{ $dayOfMonth: "$fecha" }, { $dayOfMonth: new Date(fecha) }]
+                    }
+                });
+                break;
+            case 'mes':
+                agenda = await Agenda.find({
+                    $expr: {
+                        $eq: [{ $month: "$fecha" }, { $month: new Date(fecha) }]
+                    }
+                });
+                break;
+            case 'semana':
+                agenda = await Agenda.find({
+                    $expr: {
+                        $eq: [{ $week: "$fecha" }, { $week: new Date(fecha) }]
+                    }
+                });
+                break;
+            default:
+                return res.json({
+                    succes: false,
+                    status: 'No se ingresó un filtro'
+                });
+        }
+
+        return res.json({
+            succes: true,
+            status: 'Agenda encontrada',
+            agenda: agenda
+        });
+
+    } catch (err) {
+        console.log(err);
+        return res.json({
+            succes: false,
+            status: 'Hubo un error en la operación'
+        });
+    }
+});
+
+function verificarChoqueHorarios(evento1, evento2) {
+    const fechaInicio1 = new Date(evento1.fecha);
+    const fechaFin1 = new Date(fechaInicio1.getTime() + evento1.duracionHoras * 60 * 60 * 1000 + evento1.duracionMinutos * 60 * 1000);
+    const fechaInicio2 = new Date(evento2.fecha);
+    const fechaFin2 = new Date(fechaInicio2.getTime() + evento2.duracionHoras * 60 * 60 * 1000 + evento2.duracionMinutos * 60 * 1000);
+  
+    if ((fechaInicio1 < fechaFin2 && fechaFin1 > fechaInicio2) || (fechaInicio2 < fechaFin1 && fechaFin2 > fechaInicio1)) {
+      return "Hay choque de horarios";
+    } else {
+      return "No hay choque de horarios";
+    }
+}
 
 //ver bien
 router.post('/agregar',async(req,res)=>{
@@ -184,10 +247,29 @@ router.post('/agregar',async(req,res)=>{
             fecha: Fecha,
             duracionHoras: DuracionHoras,
             duracionMinutos: DuracionMinutos,
-            asunto: Asunto,
             estado: Estado,
             correoSolicitante: CorreoSolicitante
         }
+        var agendas = await Agenda.find({});
+        for (let i = 0; i < agendas.length; i++) {
+            if(verificarChoqueHorarios(agendas[i],data) == "Hay choque de horarios"){
+                if(agendas[i].asunto == "maquillaje" || data.asunto == "maquillaje"){
+                    res.json({
+                        succes: false,
+                        status: 'Hay choque de horarios con un maquillaje'
+                    });
+                    return
+                }
+                data.estado = "Pendiente";
+                var agenda = new Agenda(data);
+                res.json({
+                    succes: false,
+                    status: 'El horario esta ocupado, se agendo como pendiente'
+                });
+                return
+            }
+        }
+        data.estado = "Aceptado";
         var agenda = new Agenda(data);
         //aca debo verificar colisiones
         await agenda.save();
@@ -206,9 +288,9 @@ router.post('/agregar',async(req,res)=>{
 
 router.post('/borrar',async(req,res)=>{
     try{
-        const {fecha,asunto,correoSolicitante} = req.body;
+        var {fecha,asunto,correoSolicitante} = req.body;
+        console.log(fecha,asunto,correoSolicitante)
         await Agenda.findOneAndDelete({fecha: fecha,asunto: asunto,correoSolicitante: correoSolicitante});
-        //await Agenda.findByIdAndDelete(idAgenda);
         res.json({
             succes: true,
             status: 'Agenda eliminada'
@@ -225,14 +307,14 @@ router.post('/borrar',async(req,res)=>{
 router.post('/editar',async(req,res)=>{
     try{
         const {fechaOriginal,asuntoOriginal,correoSolicitanteOriginal,//datos para buscar la agenda anterior
-                fecha,Descripcion,Nombre,Telefono,Notas,Imagen } = req.body;    //datos actualizados
+                fecha,duracionHoras,duracionMinutos,asunto,estado,correoSolicitante } = req.body;    //datos actualizados
         data = {
-            fecha: Fecha,
-            descripcion: Descripcion,
-            nombre: Nombre,
-            telefono: Telefono,
-            notas: Notas,
-            imagen: Imagen
+            fecha: fecha,
+            duracionHoras: duracionHoras,
+            duracionMinutos: duracionMinutos,
+            asunto: asunto,
+            estado: estado,
+            correoSolicitante: correoSolicitante
         }
         const actualizado = await Agenda.findOneAndUpdate({fecha: fechaOriginal,asunto: asuntoOriginal,correoSolicitante: correoSolicitanteOriginal},data, {new: true});
         res.json({
