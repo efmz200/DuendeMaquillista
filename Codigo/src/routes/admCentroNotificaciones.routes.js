@@ -95,30 +95,40 @@ router.post('/verFacturas',async(req,res)=>{
 
 
 function actualizar(username) {
-    var settings = {
-      "url": "http://localhost:3000/api/usuario/actualizar?usuario=" + username,
-      "method": "GET",
-      "timeout": 0,
+    var requestOptions = {
+        method: 'GET',
+        redirect: 'follow'
     };
-  
-    $.ajax(settings).done(function (response) {
-      console.log(response);
-    });
+
+    fetch(`http://localhost:3000/api/usuario/actualizar?usuario=${username}`, requestOptions)
+    .then(response => response.text())
+    .then(result => console.log(result))
+    .catch(error => console.log('error', error));
   }
   
 router.post('/agregarNotificacion',async(req,res)=>{
-    const {correoEmisor,correoReceptor,mensaje} = req.body;
-    var notificacion = new Notificacion({
-        emisor: correoEmisor,
-        receptor: correoReceptor,
-        mensaje: mensaje
-    });
-    const notificacionGuardada = await notificacion.save();
-    actualizar(correoReceptor);
-    actualizar(correoEmisor);
-    console.log(notificacionGuardada);
-
-    res.json({status: 'Notificacion guardada'});
+    try{
+        const {correoEmisor,correoReceptor,mensaje} = req.body;
+        var notificacion = new Notificacion({
+            emisor: correoEmisor,
+            receptor: correoReceptor,
+            mensaje: mensaje
+        });
+        const notificacionGuardada = await notificacion.save();
+        console.log(notificacionGuardada);
+        actualizar(correoReceptor);
+        actualizar(correoEmisor);
+        res.json({
+            succes:true,
+            status: 'Notificacion guardada'
+        });
+    }catch(err){
+        console.log(err)
+        res.json({
+            status: "Hubo un error en la creacion de la notificacion",
+            success: false
+        });
+    }
 })
 
 module.exports = router;

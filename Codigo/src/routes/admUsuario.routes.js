@@ -4,6 +4,7 @@ require('dotenv').config();
 const nodemailer = require('nodemailer');
 const Usuario = require('../models/modelo/Usuario');
 const Carrito = require('../models/modelo/Carrito');
+const Notificacion = require('../models/modelo/Notificacion');
 
 router.get("/", async (req, res) => {
     const usuario = await Usuario.find({});
@@ -203,8 +204,48 @@ router.post("/eliminarUsuario", async (req, res) => {
 });
 
 router.get('/actualizar',async (req,res) => {
-    var usr = req.params.usuario
+    var usr = req.query.usuario
     console.log("actualizando: ",usr)
+    var notis = []
+    var usuario = await Usuario.findOne({correo:usr})
+    if (usuario == null){
+        return;
+    }
+    var notificaciones = await Notificacion.updateMany({receptor:usr},{receptorNotificado:true},{new:true})
+    var notificaciones = await Notificacion.find({receptor:usr})
+    console.log("receptor:" ,notificaciones)
+    if (notificaciones != null)
+        notis= notis.concat(notificaciones)
+    var notificaciones = await Notificacion.updateMany({emisor:usr},{emisorNotificado:true},{new:true})
+    var notificaciones = await Notificacion.find({emisor:usr})
+    console.log("emisor:" ,notificaciones)
+    if (notificaciones != null)
+        notis= notis.concat(notificaciones)
+    usuario.notificaciones = notis
+    usuario = await Usuario.findOneAndUpdate({correo:usr},usuario,{new:true})
 })
+
+
+router.post('/notificacionesUsr',async (req,res) => {
+    try{
+        const {correo} = req.body;
+        var notificacionesReciv = await Notificacion.find({receptor:correo})
+        var notificaciones = await Notificacion.find({emisor:correo})
+        notificaciones = notificaciones.concat(notificacionesReciv)
+        console.log(notificaciones)
+        res.json({
+            status: "Notificaciones encontradas",
+            success: true,
+            notificaciones
+        });
+    } catch (err) {
+        console.log(err);
+        res.json({
+            success: false,
+            status: "Hubo un error en la operación",
+        });
+    }
+});
+
 
 module.exports = router;
