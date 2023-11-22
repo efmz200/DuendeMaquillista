@@ -111,7 +111,8 @@ router.get('/getAgenda',async(req,res)=>{
 //DESDE AQUI II INTEGRACIÓN
 //las fechas se arman con fecha y hora 
 //2020-10-12T00:00:00
-router.post('/filtrarPor',async(req,res)=>{
+//No usado
+router.post('/filtrarPorNOUsado',async(req,res)=>{
     try{
         var agenda;
         //filtro puede ser dia, mes, semana
@@ -170,7 +171,7 @@ router.post('/filtrarPor',async(req,res)=>{
     }    
 })
 
-router.post('/filtrarPor2', async (req, res) => {
+router.post('/filtrarPor', async (req, res) => {
     try {
         const { filtro, fecha } = req.body;
         if (fecha == null) {
