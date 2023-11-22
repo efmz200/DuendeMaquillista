@@ -203,6 +203,7 @@ router.post("/eliminarUsuario", async (req, res) => {
     }
 });
 
+//nuevo 
 router.get('/actualizar',async (req,res) => {
     var usr = req.query.usuario
     console.log("actualizando: ",usr)
