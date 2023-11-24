@@ -2,9 +2,8 @@ import React from 'react';
 import { useEffect, useState } from "react";
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { LoginPage,SignUpPage, MenuAdmin, GaleriaDuende, TiendaDuende, MenuAgenda, 
-        CursosTalleres, ServicioMaquillaje,  EntregasClientes, MensajesAdmin} from "./Routes.js"
-import {VisualizarCategoriaProductos,VisualizarProductos,FrTienda,VisualizarCarrito,VisualizarPublicacion,VisualizarTienda,VisualizarFactura} from './pages/FrTienda';
+import { LoginPage,SignUpPage, MenuAdmin, GaleriaDuende, TiendaDuende, MensajesAdmin} from "./Routes.js"
+import {VisualizarCategoriaProductos,VisualizarProductos,FrTienda, VisualizarCarrito,VisualizarPublicacion,VisualizarTienda,VisualizarFactura} from './pages/FrTienda';
 
 import './App.css';
 
@@ -25,10 +24,6 @@ const App = () => {
         <Route path="/menuAdmin" element={<MenuAdmin user={user}/>} />
         <Route path="/galeriaDuende" element={<GaleriaDuende user={user}/>} />
         <Route path="/tiendaDuende" element={<TiendaDuende user={user}/>} />
-        <Route path="/menuAgenda" element={<MenuAgenda user={user}/>} />
-        <Route path="/cursosTalleres" element={<CursosTalleres user={user}/>} />
-        <Route path="/servicioMaquillaje" element={<ServicioMaquillaje user={user}/>} />
-        <Route path="/entregasClientes" element={<EntregasClientes user={user}/>} />
         <Route path="/mensajesAdmin" element={<MensajesAdmin user={user}/>} />
         
         

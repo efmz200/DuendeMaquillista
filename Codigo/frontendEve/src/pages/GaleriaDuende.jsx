@@ -273,7 +273,7 @@ const Baseparacargarproducto = async () => {
   }
 
   const handleAgenda = () => {
-    navigate('/menuAgenda', {});
+    navigate('/Agenda', {});
   }
 
   const handleTienda = () => {

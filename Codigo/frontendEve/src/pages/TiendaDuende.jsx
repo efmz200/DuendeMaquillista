@@ -289,7 +289,7 @@ function TiendaDuende() {
     };
 
     const handleAgenda = () => {
-        navigate("/menuAgenda", {});
+        navigate("/Agenda", {});
     };
 
     const handleTienda = () => {

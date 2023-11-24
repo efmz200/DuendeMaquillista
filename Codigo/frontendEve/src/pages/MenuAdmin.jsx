@@ -15,7 +15,7 @@ function MenuAdmin() {
     }
 
     const handleAgenda = () => {
-        navigate('/menuAgenda', {});
+        navigate('/Agenda', {});
     }
 
     const handleMensajes = () => {
