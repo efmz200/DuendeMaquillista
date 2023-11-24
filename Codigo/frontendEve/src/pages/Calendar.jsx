@@ -321,16 +321,15 @@ const Baseparacargarproducto = async () => {
   return (
 
     
-      <div className="main-h-screen bg-black flex flex-col justify-center py-4">
+      <div className=" bg-black main-h-screen flex flex-col justify-center py-2">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
-          <h2 className="text-center text-3xl font-regular text-white">
+          <h2 className="text-center text-3xl font-regular bg-black text-white">
             DUENDE MAQUILLISTA
           </h2>
           <br />
         </div>
 
-
-        <div className="bg-medGreen flex flex-col justify-center py-4 sm:px-6 lg:px-8">
+        <div className="bg-medGreen flex flex-col justify-center py-2 sm:px-6 lg:px-8">
           <div class="inline-flex rounded-md shadow-sm" role="group">
             <button
               onClick={handleGaleria}
@@ -342,7 +341,7 @@ const Baseparacargarproducto = async () => {
             <button
               onClick={handleAgenda}
               type="button"
-              class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-transparent border-t border-b border-gray-900 hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-green dark:focus:bg-green"
+              class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-transparent border-t border-b border-gray-900 hover:bg-green hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-green focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:bg-green dark:focus:bg-green"
             >
               La Agenda del Duende
             </button>
@@ -406,7 +405,9 @@ const Baseparacargarproducto = async () => {
               <hr className="my-2 h-0.5 border-t-0 bg-gray-400 opacity-100 dark:opacity-50" />
             </div>
 
-            <div class="">
+            <div className="px-40 items-center justify-center">
+
+            <div className="mx-auto w-full max-w-lx" >
               <div className="calendar-container">
                 <FullCalendar
                   plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
@@ -427,7 +428,9 @@ const Baseparacargarproducto = async () => {
               </div>
             </div>
           </div>
-        </div>
+          </div><br/>
+        </div><br/><br/><br/><br/><br/>
+        
       </div>
      
     
