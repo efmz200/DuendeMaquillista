@@ -217,11 +217,21 @@ const Calendar = () => {
             />
           </label>
           <label>
-            Fecha y hora del evento:
+            Fecha y hora de inicio del evento:
             <input
               type="datetime-local"
               name="start"
               value={formData.start}
+              onChange={handleInputChange}
+              required
+            />
+          </label>
+          <label>
+            Fecha y hora de fin del evento:
+            <input
+              type="datetime-local"
+              name="end"
+              value={formData.end}
               onChange={handleInputChange}
               required
             />
