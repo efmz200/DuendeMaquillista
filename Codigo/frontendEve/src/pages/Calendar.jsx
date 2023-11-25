@@ -1,298 +1,86 @@
 // src/components/Calendar.js
-import React, { Fragment, useState, useEffect } from "react";
+import React, { Fragment, useState, useEffect, useRef } from "react";
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import moment from 'moment';
-
-
+import Event from './Event';
 import { Link, useNavigate } from "react-router-dom";
 import styles from "../styles/styles.js";
-import Modal from "../components/Modal/Modal.js";
+
 
 const Calendar = () => {
-  const [events, setEvents] = useState([]);
-
-  useEffect(() => {
-    // Lógica para obtener eventos desde la API o cualquier otra fuente de datos
-    // Puedes implementar la lógica CRUD aquí también
-    // Ejemplo: fetchEventsFromAPI().then(data => setEvents(data));
-  }, []);
-
-  const handleDateClick = (arg) => {
-    // Implementa la lógica para crear un nuevo evento
-    // Puedes mostrar un formulario para ingresar detalles del evento
-    // y luego agregar el nuevo evento a la lista de eventos
-  };
-
-  const handleEventClick = (arg) => {
-    // Implementa la lógica para actualizar o eliminar un evento
-    // Puedes mostrar un modal con opciones de edición/eliminación
-  };
-  
-
   let navigate = useNavigate();
 
-  const [showModal, setShowModal] = useState(false);
-  const [showModalEdit, setShowModalEdit] = useState(false);
-  const [showModalDel, setShowModalDel] = useState(false);
-  const [showModalAdd, setShowModalAdd] = useState(false);
-  const [showModalAddCat, setShowModalAddCat] = useState(false);
-
-  const [nombrePublicacion, setNombrePublicacion] = useState("");
-  const [descripcion, setDescripcion] = useState("");
-  const [palabraClave, setPalabraClave] = useState("");
-  const [tags, setTags] = useState("");
-
-  const [categorias, setCategorias] = useState([]); //Arreglo donde se cargan las categorias
-  const [selectedCategoria, setSelectedCategoria] = useState(""); //Categoria seleccionada en el select
-  const [nuevaCategoria, setNuevaCategoria] = useState("");
-  const [nuevaSubCategoria, setNuevaSubCategoria] = useState("");
-
-  const [categoriaSeleccionada, setCategoriaSeleccionada] = useState("");
-  const [subCats, setSubCats] = useState([]);
-
-  const [imagenSeleccionada, setImagenSeleccionada] = useState('');
-  const [contenidos, setContenidos] = useState([]);
-  const [idContenidoToDelete, setIdContenidoToDelete] = useState("");
-
-  const [formulario, setFormulario] = useState({
-    nombre: "",
-    imagen: null, // Para almacenar el archivo de imagen
-    descripcion: "",
-    categoria: "",
-    subcategoria: "",
-    palabrasClave: "",
-    tags: "",
-});
-
-//------------------------------------
-useEffect(() => {
-  // Hacer una solicitud GET a tu API para obtener la lista de contenidos
-  fetch("http://localhost:3000/api/contenido/getContenidos")
-    .then((response) => response.json())
-    .then((data) => setContenidos(data))
-    .catch((error) => console.error("Error al obtener contenidos:", error));
-}, []);
-
-//----------------------------------------
-
-const handleDelete = (idpubli) => {
-
-  console.log("Valores a registrar:", idContenidoToDelete);
-
-  var url = "http://localhost:3000/api/contenido/eliminarContenido";
-  var response =fetch(url, {
-      method: 'POST',
-      headers:{
-          'Accept': 'application/json',
-          'Content-Type':'application/json'
-      },
-      body: JSON.stringify({ idContenido:idContenidoToDelete}),
-  })
-      .then(res => res.json())
-      .then(data => {
-          console.log(data)
-          
-
-      })
-      .catch(err => console.err(err));
-};
-
-
-  // -------------------------------------------
-
-const handleImageChange = (event) => {
-  const archivoImagen = event.target.files[0];
-
-  if (archivoImagen && archivoImagen.type.startsWith('image/')) {
-  const reader = new FileReader();
-
-  reader.onload = () => {
-      setImagenSeleccionada(reader.result);
-  };
-
-  reader.readAsDataURL(archivoImagen);
-  } else {
-  setImagenSeleccionada('');
-  // Puedes manejar el error o mostrar un mensaje al usuario aquí
-  }
-  //baseparacargarproducto()
-};
-
-const Baseparacargarproducto = async () => {
-  try {
-
-  const response = await fetch('http://localhost:3000/api/contenido/registarContenido', {
-      method: 'POST',
-      headers: {
-      'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        idContenido: nombrePublicacion,
-        imagen:imagenSeleccionada,
-        descripcion: descripcion,
-        categoria:categoriaSeleccionada,
-        subcategoria:subCats,
-        palabrasClave:palabraClave,
-        tags: tags,
-      })
-      
-  });
-
-  const data = await response.json();
-  console.log(data); // Maneja la respuesta como necesites en tu aplicación React
-
-  // Actualiza la interfaz o el estado según sea necesario
-  } catch (error) {
-  console.error('Error al agregar producto al carrito:', error);
-  // Maneja los errores
-  }
-
-
-};
-
-  //*********************** Funciones acciones post get en la pagina ***********************
-  
-  // Esta función obtiene las categorías disponibles
-  const obtenerCategorias = () => {
-      fetch("http://localhost:3000/api/contenido/getCategorias")
-          .then((response) => {
-              if (!response.ok) {
-                  throw new Error("Error al obtener categorías");
-              }
-              return response.json();
-          })
-          .then((data) => {
-              setCategorias(data);
-          })
-          .catch((error) => {
-              console.error("Error al obtener categorías:", error);
-          });
-  };
+  const [events, setEvents] = useState([]);
+  const [formData, setFormData] = useState({ title: '', start: '', end: '' });
+  const [selectedEvent, setSelectedEvent] = useState(null);
+  const calendarRef = useRef();
 
   useEffect(() => {
-      obtenerCategorias(); // Cuando se monta el componente, obtiene las categorías disponibles
-  }, []);
-
-  const handleCategoriaChange = (e) => {
-    const selectedCategoria = e.target.value;
-    setCategoriaSeleccionada(selectedCategoria);
-    setSubCats([]); // Limpia las subcategorías al cambiar la categoría seleccionada
-    console.log(selectedCategoria);
-
-    if (selectedCategoria) {
-        // Si se seleccionó una categoría, obtener las subcategorías correspondientes
-        fetch(`http://localhost:3000/api/contenido/getSubcategoria?categoria=${selectedCategoria}`, {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            }
-        })
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error("Error al obtener subcategorías");
-                }
-                return response.json();
-            })
-            .then((data) => {
-                if (data.status) {
-                    setSubCats(data.subCats);
-                } else {
-                    console.error(data.descripcion);
-                }
-            })
-            .catch((error) => {
-                console.error("Error al obtener subcategorías:", error);
-            });
-    }
-};
-
-  //---------------------------------------------------------------------------------------
-
-  //Funcion para cargar las categorias
-  useEffect(() => {
-    // Hacer una solicitud para obtener las categorías desde la API
-    fetch("http://localhost:3000/api/contenido/getCategorias")
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error("Error al obtener categorías");
-            }
-            return response.json();
-        })
-        .then((data) => {
-            setCategorias(data);
-        })
-        .catch((error) => {
-            console.error("Error al obtener categorías:", error);
-        });
-}, []);
-
-  //Funcion agregar una categoria a BD
-  function agregarCategoria() {
-    var categoria = {
-      pNombreCategoria: nuevaCategoria
-    };
-  
-    console.log("Valores a registrar:", categoria);
-  
-    fetch('http://localhost:3000/api/contenido/agregarCategorias', {
-      method: 'POST',
-      body: JSON.stringify(categoria),
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      }
-    })
-    .then(res => res.json())
-    .then(data => {
-        console.log(data);
-
-    })
-    .catch(err => console.err(err));
-  }
-
-  //Funcion agregar una subCategoria
-  function agregarSubCategoria() {
-    console.log(selectedCategoria);
-    var categoria = {
-      categoria: selectedCategoria,
-      nombre: nuevaSubCategoria
-    };
-  
-    console.log("Valores a registrar:", categoria);
-  
-    fetch('http://localhost:3000/api/contenido/agregarSubcategoria', {
-      method: 'POST',
-      body: JSON.stringify(categoria),
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      }
-    })
-    .then(res => res.json())
-    .then(data => {
-        console.log(data);
-
-    })
-    .catch(err => console.err(err));
-  }
-
-  
-  useEffect(() => {
-    // Realizar una solicitud al servidor para obtener los contenidos
-    fetch("http://localhost:3000/api/contenido/getContenidos")
-      .then((response) => response.json())
-      .then((data) => {
-        setContenidos(data);
-      })
-      .catch((error) => {
-        console.error("Error al obtener los contenidos:", error);
+    if (calendarRef.current) {
+      calendarRef.current.getApi().batchRendering(() => {
+        calendarRef.current.getApi().removeAllEvents();
+        calendarRef.current.getApi().addEventSource(events);
       });
-  }, []);
+    }
+  }, [events]);
 
+  const handleDateClick = (arg) => {
+    setFormData({ title: '', start: arg.date, end: arg.date });
+    setSelectedEvent(null);
+  };
+
+  const handleEventClick = (info) => {
+    setSelectedEvent(info.event);
+    setFormData({
+      title: info.event.title,
+      start: info.event.start.toISOString().split('Z')[0],
+      end: info.event.end ? info.event.end.toISOString().split('Z')[0] : '',
+    });
+  };
+
+  const handleInputChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+
+    if (selectedEvent) {
+      // Actualizar evento existente
+      selectedEvent.setProp('title', formData.title);
+      selectedEvent.setStart(formData.start);
+      selectedEvent.setEnd(formData.end);
+      setEvents((prevEvents) =>
+        prevEvents.map((event) => (event === selectedEvent ? selectedEvent : event))
+      );
+      setSelectedEvent(null);
+    } else {
+      // Agregar nuevo evento
+      const newEvent = {
+        title: formData.title,
+        start: formData.start,
+        end: formData.end,
+        allDay: false, // Cambiar a false para incluir hora
+      };
+      setEvents((prevEvents) => [...prevEvents, newEvent]);
+    }
+
+    setFormData({ title: '', start: '', end: '' });
+  };
+
+  const handleEventDelete = () => {
+    if (selectedEvent) {
+      selectedEvent.remove();
+      setEvents((prevEvents) => prevEvents.filter((event) => event !== selectedEvent));
+      setSelectedEvent(null);
+      setFormData({ title: '', start: '', end: '' });
+    }
+  };
+  
+  // ------------------------------------------------- handle botones menu -------------------------------------------
 
   //Funciones para navegar entre menus
   const handleGaleria = () => {
@@ -322,6 +110,8 @@ const Baseparacargarproducto = async () => {
 
     
       <div className=" bg-black main-h-screen flex flex-col justify-center py-2">
+        
+
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           <h2 className="text-center text-3xl font-regular bg-black text-white">
             DUENDE MAQUILLISTA
@@ -341,7 +131,7 @@ const Baseparacargarproducto = async () => {
             <button
               onClick={handleAgenda}
               type="button"
-              class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-transparent border-t border-b border-gray-900 hover:bg-green hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-green focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:bg-green dark:focus:bg-green"
+              class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-transparent border-t border-b border-gray-900 hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:bg-green dark:focus:bg-green"
             >
               La Agenda del Duende
             </button>
@@ -356,6 +146,13 @@ const Baseparacargarproducto = async () => {
             <div className="ml-auto flex space-x-2">
               {" "}
               {/* Utilizamos ml-auto para mover estos botones al lado derecho */}
+              <button
+                type="button"
+                //onClick={() => setShowModalEvento(true)}
+                class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-medGreen rounded-lg hover:bg-medGreen focus:ring-4 focus:outline-none focus:ring-green dark:bg-medGreen dark:hover:bg-green dark:focus:ring-green"
+              >
+                Agregar Evento
+              </button>
               <button
                 onClick={handleMensajes}
                 type="button"
@@ -406,7 +203,47 @@ const Baseparacargarproducto = async () => {
             </div>
 
             <div className="px-40 items-center justify-center">
+            <div className="mb-4">
+            
+            <form onSubmit={handleFormSubmit}>
+          <label>
+            Título del evento:
+            <input
+              type="text"
+              name="title"
+              value={formData.title}
+              onChange={handleInputChange}
+              required
+            />
+          </label>
+          <label>
+            Fecha y hora del evento:
+            <input
+              type="datetime-local"
+              name="start"
+              value={formData.start}
+              onChange={handleInputChange}
+              required
+            />
+          </label>
+          <button type="submit" className="bg-blue-500 text-white px-2 py-1 mr-2 rounded">
+            {selectedEvent ? 'Actualizar Evento' : 'Agregar Evento'}
+          </button>
+          {selectedEvent && (
+            <button
+              type="button"
+              onClick={handleEventDelete}
+              className="bg-red-500 text-white px-2 py-1 rounded"
+            >
+              Eliminar Evento
+            </button>
+          )}
+        </form>
 
+
+
+            
+      </div>
             <div className="mx-auto w-full max-w-lx" >
               <div className="calendar-container">
                 <FullCalendar
@@ -424,15 +261,16 @@ const Baseparacargarproducto = async () => {
                   events={events}
                   dateClick={handleDateClick}
                   eventClick={handleEventClick}
+                  eventContent={(eventContent) => <Event event={eventContent.event} />}
                 />
               </div>
             </div>
           </div>
           </div><br/>
         </div><br/><br/><br/><br/><br/>
-        
+
       </div>
-     
+    
     
   );
 };
