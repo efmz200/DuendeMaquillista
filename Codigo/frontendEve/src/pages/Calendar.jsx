@@ -4,7 +4,7 @@ import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
-import moment from 'moment';
+import moment, { max } from 'moment';
 import Event from './Event';
 import { Link, useNavigate } from "react-router-dom";
 import styles from "../styles/styles.js";
@@ -20,7 +20,7 @@ const Calendar = () => {
 
   useEffect(() => {
     if (calendarRef.current) {
-      calendarRef.current.getApi().batchRendering(() => {
+        calendarRef.current.getApi().batchRendering(() => {
         calendarRef.current.getApi().removeAllEvents();
         calendarRef.current.getApi().addEventSource(events);
       });
@@ -28,7 +28,7 @@ const Calendar = () => {
   }, [events]);
 
   const handleDateClick = (arg) => {
-    setFormData({ title: '', start: arg.date, end: arg.date, type: 'other' });
+    setFormData({ title: '', start: arg.date, end: arg.date, type: 'otro' });
     setSelectedEvent(null);
   };
 
@@ -38,7 +38,7 @@ const Calendar = () => {
       title: info.event.title,
       start: info.event.start.toISOString().split('Z'),
       end: info.event.end ? info.event.end.toISOString().split('Z') : '',
-      type: info.event.extendedProps.type || 'other',
+      type: info.event.extendedProps.type || 'otro',
     });
   };
 
@@ -67,7 +67,7 @@ const Calendar = () => {
       };
       setEvents((prevEvents) => [...prevEvents, newEvent]);
     }
-    setFormData({ title: '', start: '', end: '', type: 'other' });
+    setFormData({ title: '', start: '', end: '', type: 'otro' });
   };
 
   const handleEventDelete = () => {
@@ -75,9 +75,10 @@ const Calendar = () => {
       selectedEvent.remove();
       setEvents((prevEvents) => prevEvents.filter((event) => event !== selectedEvent));
       setSelectedEvent(null);
-      setFormData({ title: '', start: '', end: '', type: 'other' });
+      setFormData({ title: '', start: '', end: '', type: 'otro' });
     }
   };
+  
 
 
   // ------------------------------------------------- handle botones menu -------------------------------------------
@@ -293,7 +294,7 @@ const Calendar = () => {
                   eventClick={handleEventClick}
                   eventContent={(eventContent) => {
                     return (
-                      <div>
+                      <div style={{ backgroundColor: '#3788d8', color: '#fff', padding: '5px', borderRadius: '5px', width:'100%' }}>
                         <p>{eventContent.event.title}</p>
                         <b>{eventContent.timeText}</b>
                         <p>{eventContent.event.extendedProps.type}</p>
