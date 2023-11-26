@@ -4,7 +4,7 @@ import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
-import moment from 'moment';
+import moment, { max } from 'moment';
 import Event from './Event';
 import { Link, useNavigate } from "react-router-dom";
 import styles from "../styles/styles.js";
@@ -14,13 +14,13 @@ const Calendar = () => {
   let navigate = useNavigate();
 
   const [events, setEvents] = useState([]);
-  const [formData, setFormData] = useState({ title: '', start: '', end: '' });
+  const [formData, setFormData] = useState({ title: '', start: '', end: '', type: 'tipo' });
   const [selectedEvent, setSelectedEvent] = useState(null);
   const calendarRef = useRef();
 
   useEffect(() => {
     if (calendarRef.current) {
-      calendarRef.current.getApi().batchRendering(() => {
+        calendarRef.current.getApi().batchRendering(() => {
         calendarRef.current.getApi().removeAllEvents();
         calendarRef.current.getApi().addEventSource(events);
       });
@@ -28,7 +28,7 @@ const Calendar = () => {
   }, [events]);
 
   const handleDateClick = (arg) => {
-    setFormData({ title: '', start: arg.date, end: arg.date });
+    setFormData({ title: '', start: arg.date, end: arg.date, type: 'otro' });
     setSelectedEvent(null);
   };
 
@@ -36,8 +36,9 @@ const Calendar = () => {
     setSelectedEvent(info.event);
     setFormData({
       title: info.event.title,
-      start: info.event.start.toISOString().split('Z')[0],
-      end: info.event.end ? info.event.end.toISOString().split('Z')[0] : '',
+      start: info.event.start.toISOString().split('Z'),
+      end: info.event.end ? info.event.end.toISOString().split('Z') : '',
+      type: info.event.extendedProps.type || 'otro',
     });
   };
 
@@ -47,28 +48,26 @@ const Calendar = () => {
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
-
     if (selectedEvent) {
-      // Actualizar evento existente
       selectedEvent.setProp('title', formData.title);
       selectedEvent.setStart(formData.start);
       selectedEvent.setEnd(formData.end);
-      setEvents((prevEvents) =>
-        prevEvents.map((event) => (event === selectedEvent ? selectedEvent : event))
-      );
+      selectedEvent.setExtendedProp('type', formData.type);
+      setEvents((prevEvents) => prevEvents.map((event) => (event === selectedEvent ? selectedEvent : event)));
       setSelectedEvent(null);
     } else {
-      // Agregar nuevo evento
       const newEvent = {
         title: formData.title,
         start: formData.start,
         end: formData.end,
-        allDay: false, // Cambiar a false para incluir hora
+        allDay: false,
+        extendedProps: {
+          type: formData.type,
+        },
       };
       setEvents((prevEvents) => [...prevEvents, newEvent]);
     }
-
-    setFormData({ title: '', start: '', end: '' });
+    setFormData({ title: '', start: '', end: '', type: 'otro' });
   };
 
   const handleEventDelete = () => {
@@ -76,9 +75,11 @@ const Calendar = () => {
       selectedEvent.remove();
       setEvents((prevEvents) => prevEvents.filter((event) => event !== selectedEvent));
       setSelectedEvent(null);
-      setFormData({ title: '', start: '', end: '' });
+      setFormData({ title: '', start: '', end: '', type: 'otro' });
     }
   };
+  
+
 
   // ------------------------------------------------- handle botones menu -------------------------------------------
 
@@ -218,6 +219,22 @@ const Calendar = () => {
                     required
                   />
                 </label>
+
+                <label>
+                  
+                  <select className="mr-2"
+                    name="type"
+                    value={formData.type}
+                    onChange={handleInputChange}
+                  >
+                    <option value="tipo">Tipo de evento</option>
+                    <option value="cursoTaller">Curso o Taller</option>
+                    <option value="maquillaje">Servicio Maquillaje</option>
+                    <option value="entregas">Entregas</option>
+                    <option value="otro">Otro</option>
+                  </select>
+                </label>
+
                 <label className="mr-8">
                   Inicio:
                   <input
@@ -275,7 +292,15 @@ const Calendar = () => {
                   events={events}
                   dateClick={handleDateClick}
                   eventClick={handleEventClick}
-                  eventContent={(eventContent) => <Event event={eventContent.event} />}
+                  eventContent={(eventContent) => {
+                    return (
+                      <div style={{ backgroundColor: '#3788d8', color: '#fff', padding: '5px', borderRadius: '5px', width:'100%' }}>
+                        <p>{eventContent.event.title}</p>
+                        <b>{eventContent.timeText}</b>
+                        <p>{eventContent.event.extendedProps.type}</p>
+                      </div>
+                    );
+                  }}
                 />
               </div>
             </div>
