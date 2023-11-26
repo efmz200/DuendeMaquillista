@@ -85,6 +85,8 @@ router.post('/actualizarEstadoFactura',async(req,res)=>{
 
 router.post('/verFacturas',async(req,res)=>{
     var facturas = await Factura.find({});
+    console.log('hola')
+    console.log(facturas)
     if (facturas == null){
         res.json({status: 'No existen facturas'});
         return;

@@ -902,47 +902,34 @@ export function VisualizarTienda() {//casi lista ****
 export function VisualizarFactura() {
     const [imagenSeleccionada, setImagenSeleccionada] = useState('');
     const [tituloFactura, settituloFactura] = useState('Factura');
-    const Baseparacargarproducto = async () => {
+    const [distrito, setDistrito] = useState('');
+    const [canton, setCanton] = useState('');
+    const [provincia, setProvincia] = useState('');
+    var total = 0
+    var detalle = ''
+
+    const Baseparafactura = async () => {
+        settituloFactura('Compra realizada')
         try {
-            const response = await fetch('http://localhost:3000/api/productos/agregarProducto', {
+            const response = await fetch('http://localhost:3000/api/notificaciones/crearFactura', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    codigo: '96549658741236582',
-                    nombre: 'Paleta de colores',
-                    precio: 4000,
-                    disponibilidad: 15,
-                    descripcion: 'paleta de disferentes colores',
-                    imagen: imagenSeleccionada
+                    numeroFactura:0,
+                    detalleCompra:detalle,
+                    fecha:new Date(),
+                    total:total,
+                    direccion: provincia+"/"+canton+"/"+distrito,
+                    comprobante:imagenSeleccionada
                 })
 
             });
 
             const data = await response.json();
             console.log(data); // Maneja la respuesta como necesites en tu aplicación React
-            try {
-                const response = await fetch('http://localhost:3000/api/productos/agregarProductoCategoria', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        nombreCategoria: 'Maquillaje',
-                        pCodigoProducto: '96549658741236582',
-                    })
-
-                });
-
-                const data = await response.json();
-                console.log(data); // Maneja la respuesta como necesites en tu aplicación React
-
-                // Actualiza la interfaz o el estado según sea necesario
-            } catch (error) {
-                console.error('Error al agregar producto al carrito:', error);
-                // Maneja los errores
-            }
+           
 
             // Actualiza la interfaz o el estado según sea necesario
         } catch (error) {
@@ -969,6 +956,15 @@ export function VisualizarFactura() {
         }
         //baseparacargarproducto()
     };
+    const handleSelectChangeDistrito = (event) => {
+        setDistrito(event.target.value);
+      };
+    const handleSelectChangeProvincia = (event) => {
+        setProvincia(event.target.value);
+      };
+    const handleSelectChangeCanton = (event) => {
+        setCanton(event.target.value);
+      };
 
 
     const location = useLocation();
@@ -981,6 +977,7 @@ export function VisualizarFactura() {
     var suma = 0;
     for (let i = 0; i < numColumnas; i++) {
         suma += location.state.products[i].producto.precio * location.state.products[i].cantidad
+        detalle += detalle+ location.state.products[i].producto.nombre+"-"+location.state.products[i].cantidad+"/"
         columnas.push(
             <div className="row" class="grid grid-cols-1 md:grid-cols-2 gap-2">
                 <           div className="col s8" >
@@ -998,6 +995,7 @@ export function VisualizarFactura() {
 
         );
     }
+    total = suma;
 
     const cuando = (<div>
         <div className="row" style={{ color: "#FFFFFF" }} >
@@ -1040,7 +1038,7 @@ export function VisualizarFactura() {
                     <br />
                     <div className='row' style={{ display: "flex", justifyContent: "center" }}>
                         <div style={{ marginTop: "10px" }}> {/* Agregar margen superior de 10px */}
-                            <button type="submit" onClick={() => settituloFactura('Compra realizada')} className="btn" style={{ backgroundColor: "#000000", color: "#FFFFFF " }}>
+                            <button type="submit"  className="btn" onClick={Baseparafactura} style={{ backgroundColor: "#000000", color: "#FFFFFF " }}>
                                 Pagar
                             </button>
                         </div>
@@ -1076,7 +1074,7 @@ export function VisualizarFactura() {
                     </div>
                     <div className="row" class="grid grid-cols-1 md:grid-cols-3 gap-3">
                         <div class="input-field col s4">
-                            <select>
+                            <select value={provincia} onChange={handleSelectChangeProvincia}>
                                 <option value="" disabled selected>Provincia</option>
                                 <option value="Cartago">Cartago</option>
                                 <option value="San Jose">San Jose</option>
@@ -1085,7 +1083,7 @@ export function VisualizarFactura() {
 
                         </div>
                         <div class="input-field col s4">
-                            <select>
+                            <select value={canton} onChange={handleSelectChangeCanton}>
                                 <option value="" disabled selected>Canton</option>
                                 <option value="Turrialba">Turrialba</option>
                                 <option value="Montes de Oca">Montes de Oca</option>
@@ -1094,7 +1092,7 @@ export function VisualizarFactura() {
 
                         </div>
                         <div class="input-field col s4">
-                            <select>
+                            <select value={distrito} onChange={handleSelectChangeDistrito}>
                                 <option value="" disabled selected>Distrito</option>
                                 <option value="Santa Teresita">Santa Teresita</option>
                                 <option value="Sabanilla">Sabanilla</option>
@@ -1171,5 +1169,7 @@ export function VisualizarFactura() {
 
     );
 }
+
+
 //}
 //export default FrTienda;

@@ -5,6 +5,7 @@ import GaleriaDuende from "./pages/GaleriaDuende.jsx";
 import TiendaDuende from "./pages/TiendaDuende.jsx";
 import MensajesAdmin from "./pages/MensajesAdmin.jsx";
 import Agenda from "./pages/Calendar.jsx";
+import FacturasAdmin from "./pages/FacturasAdmin.jsx";
 
 export {
     LoginPage,
@@ -13,5 +14,6 @@ export {
     GaleriaDuende, 
     TiendaDuende,
     MensajesAdmin,
-    Agenda
+    Agenda,
+    FacturasAdmin
 };

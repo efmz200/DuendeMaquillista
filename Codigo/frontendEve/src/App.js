@@ -2,7 +2,7 @@ import React from 'react';
 import { useEffect, useState } from "react";
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { LoginPage,SignUpPage, MenuAdmin, GaleriaDuende, TiendaDuende, MensajesAdmin, Agenda} from "./Routes.js"
+import { LoginPage,SignUpPage, MenuAdmin, GaleriaDuende, TiendaDuende, MensajesAdmin, Agenda,FacturasAdmin} from "./Routes.js"
 import {VisualizarCategoriaProductos,VisualizarProductos,FrTienda, VisualizarCarrito,VisualizarPublicacion,VisualizarTienda,VisualizarFactura} from './pages/FrTienda';
 
 import './App.css';
@@ -26,6 +26,7 @@ const App = () => {
         <Route path="/tiendaDuende" element={<TiendaDuende user={user}/>} />
         <Route path="/mensajesAdmin" element={<MensajesAdmin user={user}/>} />
         <Route path="/agenda" element={<Agenda user={user}/>} />
+        <Route path="/facturasAdmin" element={<FacturasAdmin user={user}/>} />
         
         
         <Route path="/categorias" element={<VisualizarCategoriaProductos user={user}  />} />
