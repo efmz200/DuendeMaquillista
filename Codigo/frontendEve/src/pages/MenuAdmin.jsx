@@ -21,6 +21,9 @@ function MenuAdmin() {
     const handleMensajes = () => {
         navigate('/mensajesAdmin', {});
     }
+    const handleFacturas = () => {
+        navigate('/facturasAdmin', {});
+    }
 
     const handleLogOut = () => {
         navigate('/', {});
@@ -63,6 +66,10 @@ function MenuAdmin() {
 
                                     <button onClick={handleMensajes} className="group relative w-full h-[40px] flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-black hover:bg-green">
                                         Mensajes
+                                    </button>
+                                    <br/> 
+                                    <button onClick={handleFacturas} className="group relative w-full h-[40px] flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-black hover:bg-green">
+                                        Facturas
                                     </button>
                                     <br/> 
                                 
