@@ -219,11 +219,6 @@ router.post('/filtrarPor', async (req, res) => {
                 break;
             case 'semana':
                 agenda = await filtroSemana(fecha);
-                await Agenda.find({
-                    $expr: {
-                        $eq: [{ $week: "$fecha" }, { $week: new Date(fecha) }]
-                    }
-                });
                 break;
             default:
                 return res.json({
