@@ -171,6 +171,33 @@ router.post('/filtrarPorNOUsado',async(req,res)=>{
     }    
 })
 
+function filtroDia(fecha){
+    agenda = Agenda.find({
+        $expr: {
+            $eq: [{ $dayOfMonth: "$fecha" }, { $dayOfMonth: new Date(fecha) }]
+        }
+    }); 
+    return agenda;   
+}
+
+function filtroMes(fecha){
+    agenda = Agenda.find({
+        $expr: {
+            $eq: [{ $month: "$fecha" }, { $month: new Date(fecha) }]
+        }
+    });
+    return agenda;
+}
+
+function filtroSemana(fecha){
+    agenda = Agenda.find({
+        $expr: {
+            $eq: [{ $week: "$fecha" }, { $week: new Date(fecha) }]
+        }
+    });
+    return agenda;
+}
+
 router.post('/filtrarPor', async (req, res) => {
     try {
         const { filtro, fecha } = req.body;
@@ -185,21 +212,14 @@ router.post('/filtrarPor', async (req, res) => {
 
         switch (filtro) {
             case 'dia':
-                agenda = await Agenda.find({
-                    $expr: {
-                        $eq: [{ $dayOfMonth: "$fecha" }, { $dayOfMonth: new Date(fecha) }]
-                    }
-                });
+                agenda = await filtroDia(fecha);
                 break;
             case 'mes':
-                agenda = await Agenda.find({
-                    $expr: {
-                        $eq: [{ $month: "$fecha" }, { $month: new Date(fecha) }]
-                    }
-                });
+                agenda = await filtroMes(fecha);                
                 break;
             case 'semana':
-                agenda = await Agenda.find({
+                agenda = await filtroSemana(fecha);
+                await Agenda.find({
                     $expr: {
                         $eq: [{ $week: "$fecha" }, { $week: new Date(fecha) }]
                     }
