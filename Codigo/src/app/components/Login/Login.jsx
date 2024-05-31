@@ -20,7 +20,7 @@ function Login() {
                 <br/>
             </div>
             <div className='bg-darkGreen flex flex-col justify-center py-4 sm:px-6 lg:px-8'></div>
-            <div class="bg-[url('./loginBackground.png')] bg-no-repeat bg-cover bg-center bg-fixed w-full">
+            <div className="bg-[url('./loginBackground.png')] bg-no-repeat bg-cover bg-center bg-fixed w-full">
             <div className="my-60  sm:mx-auto sm:w-full sm:max-w-md">
                     <div className='bg-darkGreen py-4 px-6 shadow sm:rounded-lg sm:px-10'>
                         <form className="space-y-10">
